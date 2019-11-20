@@ -36,7 +36,7 @@ trait TransformsProjects
             $project->key,
             array_map(function (IssueType $issueType) {
                 return $issueType->name;
-            }, $project->issueTypes?? [])
+            }, $project->issueTypes ?? [])
         );
     }
 }
