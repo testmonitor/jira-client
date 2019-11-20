@@ -9,21 +9,6 @@ use JiraRestApi\Project\Project as JiraProject;
 trait TransformsProjects
 {
     /**
-     * @param \TestMonitor\Jira\Resources\Project $project
-     *
-     * @return JiraProject
-     */
-    protected function toJiraProject(Project $project): JiraProject
-    {
-        $jiraProject = new JiraProject();
-
-        return $jiraProject
-            ->setId($project->id)
-            ->setName($project->name)
-            ->setKey($project->key);
-    }
-
-    /**
      * @param JiraProject $project
      *
      * @return \TestMonitor\Jira\Resources\Project
