@@ -2,9 +2,11 @@
 
 namespace TestMonitor\Jira\Tests;
 
+use JiraRestApi\JiraException;
 use Mockery;
 use TestMonitor\Jira\Client;
 use PHPUnit\Framework\TestCase;
+use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\Attachment;
 
 class AttachmentsTest extends TestCase
@@ -44,5 +46,21 @@ class AttachmentsTest extends TestCase
         $this->assertInstanceOf(Attachment::class, $attachment);
         $this->assertEquals($this->attachment->id, $attachment->id);
         $this->assertEquals($this->attachment->filename, $attachment->filename);
+    }
+
+    /** @test */
+    public function it_should_throw_an_exception_when_client_fails_to_add_an_attachment()
+    {
+        // Given
+        $jira = new Client('url', 'user', 'pass');
+
+        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+
+        $service->shouldReceive('addAttachments')->once()->andThrow(new JiraException());
+
+        $this->expectException(Exception::class);
+
+        // When
+        $jira->addAttachment('Attach', 'Me');
     }
 }

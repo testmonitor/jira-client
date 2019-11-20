@@ -2,9 +2,11 @@
 
 namespace TestMonitor\Jira\Tests;
 
+use JiraRestApi\JiraException;
 use Mockery;
 use TestMonitor\Jira\Client;
 use PHPUnit\Framework\TestCase;
+use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\Issue;
 
 class IssuesTest extends TestCase
@@ -65,7 +67,26 @@ class IssuesTest extends TestCase
         $this->assertIsArray($issues);
         $this->assertCount(1, $issues);
         $this->assertInstanceOf(Issue::class, $issues[0]);
-        $this->assertEquals($issues[0]->id, $this->issue->id);
+        $this->assertEquals($this->issue->id, $issues[0]->id);
+    }
+
+    /** @test */
+    public function it_should_throw_an_exception_when_client_fails_to_get_a_list_of_issues()
+    {
+        // Given
+        $jira = new Client('url', 'user', 'pass');
+
+        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+
+        $results = Mockery::mock('JiraRestApi\Issue\IssueSearchResult');
+        $results->issues = [$this->issue];
+
+        $service->shouldReceive('search')->once()->andThrow(new JiraException());
+
+        $this->expectException(Exception::class);
+
+        // When
+        $jira->issues('nonsense');
     }
 
     /** @test */
@@ -88,6 +109,22 @@ class IssuesTest extends TestCase
     }
 
     /** @test */
+    public function it_should_throw_an_exception_when_client_fails_to_get_a_single_issue()
+    {
+        // Given
+        $jira = new Client('url', 'user', 'pass');
+
+        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+
+        $service->shouldReceive('get')->with('nonsense')->once()->andThrow(new JiraException());
+
+        $this->expectException(Exception::class);
+
+        // When
+        $jira->issue('nonsense');
+    }
+
+    /** @test */
     public function it_should_create_an_issue()
     {
         // Given
@@ -106,5 +143,22 @@ class IssuesTest extends TestCase
         $this->assertIsArray($issue->toArray());
         $this->assertEquals($this->issue->id, $issue->id);
         $this->assertEquals($this->issue->fields->summary, $issue->summary);
+    }
+
+    /** @test */
+    public function it_should_throw_an_exception_when_client_fails_to_create_an_issue()
+    {
+        // Given
+        $jira = new Client('url', 'user', 'pass');
+
+        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+
+        $service->shouldReceive('create')->once()->andThrow(new JiraException());
+        $service->shouldReceive('get')->with($this->issue->key)->never()->andReturn($this->issue);
+
+        $this->expectException(Exception::class);
+
+        // When
+        $jira->createIssue(new Issue('I', 'Like', 'To', 'Fail'));
     }
 }

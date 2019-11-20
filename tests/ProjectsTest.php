@@ -2,10 +2,12 @@
 
 namespace TestMonitor\Jira\Tests;
 
+use JiraRestApi\JiraException;
 use Mockery;
 use ArrayObject;
 use TestMonitor\Jira\Client;
 use PHPUnit\Framework\TestCase;
+use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\Project;
 
 class ProjectsTest extends TestCase
@@ -16,10 +18,15 @@ class ProjectsTest extends TestCase
     {
         parent::setUp();
 
+        $type = Mockery::mock('JiraRestApi\Issue\IssueType');
+        $type->id = 1;
+        $type->name = 'Bug';
+
         $this->project = Mockery::mock('\JiraRestApi\Project\Project');
         $this->project->id = '1';
         $this->project->key = 'TST';
         $this->project->name = 'A test';
+        $this->project->issueTypes = [$type];
     }
 
     public function tearDown(): void
@@ -46,7 +53,24 @@ class ProjectsTest extends TestCase
         $this->assertIsArray($projects);
         $this->assertCount(1, $projects);
         $this->assertInstanceOf(Project::class, $projects[0]);
-        $this->assertEquals($projects[0]->id, $this->project->id);
+        $this->assertEquals($this->project->id, $projects[0]->id);
+        $this->assertEquals(['Bug'], $projects[0]->issueTypes);
+    }
+
+    /** @test */
+    public function it_should_throw_an_exception_when_client_fails_to_get_a_list_of_projects()
+    {
+        // Given
+        $jira = new Client('url', 'user', 'pass');
+
+        $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
+
+        $service->shouldReceive('getAllProjects')->once()->andThrow(new JiraException());
+
+        $this->expectException(Exception::class);
+
+        // When
+        $jira->projects();
     }
 
     /** @test */
@@ -65,5 +89,22 @@ class ProjectsTest extends TestCase
         // Then
         $this->assertInstanceOf(Project::class, $project);
         $this->assertEquals($this->project->id, $project->id);
+        $this->assertEquals(['Bug'], $project->issueTypes);
+    }
+
+    /** @test */
+    public function it_should_throw_an_exception_when_client_fails_to_get_a_single_project()
+    {
+        // Given
+        $jira = new Client('url', 'user', 'pass');
+
+        $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
+
+        $service->shouldReceive('get')->with('nonsense')->once()->andThrow(new JiraException());
+
+        $this->expectException(Exception::class);
+
+        // When
+        $project = $jira->project('nonsense');
     }
 }
