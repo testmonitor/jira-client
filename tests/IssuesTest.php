@@ -103,6 +103,7 @@ class IssuesTest extends TestCase
 
         // Then
         $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertIsArray($issue->toArray());
         $this->assertEquals($this->issue->id, $issue->id);
         $this->assertEquals($this->issue->fields->summary, $issue->summary);
     }
