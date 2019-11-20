@@ -3,6 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/testmonitor/jira-client/v/stable)](https://packagist.org/packages/testmonitor/jira-client)
 [![CircleCI](https://img.shields.io/circleci/project/github/testmonitor/jira-client.svg)](https://circleci.com/gh/testmonitor/jira-client)
 [![Travis Build](https://travis-ci.com/testmonitor/jira-client.svg?branch=master)](https://travis-ci.com/testmonitor/jira-client)
+[![Code Coverage](https://scrutinizer-ci.com/g/testmonitor/jira-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/testmonitor/jira-client/?branch=master)
 [![Code Quality](https://scrutinizer-ci.com/g/testmonitor/jira-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/testmonitor/jira-client/?branch=master)
 [![StyleCI](https://styleci.io/repos/222957448/shield)](https://styleci.io/repos/222957448)
 [![License](https://poser.pugx.org/testmonitor/jira-client/license)](https://packagist.org/packages/testmonitor/jira-client)
