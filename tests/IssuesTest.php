@@ -2,12 +2,12 @@
 
 namespace TestMonitor\Jira\Tests;
 
-use JiraRestApi\JiraException;
 use Mockery;
 use TestMonitor\Jira\Client;
+use JiraRestApi\JiraException;
 use PHPUnit\Framework\TestCase;
-use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\Issue;
+use TestMonitor\Jira\Exceptions\Exception;
 
 class IssuesTest extends TestCase
 {
