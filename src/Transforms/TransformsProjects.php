@@ -17,8 +17,8 @@ trait TransformsProjects
     {
         return new Project(
             $project->id,
-            $project->name,
             $project->key,
+            $project->name,
             array_map(function (IssueType $issueType) {
                 return $issueType->name;
             }, $project->issueTypes ?? [])
