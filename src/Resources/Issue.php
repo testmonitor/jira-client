@@ -49,26 +49,15 @@ class Issue extends Resource
     /**
      * Create a new resource instance.
      *
-     * @param string $summary
-     * @param string $description
-     * @param string $type
-     * @param string $projectKey
-     * @param string $id
-     * @param string $key
+     * @param array $issue
      */
-    public function __construct(
-        string $summary,
-        string $description,
-        string $type,
-        string $projectKey,
-        ?string $id = null,
-        ?string $key = null
-    ) {
-        $this->id = $id;
-        $this->key = $key;
-        $this->summary = $summary;
-        $this->description = $description;
-        $this->type = $type;
-        $this->projectKey = $projectKey;
+    public function __construct(array $issue)
+    {
+        $this->id = $issue['id'] ?? null;
+        $this->key = $issue['key'] ?? null;
+        $this->summary = $issue['summary'];
+        $this->description = $issue['description'];
+        $this->type = $issue['type'];
+        $this->projectKey = $issue['projectKey'];
     }
 }

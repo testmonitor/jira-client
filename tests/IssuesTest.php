@@ -11,23 +11,34 @@ use TestMonitor\Jira\Exceptions\Exception;
 
 class IssuesTest extends TestCase
 {
+    /**
+     * @var \JiraRestApi\Issue\IssueField
+     */
     protected $fields;
 
+    /**
+     * @var \JiraRestApi\Issue\Issue
+     */
     protected $issue;
+
+    /**
+     * @var array
+     */
+    protected $config;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $project = Mockery::mock('JiraRestApi\Project\Project');
+        $project = Mockery::mock('\JiraRestApi\Project\Project');
         $project->id = 1;
         $project->key = 'TST';
 
-        $type = Mockery::mock('JiraRestApi\Issue\IssueType');
+        $type = Mockery::mock('\JiraRestApi\Issue\IssueType');
         $type->id = 1;
         $type->name = 'Bug';
 
-        $this->fields = Mockery::mock('JiraRestApi\Issue\IssueField');
+        $this->fields = Mockery::mock('\JiraRestApi\Issue\IssueField');
         $this->fields->shouldReceive('getIssueType')->andReturn($type);
         $this->fields->shouldReceive('getProjectKey')->andReturn($project);
 
@@ -40,6 +51,12 @@ class IssuesTest extends TestCase
         $this->issue->id = '1';
         $this->issue->key = 'TST';
         $this->issue->fields = $this->fields;
+
+        $this->config = [
+            'instance' => 'url',
+            'username' => 'user',
+            'token' => 'pass',
+        ];
     }
 
     public function tearDown(): void
@@ -51,7 +68,7 @@ class IssuesTest extends TestCase
     public function it_should_return_a_list_of_issues()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -74,7 +91,7 @@ class IssuesTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_list_of_issues()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -93,7 +110,7 @@ class IssuesTest extends TestCase
     public function it_should_return_a_single_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -112,7 +129,7 @@ class IssuesTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_single_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -128,7 +145,7 @@ class IssuesTest extends TestCase
     public function it_should_create_an_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -136,7 +153,12 @@ class IssuesTest extends TestCase
         $service->shouldReceive('get')->with($this->issue->key)->once()->andReturn($this->issue);
 
         // When
-        $issue = $jira->createIssue(new Issue('Summary', 'Description', 'Bug', 'TST'));
+        $issue = $jira->createIssue(new Issue([
+            'summary' => 'Summary',
+            'description' => 'Description',
+            'type' => 'Bug',
+            'projectKey' => 'TST',
+        ]));
 
         // Then
         $this->assertInstanceOf(Issue::class, $issue);
@@ -149,7 +171,7 @@ class IssuesTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_create_an_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -159,6 +181,11 @@ class IssuesTest extends TestCase
         $this->expectException(Exception::class);
 
         // When
-        $jira->createIssue(new Issue('I', 'Like', 'To', 'Fail'));
+        $jira->createIssue(new Issue([
+            'summary' => 'I',
+            'description' => 'Like',
+            'type' => 'To',
+            'projectKey' => 'Fail',
+        ]));
     }
 }

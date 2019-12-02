@@ -15,13 +15,13 @@ trait TransformsProjects
      */
     protected function fromJiraProject(\JiraRestApi\Project\Project $project): Project
     {
-        return new Project(
-            $project->id,
-            $project->key,
-            $project->name,
-            array_map(function (IssueType $issueType) {
+        return new Project([
+            'id' => $project->id,
+            'key' => $project->key,
+            'name' => $project->name,
+            'issueTypes' => array_map(function (IssueType $issueType) {
                 return $issueType->name;
-            }, $project->issueTypes ?? [])
-        );
+            }, $project->issueTypes ?? []),
+        ]);
     }
 }

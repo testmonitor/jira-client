@@ -13,10 +13,10 @@ trait TransformsAttachments
      */
     protected function fromJiraAttachment(\JiraRestApi\Issue\Attachment $attachment): Attachment
     {
-        return new Attachment(
-            $attachment->id,
-            $attachment->filename,
-            $attachment->content
-        );
+        return new Attachment([
+            'id' => $attachment->id,
+            'filename' => $attachment->filename,
+            'content' => $attachment->content,
+        ]);
     }
 }

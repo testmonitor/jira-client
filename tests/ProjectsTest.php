@@ -12,13 +12,21 @@ use TestMonitor\Jira\Exceptions\Exception;
 
 class ProjectsTest extends TestCase
 {
+    /**
+     * @var \JiraRestApi\Project\Project
+     */
     protected $project;
+
+    /**
+     * @var array
+     */
+    protected $config;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $type = Mockery::mock('JiraRestApi\Issue\IssueType');
+        $type = Mockery::mock('\JiraRestApi\Issue\IssueType');
         $type->id = 1;
         $type->name = 'Bug';
 
@@ -27,6 +35,12 @@ class ProjectsTest extends TestCase
         $this->project->key = 'TST';
         $this->project->name = 'A test';
         $this->project->issueTypes = [$type];
+
+        $this->config = [
+            'instance' => 'url',
+            'username' => 'user',
+            'token' => 'pass',
+        ];
     }
 
     public function tearDown(): void
@@ -38,7 +52,7 @@ class ProjectsTest extends TestCase
     public function it_should_return_a_list_of_projects()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 
@@ -61,7 +75,7 @@ class ProjectsTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_list_of_projects()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 
@@ -77,7 +91,7 @@ class ProjectsTest extends TestCase
     public function it_should_return_a_single_project()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 
@@ -96,7 +110,7 @@ class ProjectsTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_single_project()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client($this->config);
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 

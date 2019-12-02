@@ -30,13 +30,13 @@ trait TransformsIssues
      */
     protected function fromJiraIssue(\JiraRestApi\Issue\Issue $issue): Issue
     {
-        return new Issue(
-            $issue->fields->summary ?? '',
-            $issue->fields->description ?? '',
-            $issue->fields->getIssueType()->name,
-            $issue->fields->getProjectKey(),
-            $issue->id,
-            $issue->key
-        );
+        return new Issue([
+            'summary' => $issue->fields->summary ?? '',
+            'description' => $issue->fields->description ?? '',
+            'type' => $issue->fields->getIssueType()->name,
+            'projectKey' => $issue->fields->getProjectKey(),
+            'id' => $issue->id,
+            'key' => $issue->key,
+        ]);
     }
 }

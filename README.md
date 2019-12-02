@@ -40,7 +40,11 @@ You're all set up now!
 You'll have to instantiate the client using your credentials:
 
 ```php
-$jira = new \TestMonitor\Jira\Client('https://myjira.atlassian.net', 'username', 'password');
+$jira = new \TestMonitor\Jira\Client([
+    'instance' => 'https://myjira.atlassian.net', 
+    'username' => 'username', 
+    'token' => 'token'
+]);
 ```
 
 Next, you can start interacting with Jira. 
@@ -56,12 +60,12 @@ $projects = $jira->projects();
 Or creating an issue, for example (using type 'Bug' and project key 'PROJ'):
 
 ```php
-$issue = $jira->createIssue(new \TestMonitor\Jira\Resources\Issue(
-    'Some issue',
-    'A better description',
-    'Bug',
-    'PROJ'
-));
+$issue = $jira->createIssue(new \TestMonitor\Jira\Resources\Issue([
+    'summary' => 'Some issue',
+    'description' => 'A better description',
+    'type' => 'Bug',
+    'projectKey' => 'PROJ'
+]));
 ```
 
 ## Tests

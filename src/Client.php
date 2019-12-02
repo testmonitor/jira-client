@@ -13,21 +13,6 @@ class Client
         Actions\ManagesProjects;
 
     /**
-     * @var string
-     */
-    protected $instance;
-
-    /**
-     * @var string
-     */
-    protected $username;
-
-    /**
-     * @var string
-     */
-    protected $token;
-
-    /**
      * @var ArrayConfiguration
      */
     protected $configuration;
@@ -49,16 +34,12 @@ class Client
      * @param string $username
      * @param string $token
      */
-    public function __construct($instance, $username, $token)
+    public function __construct(array $config)
     {
-        $this->instance = $instance;
-        $this->username = $username;
-        $this->token = $token;
-
         $this->configuration = new ArrayConfiguration([
-            'jiraHost' => $this->instance,
-            'jiraUser' => $this->username,
-            'jiraPassword' => $this->token,
+            'jiraHost' => $config['instance'],
+            'jiraUser' => $config['username'],
+            'jiraPassword' => $config['token'],
         ]);
     }
 

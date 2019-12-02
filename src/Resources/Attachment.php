@@ -28,14 +28,12 @@ class Attachment extends Resource
     /**
      * Create a new resource instance.
      *
-     * @param string $id
-     * @param string $filename
-     * @param string $content
+     * @param array $attachment
      */
-    public function __construct(string $id, string $filename, string $content)
+    public function __construct(array $attachment)
     {
-        $this->id = $id;
-        $this->filename = $filename;
-        $this->content = $content;
+        $this->id = $attachment['id'];
+        $this->filename = $attachment['filename'];
+        $this->content = $attachment['content'];
     }
 }
