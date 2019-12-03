@@ -17,11 +17,6 @@ class ProjectsTest extends TestCase
      */
     protected $project;
 
-    /**
-     * @var array
-     */
-    protected $config;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,7 +47,7 @@ class ProjectsTest extends TestCase
     public function it_should_return_a_list_of_projects()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 
@@ -75,7 +70,7 @@ class ProjectsTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_list_of_projects()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 
@@ -91,7 +86,7 @@ class ProjectsTest extends TestCase
     public function it_should_return_a_single_project()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 
@@ -110,7 +105,7 @@ class ProjectsTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_single_project()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setProjectService($service = Mockery::mock('JiraRestApi\Project\ProjectService'));
 

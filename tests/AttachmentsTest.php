@@ -16,11 +16,6 @@ class AttachmentsTest extends TestCase
      */
     protected $attachment;
 
-    /**
-     * @var array
-     */
-    protected $config;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,12 +25,6 @@ class AttachmentsTest extends TestCase
         $this->attachment->id = '1';
         $this->attachment->filename = 'file.jpg';
         $this->attachment->content = 'https://jira.atlassian.net/TST/secure/1';
-
-        $this->config = [
-            'instance' => 'url',
-            'username' => 'user',
-            'token' => 'pass',
-        ];
     }
 
     public function tearDown(): void
@@ -47,7 +36,7 @@ class AttachmentsTest extends TestCase
     public function it_should_add_an_attachment_to_an_issue()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -66,7 +55,7 @@ class AttachmentsTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_add_an_attachment()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 

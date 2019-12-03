@@ -21,11 +21,6 @@ class IssuesTest extends TestCase
      */
     protected $issue;
 
-    /**
-     * @var array
-     */
-    protected $config;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -51,12 +46,6 @@ class IssuesTest extends TestCase
         $this->issue->id = '1';
         $this->issue->key = 'TST';
         $this->issue->fields = $this->fields;
-
-        $this->config = [
-            'instance' => 'url',
-            'username' => 'user',
-            'token' => 'pass',
-        ];
     }
 
     public function tearDown(): void
@@ -68,7 +57,7 @@ class IssuesTest extends TestCase
     public function it_should_return_a_list_of_issues()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -91,7 +80,7 @@ class IssuesTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_list_of_issues()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -110,7 +99,7 @@ class IssuesTest extends TestCase
     public function it_should_return_a_single_issue()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -129,7 +118,7 @@ class IssuesTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_get_a_single_issue()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -145,7 +134,7 @@ class IssuesTest extends TestCase
     public function it_should_create_an_issue()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 
@@ -171,7 +160,7 @@ class IssuesTest extends TestCase
     public function it_should_throw_an_exception_when_client_fails_to_create_an_issue()
     {
         // Given
-        $jira = new Client($this->config);
+        $jira = new Client('url', 'user', 'pass');
 
         $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
 

@@ -40,11 +40,7 @@ You're all set up now!
 You'll have to instantiate the client using your credentials:
 
 ```php
-$jira = new \TestMonitor\Jira\Client([
-    'instance' => 'https://myjira.atlassian.net', 
-    'username' => 'username', 
-    'token' => 'token'
-]);
+$jira = new \TestMonitor\Jira\Client('https://myjira.atlassian.net', 'username', token')
 ```
 
 Next, you can start interacting with Jira. 
