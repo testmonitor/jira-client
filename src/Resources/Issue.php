@@ -58,6 +58,6 @@ class Issue extends Resource
         $this->summary = $issue['summary'];
         $this->description = $issue['description'];
         $this->type = $issue['type'];
-        $this->projectKey = $issue['projectKey'];
+        $this->projectKey = $issue['projectKey'] ?? null;
     }
 }

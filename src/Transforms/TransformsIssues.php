@@ -9,15 +9,16 @@ trait TransformsIssues
 {
     /**
      * @param \TestMonitor\Jira\Resources\Issue $issue
+     * @param string|null $projectKey
      *
      * @return \JiraRestApi\Issue\IssueField
      */
-    protected function toJiraIssue(Issue $issue): IssueField
+    protected function toJiraIssue(Issue $issue, string $projectKey = null): IssueField
     {
         $issueField = new IssueField();
 
         return $issueField
-            ->setProjectKey($issue->projectKey)
+            ->setProjectKey($projectKey ?? $issue->projectKey)
             ->setSummary($issue->summary)
             ->setIssueType($issue->type)
             ->setDescription($issue->description);

@@ -60,14 +60,15 @@ trait ManagesIssues
      * Create a new issue.
      *
      * @param \TestMonitor\Jira\Resources\Issue $issue
+     * @param string $projectKey
      *
      * @throws \TestMonitor\Jira\Exceptions\Exception
      * @return Issue
      */
-    public function createIssue(Issue $issue)
+    public function createIssue(Issue $issue, string $projectKey)
     {
         try {
-            $result = $this->issueService()->create($this->toJiraIssue($issue));
+            $result = $this->issueService()->create($this->toJiraIssue($issue, $projectKey));
 
             return $this->issue($result->key);
         } catch (JiraException $exception) {

@@ -146,8 +146,7 @@ class IssuesTest extends TestCase
             'summary' => 'Summary',
             'description' => 'Description',
             'type' => 'Bug',
-            'projectKey' => 'TST',
-        ]));
+        ]), 'TST');
 
         // Then
         $this->assertInstanceOf(Issue::class, $issue);
@@ -174,7 +173,6 @@ class IssuesTest extends TestCase
             'summary' => 'I',
             'description' => 'Like',
             'type' => 'To',
-            'projectKey' => 'Fail',
-        ]));
+        ]), 'Fail');
     }
 }
