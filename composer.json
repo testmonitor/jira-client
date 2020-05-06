@@ -41,12 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "TestMonitor\\": "src/"
+            "TestMonitor\\Jira\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "TestMonitor\\Jira\\Tests\\": "tests/"
         }
     },
     "scripts": {
