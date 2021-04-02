@@ -117,4 +117,24 @@ class ValidatorTest extends TestCase
         // When
         Validator::keysExists(['id' => 1], ['id', 'description']);
     }
+
+    /** @test */
+    public function it_should_validate_a_object_having_a_specified_property()
+    {
+        // When
+        $result = \TestMonitor\Jira\Validator::hasProperty((object) ['id' => 1, 'name' => 'name'], 'id');
+
+        // Then
+        $this->assertTrue($result);
+    }
+
+    /** @test */
+    public function it_should_throw_an_exception_when_validating_a_object_without_the_requested_property()
+    {
+        // Given
+        $this->expectException(\TestMonitor\Jira\Exceptions\InvalidDataException::class);
+
+        // When
+        Validator::hasProperty((object) ['id' => 1], 'name');
+    }
 }
