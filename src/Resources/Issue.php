@@ -2,6 +2,8 @@
 
 namespace TestMonitor\Jira\Resources;
 
+use TestMonitor\Jira\Validator;
+
 class Issue extends Resource
 {
     /**
@@ -53,6 +55,8 @@ class Issue extends Resource
      */
     public function __construct(array $issue)
     {
+        Validator::keysExists($issue, ['summary', 'description', 'type']);
+
         $this->id = $issue['id'] ?? null;
         $this->key = $issue['key'] ?? null;
         $this->summary = $issue['summary'];

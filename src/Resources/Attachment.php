@@ -2,6 +2,8 @@
 
 namespace TestMonitor\Jira\Resources;
 
+use TestMonitor\Jira\Validator;
+
 class Attachment extends Resource
 {
     /**
@@ -32,6 +34,8 @@ class Attachment extends Resource
      */
     public function __construct(array $attachment)
     {
+        Validator::keysExists($attachment, ['id', 'filename', 'content']);
+
         $this->id = $attachment['id'];
         $this->filename = $attachment['filename'];
         $this->content = $attachment['content'];
