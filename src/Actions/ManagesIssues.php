@@ -20,6 +20,7 @@ trait ManagesIssues
      * @param int $maxResults
      *
      * @throws \TestMonitor\Jira\Exceptions\Exception
+     *
      * @return Issue[]
      */
     public function issues(string $projectKey, int $startAt = 0, int $maxResults = 15)
@@ -43,6 +44,7 @@ trait ManagesIssues
      * @param string $key
      *
      * @throws \TestMonitor\Jira\Exceptions\Exception
+     *
      * @return Issue
      */
     public function issue($key)
@@ -63,6 +65,7 @@ trait ManagesIssues
      * @param string $projectKey
      *
      * @throws \TestMonitor\Jira\Exceptions\Exception
+     *
      * @return Issue
      */
     public function createIssue(Issue $issue, string $projectKey)
