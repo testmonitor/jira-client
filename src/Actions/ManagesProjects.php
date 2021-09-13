@@ -15,6 +15,7 @@ trait ManagesProjects
      * Get a list of of projects.
      *
      * @throws \TestMonitor\Jira\Exceptions\Exception
+     *
      * @return Project[]
      */
     public function projects()
@@ -36,6 +37,7 @@ trait ManagesProjects
      * @param string $key
      *
      * @throws \TestMonitor\Jira\Exceptions\Exception
+     *
      * @return Project
      */
     public function project($key)

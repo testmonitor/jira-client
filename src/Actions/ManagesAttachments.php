@@ -17,6 +17,7 @@ trait ManagesAttachments
      * @param string $issueKey
      *
      * @throws \TestMonitor\Jira\Exceptions\Exception
+     *
      * @return \TestMonitor\Jira\Resources\Attachment
      */
     public function addAttachment(string $path, string $issueKey)

@@ -10,7 +10,6 @@ trait TransformsProjects
 {
     /**
      * @param JiraProject $project
-     *
      * @return \TestMonitor\Jira\Resources\Project
      */
     protected function fromJiraProject(\JiraRestApi\Project\Project $project): Project

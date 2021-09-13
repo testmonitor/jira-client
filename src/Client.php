@@ -64,6 +64,7 @@ class Client
 
     /**
      * @throws \JiraRestApi\JiraException
+     *
      * @return \JiraRestApi\Issue\IssueService
      */
     protected function issueService(): IssueService
@@ -81,6 +82,7 @@ class Client
 
     /**
      * @throws \JiraRestApi\JiraException
+     *
      * @return \JiraRestApi\Project\ProjectService
      */
     protected function projectService(): ProjectService

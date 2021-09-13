@@ -8,7 +8,6 @@ trait TransformsAttachments
 {
     /**
      * @param \JiraRestApi\Issue\Attachment $attachment
-     *
      * @return \TestMonitor\Jira\Resources\Attachment
      */
     protected function fromJiraAttachment(\JiraRestApi\Issue\Attachment $attachment): Attachment

@@ -10,7 +10,6 @@ trait TransformsIssues
     /**
      * @param \TestMonitor\Jira\Resources\Issue $issue
      * @param string|null $projectKey
-     *
      * @return \JiraRestApi\Issue\IssueField
      */
     protected function toJiraIssue(Issue $issue, string $projectKey = null): IssueField
@@ -26,7 +25,6 @@ trait TransformsIssues
 
     /**
      * @param \JiraRestApi\Issue\Issue $issue
-     *
      * @return \TestMonitor\Jira\Resources\Issue
      */
     protected function fromJiraIssue(\JiraRestApi\Issue\Issue $issue): Issue
