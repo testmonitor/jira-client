@@ -19,7 +19,7 @@ trait TransformsIssues
         return $issueField
             ->setProjectKey($projectKey ?? $issue->projectKey)
             ->setSummary($issue->summary)
-            ->setIssueType($issue->type)
+            ->setIssueTypeAsString($issue->type)
             ->setDescription($issue->description);
     }
 
