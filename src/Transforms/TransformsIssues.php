@@ -3,6 +3,7 @@
 namespace TestMonitor\Jira\Transforms;
 
 use JiraRestApi\Issue\IssueField;
+use JiraRestApi\Issue\IssueType;
 use TestMonitor\Jira\Resources\Issue;
 
 trait TransformsIssues
@@ -19,7 +20,7 @@ trait TransformsIssues
         return $issueField
             ->setProjectKey($projectKey ?? $issue->projectKey)
             ->setSummary($issue->summary)
-            ->setIssueType($issue->type)
+            ->setIssueTypeAsString($issue->type)
             ->setDescription($issue->description);
     }
 
