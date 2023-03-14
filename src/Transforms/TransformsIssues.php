@@ -3,7 +3,6 @@
 namespace TestMonitor\Jira\Transforms;
 
 use JiraRestApi\Issue\IssueField;
-use JiraRestApi\Issue\IssueType;
 use TestMonitor\Jira\Resources\Issue;
 
 trait TransformsIssues
