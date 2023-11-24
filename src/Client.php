@@ -95,7 +95,6 @@ class Client
      * Create a new authorization URL for the given state.
      *
      * @param string $state
-     *
      * @return string
      */
     public function authorizationUrl($state)
@@ -110,7 +109,6 @@ class Client
      * Fetch the access and refresh token based on the authorization code.
      *
      * @param string $code
-     *
      * @return \TestMonitor\Jira\AccessToken
      */
     public function fetchToken(string $code): AccessToken

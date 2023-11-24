@@ -56,12 +56,11 @@ trait ManagesIssues
      * Create a new issue.
      *
      * @param \TestMonitor\Jira\Resources\Issue $issue
-     *
      * @return \TestMonitor\Jira\Resources\Issue
      */
     public function createIssue(Issue $issue): Issue
     {
-        $response = $this->post("issue", ['json' => $this->toNewIssue($issue)]);
+        $response = $this->post('issue', ['json' => $this->toNewIssue($issue)]);
 
         return $this->fromJiraIssue($response);
     }
@@ -76,7 +75,6 @@ trait ManagesIssues
      *      type: \TestMonitor\Jira\Resources\IssueType,
      *      priority: \TestMonitor\Jira\Resources\IssuePriority
      *  } $attributes
-     *
      * @return \TestMonitor\Jira\Resources\Issue
      */
     public function updateIssue($id, array $attributes): Issue
@@ -90,7 +88,6 @@ trait ManagesIssues
      * Update the status of an issue.
      *
      * @param \TestMonitor\Jira\Resources\Issue $issue
-     *
      * @return \TestMonitor\Jira\Resources\Issue
      */
     public function updateIssueStatus($issueId, IssueStatus $status): Issue
@@ -113,8 +110,8 @@ trait ManagesIssues
      * @param \TestMonitor\Jira\Resources\IssueStatus $status
      *
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
-     * @return array
      *
+     * @return array
      */
     protected function findTransitionForStatus($issueId, IssueStatus $status): array
     {

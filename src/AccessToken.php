@@ -37,7 +37,6 @@ class AccessToken
 
     /**
      * @param \League\OAuth2\Client\Token\AccessToken $token
-     *
      * @return \TestMonitor\Jira\AccessToken
      */
     public static function fromJira(OAuth2AccessToken $token)

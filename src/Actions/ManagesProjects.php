@@ -21,7 +21,7 @@ trait ManagesProjects
      */
     public function projects(string $query = '', int $page = 1, int $limit = 50)
     {
-        $response = $this->get("project/search", [
+        $response = $this->get('project/search', [
             'query' => [
                 'query' => $query,
                 'startAt' => $page,
