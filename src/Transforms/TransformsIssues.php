@@ -16,7 +16,6 @@ trait TransformsIssues
 
     /**
      * @param \TestMonitor\Jira\Resources\Issue $issue
-     *
      * @return array
      */
     protected function toUpdateIssue(array $attributes): array
@@ -35,7 +34,6 @@ trait TransformsIssues
 
     /**
      * @param \TestMonitor\Jira\Resources\Issue $issue
-     *
      * @return array
      */
     protected function toNewIssue(Issue $issue): array
@@ -84,7 +82,7 @@ trait TransformsIssues
             'self' => $issue['self'] ?? '',
             'summary' => $issue['fields']['summary'] ?? '',
 
-            'description' => !empty($issue['fields']['description']) ?
+            'description' => ! empty($issue['fields']['description']) ?
                 Document::load($issue['fields']['description']) : null,
 
             'type' => isset($issue['fields']['issuetype']) ?

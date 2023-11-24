@@ -30,7 +30,7 @@ class Attachment extends Resource
     /**
      * The size of the attachment.
      *
-     * @var integer
+     * @var int
      */
     public $size;
 

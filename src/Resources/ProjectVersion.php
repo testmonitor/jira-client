@@ -28,14 +28,14 @@ class ProjectVersion extends Resource
     /**
      * The archived flag of the project version.
      *
-     * @var boolean
+     * @var bool
      */
     public $archived;
 
     /**
      * The release flag of the project version.
      *
-     * @var boolean
+     * @var bool
      */
     public $released;
 
