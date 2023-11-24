@@ -6,21 +6,16 @@ use Mockery;
 use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use TestMonitor\Jira\Resources\Attachment;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
 
-class AttachmentsTest extends TestCase
+class AccountsTest extends TestCase
 {
     protected $token;
 
-    protected $project;
-
-    protected $issue;
-
-    protected $attachment;
+    protected $account;
 
     protected function setUp(): void
     {
@@ -29,9 +24,7 @@ class AttachmentsTest extends TestCase
         $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
         $this->token->shouldReceive('expired')->andReturnFalse();
 
-        $this->project = ['id' => '1', 'name' => 'Project'];
-        $this->issue = ['id' => 1];
-        $this->attachment = ['id' => 1, 'filename' => 'logo.png', 'size' => 100, 'mimeType' => 'jpeg'];
+        $this->account = ['AccountId' => '1', 'AccountName' => 'Account'];
     }
 
     public function tearDown(): void
@@ -40,29 +33,7 @@ class AttachmentsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_add_an_attachment_to_an_issue()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
-
-        // Second, adding the attachment to the issue
-        $service->shouldReceive('request')
-            ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([$this->attachment])));
-
-        // When
-        $attachments = $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
-
-        // Then
-        $this->assertIsArray($attachments);
-        $this->assertInstanceOf(Attachment::class, $attachments[0]);
-        $this->assertIsArray($attachments[0]->toArray());
-    }
-
-    /** @test */
-    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_adding_an_attachment_to_a_issue()
+    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -76,11 +47,11 @@ class AttachmentsTest extends TestCase
         $this->expectException(FailedActionException::class);
 
         // When
-        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+        $jira->account();
     }
 
     /** @test */
-    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_adding_an_attachment_to_a_issue()
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -94,11 +65,11 @@ class AttachmentsTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         // When
-        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+        $jira->account();
     }
 
     /** @test */
-    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_adding_an_attachment_to_a_issue()
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -112,11 +83,11 @@ class AttachmentsTest extends TestCase
         $this->expectException(UnauthorizedException::class);
 
         // When
-        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+        $jira->account();
     }
 
     /** @test */
-    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_adding_an_attachment_to_a_issue()
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -130,6 +101,6 @@ class AttachmentsTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // When
-        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+        $jira->account();
     }
 }

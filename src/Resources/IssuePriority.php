@@ -2,28 +2,28 @@
 
 namespace TestMonitor\Jira\Resources;
 
-class Project extends Resource
+class IssuePriority extends Resource
 {
     /**
-     * The ID of the project.
+     * The ID of the issue priority.
      *
      * @var string
      */
     public $id;
 
     /**
-     * The key of the project.
-     *
-     * @var string
-     */
-    public $key;
-
-    /**
-     * The name of the project.
+     * The name of the issue priority.
      *
      * @var string
      */
     public $name;
+
+    /**
+     * The icon url for the issue priority.
+     *
+     * @var string
+     */
+    public $iconUrl;
 
     /**
      * Create a new resource instance.
@@ -32,8 +32,8 @@ class Project extends Resource
      */
     public function __construct(array $attributes)
     {
-        $this->id = $attributes['id'] ?? null;
-        $this->key = $attributes['key'] ?? null;
-        $this->name = $attributes['name'] ?? null;
+        $this->id = (string) $attributes['id'];
+        $this->iconUrl = $attributes['iconUrl'] ?? '';
+        $this->name = $attributes['name'] ?? '';
     }
 }

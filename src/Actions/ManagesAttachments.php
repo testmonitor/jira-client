@@ -2,8 +2,6 @@
 
 namespace TestMonitor\Jira\Actions;
 
-use JiraRestApi\JiraException;
-use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Transforms\TransformsAttachments;
 
 trait ManagesAttachments
@@ -11,23 +9,44 @@ trait ManagesAttachments
     use TransformsAttachments;
 
     /**
-     * Add a new attachment.
+     * Get the attachment content.
      *
-     * @param string $path
-     * @param string $issueKey
+     * @param string $id
      *
-     * @throws \TestMonitor\Jira\Exceptions\Exception
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
      * @return \TestMonitor\Jira\Resources\Attachment
      */
-    public function addAttachment(string $path, string $issueKey)
+    public function attachment($id)
     {
-        try {
-            $result = $this->issueService()->addAttachments($issueKey, [$path]);
+        return $this->get("attachment/content/{$id}");
+    }
 
-            return $this->fromJiraAttachment($result[0]);
-        } catch (JiraException $exception) {
-            throw new Exception($exception->getMessage());
-        }
+    /**
+     * Add attachment to issue.
+     *
+     * @param string $issueId
+     * @param string $path
+     *
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return \TestMonitor\Jira\Resources\Attachment
+     */
+    public function addAttachmentToIssue(string $issueId, string $path)
+    {
+        $response = $this->post("issue/{$issueId}/attachments", [
+            'headers' => [
+                'X-Atlassian-Token' => 'no-check',
+                'Accept' => 'application/json',
+            ],
+            'multipart' => [
+                [
+                    'name' => 'file',
+                    'contents' => fopen($path, 'r'),
+                ],
+            ],
+        ]);
+
+        return $this->fromJiraAttachments($response);
     }
 }

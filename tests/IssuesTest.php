@@ -4,48 +4,34 @@ namespace TestMonitor\Jira\Tests;
 
 use Mockery;
 use TestMonitor\Jira\Client;
-use JiraRestApi\JiraException;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use TestMonitor\Jira\Resources\Issue;
+use TestMonitor\Jira\Resources\Project;
+use TestMonitor\Jira\Resources\IssueType;
 use TestMonitor\Jira\Exceptions\Exception;
+use TestMonitor\Jira\Resources\IssueStatus;
+use TestMonitor\Jira\Resources\IssuePriority;
+use TestMonitor\Jira\Exceptions\NotFoundException;
+use TestMonitor\Jira\Exceptions\ValidationException;
+use TestMonitor\Jira\Exceptions\InvalidDataException;
+use TestMonitor\Jira\Exceptions\FailedActionException;
+use TestMonitor\Jira\Exceptions\UnauthorizedException;
 
 class IssuesTest extends TestCase
 {
-    /**
-     * @var \JiraRestApi\Issue\IssueField
-     */
-    protected $fields;
+    protected $token;
 
-    /**
-     * @var \JiraRestApi\Issue\Issue
-     */
     protected $issue;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $project = Mockery::mock('\JiraRestApi\Project\Project');
-        $project->id = 1;
-        $project->key = 'TST';
+        $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
+        $this->token->shouldReceive('expired')->andReturnFalse();
 
-        $type = Mockery::mock('\JiraRestApi\Issue\IssueType');
-        $type->id = 1;
-        $type->name = 'Bug';
-
-        $this->fields = Mockery::mock('\JiraRestApi\Issue\IssueField');
-        $this->fields->shouldReceive('getIssueType')->andReturn($type);
-        $this->fields->shouldReceive('getProjectKey')->andReturn($project);
-
-        $this->fields->summary = 'Summary';
-        $this->fields->description = 'Description';
-        $this->fields->issuetype = $type;
-
-        $this->issue = Mockery::mock('\JiraRestApi\Issue\Issue');
-
-        $this->issue->id = '1';
-        $this->issue->key = 'TST';
-        $this->issue->fields = $this->fields;
+        $this->issue = ['id' => '1', 'key' => 'KEY', 'summary' => 'My Issue', 'description' => 'My Description'];
     }
 
     public function tearDown(): void
@@ -57,122 +43,209 @@ class IssuesTest extends TestCase
     public function it_should_return_a_list_of_issues()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
-        $results = Mockery::mock('JiraRestApi\Issue\IssueSearchResult');
-        $results->issues = [$this->issue];
-
-        $service->shouldReceive('search')->once()->andReturn($results);
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(['issues' => [$this->issue]])));
 
         // When
-        $issues = $jira->issues('TST');
+        $issues = $jira->issues();
 
         // Then
         $this->assertIsArray($issues);
         $this->assertCount(1, $issues);
         $this->assertInstanceOf(Issue::class, $issues[0]);
-        $this->assertEquals($this->issue->id, $issues[0]->id);
+        $this->assertEquals($this->issue['id'], $issues[0]->id);
+        $this->assertIsArray($issues[0]->toArray());
     }
 
     /** @test */
-    public function it_should_throw_an_exception_when_client_fails_to_get_a_list_of_issues()
+    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_issues()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
-        $results = Mockery::mock('JiraRestApi\Issue\IssueSearchResult');
-        $results->issues = [$this->issue];
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(400, ['Content-Type' => 'application/json'], null));
 
-        $service->shouldReceive('search')->once()->andThrow(new JiraException());
+        $this->expectException(FailedActionException::class);
+
+        // When
+        $jira->issues();
+    }
+
+    /** @test */
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_issues()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(404, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(NotFoundException::class);
+
+        // When
+        $jira->issues();
+    }
+
+    /** @test */
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_issues()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(401, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(UnauthorizedException::class);
+
+        // When
+        $jira->issues();
+    }
+
+    /** @test */
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_issues()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(422, ['Content-Type' => 'application/json'], json_encode(['message' => 'invalid'])));
+
+        $this->expectException(ValidationException::class);
+
+        // When
+        $jira->issues();
+    }
+
+    /** @test */
+    public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_issues()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(422, ['Content-Type' => 'application/json'], json_encode(['errors' => ['invalid']])));
+
+        // When
+        try {
+            $jira->issues();
+        } catch (ValidationException $exception) {
+            // Then
+            $this->assertIsArray($exception->errors());
+            $this->assertEquals('invalid', $exception->errors()['errors'][0]);
+        }
+    }
+
+    /** @test */
+    public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_issues()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(418, ['Content-Type' => 'application/json'], json_encode(['rooibos' => 'anyone?'])));
 
         $this->expectException(Exception::class);
 
         // When
-        $jira->issues('nonsense');
+        $jira->issues();
     }
 
     /** @test */
     public function it_should_return_a_single_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
-        $service->shouldReceive('get')->with($this->issue->key)->once()->andReturn($this->issue);
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($this->issue)));
 
         // When
-        $issue = $jira->issue($this->issue->key);
+        $issue = $jira->issue($this->issue['id']);
 
         // Then
         $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertEquals($this->issue->id, $issue->id);
-        $this->assertEquals($this->issue->fields->summary, $issue->summary);
-    }
-
-    /** @test */
-    public function it_should_throw_an_exception_when_client_fails_to_get_a_single_issue()
-    {
-        // Given
-        $jira = new Client('url', 'user', 'pass');
-
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
-
-        $service->shouldReceive('get')->with('nonsense')->once()->andThrow(new JiraException());
-
-        $this->expectException(Exception::class);
-
-        // When
-        $jira->issue('nonsense');
+        $this->assertEquals($this->issue['id'], $issue->id);
+        $this->assertIsArray($issue->toArray());
     }
 
     /** @test */
     public function it_should_create_an_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
-        $service->shouldReceive('create')->once()->andReturn($this->issue);
-        $service->shouldReceive('get')->with($this->issue->key)->once()->andReturn($this->issue);
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(201, ['Content-Type' => 'application/json'], json_encode($this->issue)));
 
         // When
         $issue = $jira->createIssue(new Issue([
-            'summary' => 'Summary',
-            'description' => 'Description',
-            'type' => 'Bug',
-        ]), 'TST');
+            'id' => '1',
+            'key' => 'KEY',
+            'summary' => 'Issue',
+            'description' => 'Issue',
+            'project' => new Project(['id' => 1]),
+            'type' => new IssueType(['id' => 1]),
+            'priority' => new IssuePriority(['id' => 1]),
+            'status' => new IssueStatus(['id' => 1]),
+        ]));
 
         // Then
         $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertIsArray($issue->toArray());
-        $this->assertEquals($this->issue->id, $issue->id);
-        $this->assertEquals($this->issue->fields->summary, $issue->summary);
+        $this->assertEquals($this->issue['id'], $issue->id);
     }
 
     /** @test */
-    public function it_should_throw_an_exception_when_client_fails_to_create_an_issue()
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_creating_an_invalid_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+        $jira->setClient(Mockery::mock('\GuzzleHttp\Client'));
 
-        $service->shouldReceive('create')->once()->andThrow(new JiraException());
-        $service->shouldReceive('get')->with($this->issue->key)->never()->andReturn($this->issue);
-
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidDataException::class);
 
         // When
-        $jira->createIssue(new Issue([
-            'summary' => 'I',
-            'description' => 'Like',
-            'type' => 'To',
-        ]), 'Fail');
+        $issue = $jira->createIssue(new Issue([
+            'id' => '1',
+            'key' => 'KEY',
+            'project' => new Project(['id' => 1]),
+            'type' => new IssueType(['id' => 1]),
+            'priority' => new IssuePriority(['id' => 1]),
+            'status' => new IssueStatus(['id' => 1]),
+        ]));
+
+        // Then
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertEquals($this->issue['id'], $issue->id);
     }
 }

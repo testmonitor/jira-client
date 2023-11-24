@@ -13,4 +13,4 @@ phpunit.xml
 
 /.idea
 
-test.php
+src/Test.php
