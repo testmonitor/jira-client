@@ -2,80 +2,136 @@
 
 namespace TestMonitor\Jira\Actions;
 
-use JiraRestApi\JiraException;
-use JiraRestApi\Issue\JqlQuery;
+use JqlBuilder\Jql;
 use TestMonitor\Jira\Resources\Issue;
-use TestMonitor\Jira\Exceptions\Exception;
+use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Transforms\TransformsIssues;
+use TestMonitor\Jira\Exceptions\FailedActionException;
 
 trait ManagesIssues
 {
     use TransformsIssues;
 
     /**
-     * Get a list of of issues.
+     * Get a single issue.
      *
-     * @param string $projectKey
-     * @param int $startAt
-     * @param int $maxResults
+     * @param string $id
      *
-     * @throws \TestMonitor\Jira\Exceptions\Exception
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return Issue[]
+     * @return \TestMonitor\Jira\Resources\Issue
      */
-    public function issues(string $projectKey, int $startAt = 0, int $maxResults = 15)
+    public function issue($id)
     {
-        try {
-            $jql = (new JqlQuery())->setProject($projectKey);
+        $response = $this->get("issue/{$id}");
 
-            $result = $this->issueService()->search($jql->getQuery(), $startAt, $maxResults);
-
-            return array_map(function ($issue) {
-                return $this->fromJiraIssue($issue);
-            }, $result->issues);
-        } catch (JiraException $exception) {
-            throw new Exception($exception->getMessage());
-        }
+        return $this->fromJiraIssue($response);
     }
 
     /**
-     * Get a single issue.
+     * Get a list of issues.
      *
-     * @param string $key
+     * @param \JqlBuilder\Jql|null $query
+     * @param int $page
+     * @param int $limit
      *
-     * @throws \TestMonitor\Jira\Exceptions\Exception
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return Issue
+     * @return \TestMonitor\Jira\Resources\Issue[]
      */
-    public function issue($key)
+    public function issues(Jql $query = null, int $page = 1, int $limit = 50)
     {
-        try {
-            $issue = $this->issueService()->get($key);
+        $response = $this->get('search', [
+            'query' => [
+                'jql' => $query instanceof Jql ? $query->getQuery() : '',
+                'startAt' => $page,
+                'maxResults' => $limit,
+            ],
+        ]);
 
-            return $this->fromJiraIssue($issue);
-        } catch (JiraException $exception) {
-            throw new Exception($exception->getMessage());
-        }
+        return $this->fromJiraIssues($response['issues'] ?? []);
     }
 
     /**
      * Create a new issue.
      *
      * @param \TestMonitor\Jira\Resources\Issue $issue
-     * @param string $projectKey
      *
-     * @throws \TestMonitor\Jira\Exceptions\Exception
-     *
-     * @return Issue
+     * @return \TestMonitor\Jira\Resources\Issue
      */
-    public function createIssue(Issue $issue, string $projectKey)
+    public function createIssue(Issue $issue): Issue
     {
-        try {
-            $result = $this->issueService()->create($this->toJiraIssue($issue, $projectKey));
+        $response = $this->post("issue", ['json' => $this->toNewIssue($issue)]);
 
-            return $this->issue($result->key);
-        } catch (JiraException $exception) {
-            throw new Exception($exception->getMessage());
+        return $this->fromJiraIssue($response);
+    }
+
+    /**
+     * Update an issue.
+     *
+     * @param string $id
+     * @param array{
+     *      summary: string,
+     *      description: \DH\Adf\Node\Block\Document,
+     *      type: \TestMonitor\Jira\Resources\IssueType,
+     *      priority: \TestMonitor\Jira\Resources\IssuePriority
+     *  } $attributes
+     *
+     * @return \TestMonitor\Jira\Resources\Issue
+     */
+    public function updateIssue($id, array $attributes): Issue
+    {
+        $this->put("issue/{$id}", ['json' => $this->toUpdateIssue($attributes)]);
+
+        return $this->issue($id);
+    }
+
+    /**
+     * Update the status of an issue.
+     *
+     * @param \TestMonitor\Jira\Resources\Issue $issue
+     *
+     * @return \TestMonitor\Jira\Resources\Issue
+     */
+    public function updateIssueStatus($issueId, IssueStatus $status): Issue
+    {
+        $transition = $this->findTransitionForStatus($issueId, $status);
+
+        $this->post("issue/{$issueId}/transitions", [
+            'json' => [
+                'transition' => ['id' => $transition['id']],
+            ],
+        ]);
+
+        return $this->issue($issueId);
+    }
+
+    /**
+     * Determine the transition for a given issue and status.
+     *
+     * @param string $issueId
+     * @param \TestMonitor\Jira\Resources\IssueStatus $status
+     *
+     * @throws \TestMonitor\Jira\Exceptions\FailedActionException
+     * @return array
+     *
+     */
+    protected function findTransitionForStatus($issueId, IssueStatus $status): array
+    {
+        // Get the available transitions for this issue.
+        $response = $this->get("issue/{$issueId}/transitions");
+
+        // Find matching transitions for the given status.
+        $transitions = array_filter(
+            $response['transitions'],
+            fn (array $transition) => $transition['to']['id'] === $status->id
+        );
+
+        if (empty($transitions)) {
+            throw new FailedActionException('The provided status ID is not available for this issue.');
         }
+
+        // Return the first matching transition
+        return array_shift($transitions);
     }
 }

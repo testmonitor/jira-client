@@ -7,7 +7,7 @@ use TestMonitor\Jira\Validator;
 class Attachment extends Resource
 {
     /**
-     * The id of the attachment.
+     * The ID of the attachment.
      *
      * @var string
      */
@@ -21,11 +21,18 @@ class Attachment extends Resource
     public $filename;
 
     /**
-     * The URL of the attachment.
+     * The mimetype of the attachment.
      *
      * @var string
      */
-    public $content;
+    public $mimeType;
+
+    /**
+     * The size of the attachment.
+     *
+     * @var integer
+     */
+    public $size;
 
     /**
      * Create a new resource instance.
@@ -34,10 +41,11 @@ class Attachment extends Resource
      */
     public function __construct(array $attachment)
     {
-        Validator::keysExists($attachment, ['id', 'filename', 'content']);
+        Validator::keysExists($attachment, ['id', 'filename']);
 
         $this->id = $attachment['id'];
         $this->filename = $attachment['filename'];
-        $this->content = $attachment['content'];
+        $this->size = $attachment['size'];
+        $this->mimeType = $attachment['mimeType'];
     }
 }

@@ -3,11 +3,12 @@
 namespace TestMonitor\Jira\Resources;
 
 use TestMonitor\Jira\Validator;
+use DH\Adf\Exporter\Html\Block\DocumentExporter;
 
 class Issue extends Resource
 {
     /**
-     * The id of the issue.
+     * The ID of the issue.
      *
      * @var string
      */
@@ -30,23 +31,44 @@ class Issue extends Resource
     /**
      * The description of the issue.
      *
-     * @var string
+     * @var \DH\Adf\Node\Block\Document|null
      */
     public $description;
 
     /**
      * The issue type.
      *
-     * @var string
+     * @var \TestMonitor\Jira\Resources\IssueType
      */
     public $type;
 
     /**
-     * The key of the project.
+     * The issue status.
      *
-     * @var string
+     * @var \TestMonitor\Jira\Resources\IssueStatus
      */
-    public $projectKey;
+    public $status;
+
+    /**
+     * The issue priority.
+     *
+     * @var \TestMonitor\Jira\Resources\IssuePriority
+     */
+    public $priority;
+
+    /**
+     * The list of attachments.
+     *
+     * @var array
+     */
+    public $attachments;
+
+    /**
+     * The project of the issue.
+     *
+     * @var \TestMonitor\Jira\Resources\Project
+     */
+    public $project;
 
     /**
      * Create a new resource instance.
@@ -55,13 +77,31 @@ class Issue extends Resource
      */
     public function __construct(array $issue)
     {
-        Validator::keysExists($issue, ['summary', 'description', 'type']);
+        Validator::keysExists($issue, ['summary', 'description']);
 
         $this->id = $issue['id'] ?? null;
         $this->key = $issue['key'] ?? null;
         $this->summary = $issue['summary'];
+
         $this->description = $issue['description'];
-        $this->type = $issue['type'];
-        $this->projectKey = $issue['projectKey'] ?? null;
+
+        $this->type = $issue['type'] ?? null;
+        $this->status = $issue['status'] ?? null;
+        $this->priority = $issue['priority'] ?? null;
+
+        $this->project = $issue['project'] ?? null;
+        $this->attachments = $issue['attachments'] ?? null;
+    }
+
+    /**
+     * Returns the description field as HTML.
+     *
+     * @return string
+     */
+    public function getDescriptionAsHTML(): string
+    {
+        $document = new DocumentExporter($this->description);
+
+        return $document->export();
     }
 }
