@@ -43,7 +43,6 @@ trait TransformsWebhooks
 
     /**
      * @param array $webhook
-     *
      * @return \TestMonitor\Jira\Resources\Webhook
      */
     protected function fromJiraWebhook(array $webhook): Webhook
