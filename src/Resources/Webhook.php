@@ -63,7 +63,6 @@ class Webhook extends Resource
      * Returns a project filter.
      *
      * @param string[] $projectIds
-     *
      * @return \JqlBuilder\Jql
      */
     protected function projectFilter($projectIds): Jql
