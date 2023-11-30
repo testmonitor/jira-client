@@ -8,6 +8,22 @@ use TestMonitor\Jira\Resources\Account;
 trait TransformsAccounts
 {
     /**
+     * @param array $accounts
+     *
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return \TestMonitor\Jira\Resources\Account[]
+     */
+    protected function fromJiraAccounts($accounts): array
+    {
+        Validator::isArray($accounts);
+
+        return array_map(function ($account) {
+            return $this->fromJiraAccount($account);
+        }, $accounts);
+    }
+
+    /**
      * @param array $account
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException

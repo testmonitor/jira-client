@@ -47,7 +47,7 @@ class AccountsTest extends TestCase
         $this->expectException(FailedActionException::class);
 
         // When
-        $jira->account();
+        $jira->accounts();
     }
 
     /** @test */
@@ -65,7 +65,7 @@ class AccountsTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         // When
-        $jira->account();
+        $jira->accounts();
     }
 
     /** @test */
@@ -83,7 +83,7 @@ class AccountsTest extends TestCase
         $this->expectException(UnauthorizedException::class);
 
         // When
-        $jira->account();
+        $jira->accounts();
     }
 
     /** @test */
@@ -101,6 +101,6 @@ class AccountsTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // When
-        $jira->account();
+        $jira->accounts();
     }
 }
