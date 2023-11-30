@@ -62,7 +62,7 @@ class OauthTest extends TestCase
         $this->expectException(TokenExpiredException::class);
 
         // When
-        $jira = $jira->account();
+        $jira = $jira->accounts();
     }
 
     /** @test */
@@ -153,6 +153,6 @@ class OauthTest extends TestCase
         $this->expectException(UnauthorizedException::class);
 
         // When
-        $jira->account();
+        $jira->accounts();
     }
 }

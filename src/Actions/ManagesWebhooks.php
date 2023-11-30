@@ -21,7 +21,7 @@ trait ManagesWebhooks
      */
     public function webhooks(int $start = 0, int $limit = 50)
     {
-        $response = $this->get("webhook", [
+        $response = $this->get('webhook', [
             'query' => [
                 'startAt' => $start,
                 'maxResults' => $limit,
@@ -35,12 +35,11 @@ trait ManagesWebhooks
      * Create a new webhook.
      *
      * @param Webhook $webhook
-     *
      * @return \TestMonitor\Jira\Resources\Webhook
      */
     public function createWebhook(Webhook $webhook): Webhook
     {
-        $response = $this->post("webhook", ['json' => $this->toJiraWebhook($webhook)]);
+        $response = $this->post('webhook', ['json' => $this->toJiraWebhook($webhook)]);
 
         $result = array_shift($response['webhookRegistrationResult']);
 
@@ -53,12 +52,11 @@ trait ManagesWebhooks
      * Extend webhook lifetimes.
      *
      * @param array $webhookIds
-     *
      * @return string
      */
     public function extendWebhookLifetimes(array $webhookIds): array
     {
-        $response = $this->put("webhook/refresh", [
+        $response = $this->put('webhook/refresh', [
             'json' => ['webhookIds' => $webhookIds],
         ]);
 
@@ -69,12 +67,11 @@ trait ManagesWebhooks
      * Delete webhooks.
      *
      * @param array $webhookIds
-     *
      * @return bool
      */
     public function deleteWebhooks(array $webhookIds): bool
     {
-        $response = $this->delete("webhook", [
+        $response = $this->delete('webhook', [
             'json' => ['webhookIds' => $webhookIds],
         ]);
 
