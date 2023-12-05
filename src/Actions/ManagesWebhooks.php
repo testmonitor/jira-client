@@ -54,13 +54,13 @@ trait ManagesWebhooks
      * @param array $webhookIds
      * @return string
      */
-    public function extendWebhookLifetimes(array $webhookIds): array
+    public function extendWebhookLifetimes(array $webhookIds): bool
     {
         $response = $this->put('webhook/refresh', [
             'json' => ['webhookIds' => $webhookIds],
         ]);
 
-        return $response;
+        return empty($response);
     }
 
     /**
