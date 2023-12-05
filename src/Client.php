@@ -21,7 +21,8 @@ class Client
         Actions\ManagesIssueTypes,
         Actions\ManagesProjects,
         Actions\ManagesProjectVersions,
-        Actions\ManagesUsers;
+        Actions\ManagesUsers,
+        Actions\ManagesWebhooks;
 
     /**
      * @var \TestMonitor\Jira\AccessToken
@@ -295,7 +296,7 @@ class Client
             $payload
         );
 
-        if (! in_array($response->getStatusCode(), [200, 201, 203, 204, 206])) {
+        if (! in_array($response->getStatusCode(), [200, 201, 202, 203, 204, 206])) {
             return $this->handleRequestError($response);
         }
 
