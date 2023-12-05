@@ -25,4 +25,31 @@ trait ManagesIssueStatuses
 
         return $this->fromJiraIssueStatuses($response['values']);
     }
+
+    /**
+     * Get a list of issue statuses for an issue type.
+     *
+     * @param string $projectId
+     * @param string $typeId
+     *
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return \TestMonitor\Jira\Resources\IssueStatus[]
+     */
+    public function issueStatusesForType(string $projectId, string $typeId)
+    {
+        $response = $this->get("project/{$projectId}/statuses");
+
+        $filtered = array_merge(
+            ...array_column(
+                array_filter(
+                    $response,
+                    fn ($type) => $type['id'] === $typeId
+                ),
+                'statuses'
+            )
+        );
+
+        return $this->fromJiraIssueStatuses($filtered);
+    }
 }
