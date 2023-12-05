@@ -2,7 +2,6 @@
 
 namespace TestMonitor\Jira\Actions;
 
-use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Transforms\TransformsIssueStatuses;
 
 trait ManagesIssueStatuses
