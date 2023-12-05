@@ -52,21 +52,8 @@ class Webhook extends Resource
         $this->url = $webhook['url'] ?? '';
         $this->events = $webhook['events'];
 
-        $this->jqlFilter = isset($webhook['projectIds']) ?
-            $this->projectFilter($webhook['projectIds'])->getQuery() :
-            $webhook['jqlFilter'] ?? '';
+        $this->jqlFilter = $webhook['jqlFilter'] ?? '';
 
         $this->expirationDate = $webhook['expirationDate'] ?? '';
-    }
-
-    /**
-     * Returns a project filter.
-     *
-     * @param string[] $projectIds
-     * @return \JqlBuilder\Jql
-     */
-    protected function projectFilter($projectIds): Jql
-    {
-        return (new Jql)->where(column: 'project', operator: 'in', value: $projectIds);
     }
 }
