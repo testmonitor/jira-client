@@ -58,29 +58,6 @@ class IssueStatusesTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_a_list_of_issue_statuses_for_an_issue_type()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
-
-        $service->shouldReceive('request')
-            ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([['id' => '10001', 'statuses' => [$this->issueStatus]]])));
-
-        // When
-        $issueStatuses = $jira->issueStatusesForType('123456789', '10001');
-
-        // Then
-        $this->assertIsArray($issueStatuses);
-        $this->assertCount(1, $issueStatuses);
-        $this->assertInstanceOf(IssueStatus::class, $issueStatuses[0]);
-        $this->assertEquals($this->issueStatus['id'], $issueStatuses[0]->id);
-        $this->assertIsArray($issueStatuses[0]->toArray());
-    }
-
-    /** @test */
     public function it_should_throw_a_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_issue_statuses()
     {
         // Given
@@ -190,5 +167,28 @@ class IssueStatusesTest extends TestCase
 
         // When
         $jira->issueStatuses('123456789');
+    }
+
+    /** @test */
+    public function it_should_return_a_list_of_issue_statuses_for_an_issue_type()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+        ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([['id' => '10001', 'statuses' => [$this->issueStatus]]])));
+
+        // When
+        $issueStatuses = $jira->issueStatusesForType('123456789', '10001');
+
+        // Then
+        $this->assertIsArray($issueStatuses);
+        $this->assertCount(1, $issueStatuses);
+        $this->assertInstanceOf(IssueStatus::class, $issueStatuses[0]);
+        $this->assertEquals($this->issueStatus['id'], $issueStatuses[0]->id);
+        $this->assertIsArray($issueStatuses[0]->toArray());
     }
 }
