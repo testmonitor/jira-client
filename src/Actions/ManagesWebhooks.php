@@ -41,9 +41,7 @@ trait ManagesWebhooks
     {
         $response = $this->post('webhook', ['json' => $this->toJiraWebhook($webhook)]);
 
-        $result = array_shift($response['webhookRegistrationResult']);
-
-        $webhook->id = $result['createdWebhookId'];
+        $webhook->id = $response['webhookRegistrationResult'][0]['createdWebhookId'];
 
         return $webhook;
     }
