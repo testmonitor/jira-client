@@ -33,4 +33,18 @@ trait ManagesUsers
 
         return $this->fromJiraUsers($response);
     }
+
+    /**
+     * Returns the profile of the authenticated user.
+     *
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return \TestMonitor\Jira\Resources\User
+     */
+    public function myself()
+    {
+        $response = $this->get("https://api.atlassian.com/ex/jira/{$this->cloudId}/rest/api/3/myself");
+
+        return $this->fromJiraUser($response);
+    }
 }
