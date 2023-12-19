@@ -32,19 +32,19 @@ trait ManagesIssues
      * Get a list of issues.
      *
      * @param \JqlBuilder\Jql|null $query
-     * @param int $page
+     * @param int $offset
      * @param int $limit
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
      * @return \TestMonitor\Jira\Resources\Issue[]
      */
-    public function issues(Jql $query = null, int $page = 1, int $limit = 50)
+    public function issues(Jql $query = null, int $offset = 0, int $limit = 50)
     {
         $response = $this->get('search', [
             'query' => [
                 'jql' => $query instanceof Jql ? $query->getQuery() : '',
-                'startAt' => $page,
+                'startAt' => $offset,
                 'maxResults' => $limit,
             ],
         ]);
