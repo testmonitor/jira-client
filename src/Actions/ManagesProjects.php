@@ -12,19 +12,19 @@ trait ManagesProjects
      * Get a list of projects.
      *
      * @param string $query
-     * @param int $page
+     * @param int $offset
      * @param int $limit
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
      * @return \TestMonitor\Jira\Resources\Project[]
      */
-    public function projects(string $query = '', int $page = 1, int $limit = 50)
+    public function projects(string $query = '', int $offset = 0, int $limit = 50)
     {
         $response = $this->get('project/search', [
             'query' => [
                 'query' => $query,
-                'startAt' => $page,
+                'startAt' => $offset,
                 'maxResults' => $limit,
             ],
         ]);
