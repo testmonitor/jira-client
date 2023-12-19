@@ -2,6 +2,7 @@
 
 namespace TestMonitor\Jira\Actions;
 
+use TestMonitor\Jira\Resources\ProjectVersion;
 use TestMonitor\Jira\Transforms\TransformsProjectVersions;
 
 trait ManagesProjectVersions
@@ -26,7 +27,7 @@ trait ManagesProjectVersions
         string $query = '',
         int $offset = 0,
         int $limit = 50,
-        string $orderBy = '-sequence',
+        string $orderBy = ProjectVersion::ORDER_SEQUENCE_DESC,
     ) {
         $response = $this->get("project/{$projectId}/version", [
             'query' => [
