@@ -12,18 +12,18 @@ trait ManagesWebhooks
     /**
      * Get a list of webhooks.
      *
-     * @param int $start
+     * @param int $offset
      * @param int $limit
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
      * @return \TestMonitor\Jira\Resources\Webhook[]
      */
-    public function webhooks(int $start = 0, int $limit = 50)
+    public function webhooks(int $offset = 0, int $limit = 50)
     {
         $response = $this->get('webhook', [
             'query' => [
-                'startAt' => $start,
+                'startAt' => $offset,
                 'maxResults' => $limit,
             ],
         ]);
