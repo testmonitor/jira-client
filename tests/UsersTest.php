@@ -187,12 +187,12 @@ class UsersTest extends TestCase
             ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($this->user)));
 
         // When
-        $users = $jira->myself();
+        $user = $jira->myself();
 
         // Then
-        $this->assertIsObject($users);
-        $this->assertInstanceOf(User::class, $users);
-        $this->assertEquals($this->user['accountId'], $users->id);
+        $this->assertIsObject($user);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($this->user['accountId'], $user->id);
     }
 
     /** @test */
