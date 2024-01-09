@@ -2,13 +2,13 @@
 
 [![Latest Stable Version](https://poser.pugx.org/testmonitor/jira-client/v/stable)](https://packagist.org/packages/testmonitor/jira-client)
 [![CircleCI](https://img.shields.io/circleci/project/github/testmonitor/jira-client.svg)](https://circleci.com/gh/testmonitor/jira-client)
-[![Travis Build](https://travis-ci.com/testmonitor/jira-client.svg?branch=master)](https://travis-ci.com/testmonitor/jira-client)
+[![Travis Build](https://travis-ci.com/testmonitor/jira-client.svg?branch=master)](https://app.travis-ci.com/github/testmonitor/jira-client)
 [![Code Coverage](https://scrutinizer-ci.com/g/testmonitor/jira-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/testmonitor/jira-client/?branch=master)
 [![Code Quality](https://scrutinizer-ci.com/g/testmonitor/jira-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/testmonitor/jira-client/?branch=master)
 [![StyleCI](https://styleci.io/repos/222957448/shield)](https://styleci.io/repos/222957448)
 [![License](https://poser.pugx.org/testmonitor/jira-client/license)](https://packagist.org/packages/testmonitor/jira-client)
 
-This package provides a very basic, convenient, and unified wrapper for the [PHP JIRA Rest Client](https://github.com/lesstif/php-jira-rest-client). 
+This package provides a very basic, convenient, and unified wrapper for the [PHP JIRA Rest Client](https://github.com/lesstif/php-jira-rest-client).
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ This package provides a very basic, convenient, and unified wrapper for the [PHP
 - [Contributing](#contributing)
 - [Credits](#credits)
 - [License](#license)
-  
+
 ## Installation
 
 To install the client you need to require the package using composer:
@@ -43,7 +43,7 @@ You'll have to instantiate the client using your credentials:
 $jira = new \TestMonitor\Jira\Client('https://myjira.atlassian.net', 'username', token');
 ```
 
-Next, you can start interacting with Jira. 
+Next, you can start interacting with Jira.
 
 ## Examples
 
@@ -68,7 +68,7 @@ $issue = $jira->createIssue(new \TestMonitor\Jira\Resources\Issue([
 The package contains integration tests. You can run them using PHPUnit.
 
     $ vendor/bin/phpunit
-    
+
 ## Changelog
 
 Refer to [CHANGELOG](CHANGELOG.md) for more information.
