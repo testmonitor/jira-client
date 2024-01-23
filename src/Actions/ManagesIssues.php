@@ -5,6 +5,7 @@ namespace TestMonitor\Jira\Actions;
 use JqlBuilder\Jql;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\IssueStatus;
+use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Transforms\TransformsIssues;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 
@@ -37,7 +38,7 @@ trait ManagesIssues
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\Issue[]
+     * @return \TestMonitor\Jira\Responses\PaginatedResponse
      */
     public function issues(Jql $query = null, int $offset = 0, int $limit = 50)
     {
@@ -49,7 +50,12 @@ trait ManagesIssues
             ],
         ]);
 
-        return $this->fromJiraIssues($response['issues'] ?? []);
+        return new PaginatedResponse(
+            $this->fromJiraIssues($response['issues'] ?? []),
+            $response['total'],
+            $response['maxResults'],
+            $response['startAt']
+        );
     }
 
     /**
