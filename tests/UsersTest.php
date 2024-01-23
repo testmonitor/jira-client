@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use TestMonitor\Jira\Resources\User;
 use TestMonitor\Jira\Exceptions\Exception;
+use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
@@ -55,11 +56,12 @@ class UsersTest extends TestCase
         $users = $jira->users('123456789');
 
         // Then
-        $this->assertIsArray($users);
-        $this->assertCount(1, $users);
-        $this->assertInstanceOf(User::class, $users[0]);
-        $this->assertEquals($this->user['accountId'], $users[0]->id);
-        $this->assertIsArray($users[0]->toArray());
+        $this->assertInstanceOf(PaginatedResponse::class, $users);
+        $this->assertIsArray($users->items());
+        $this->assertCount(1, $users->items());
+        $this->assertInstanceOf(User::class, $users->items()[0]);
+        $this->assertEquals($this->user['accountId'], $users->items()[0]->id);
+        $this->assertIsArray($users->items()[0]->toArray());
     }
 
     /** @test */

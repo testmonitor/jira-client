@@ -12,6 +12,7 @@ use TestMonitor\Jira\Resources\IssueType;
 use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Resources\IssuePriority;
+use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\InvalidDataException;
@@ -49,17 +50,26 @@ class IssuesTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(['issues' => [$this->issue]])));
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'issues' => [$this->issue],
+                'maxResults' => 100,
+                'startAt' => 0,
+                'total' => 1,
+            ])));
 
         // When
         $issues = $jira->issues();
 
         // Then
-        $this->assertIsArray($issues);
-        $this->assertCount(1, $issues);
-        $this->assertInstanceOf(Issue::class, $issues[0]);
-        $this->assertEquals($this->issue['id'], $issues[0]->id);
-        $this->assertIsArray($issues[0]->toArray());
+        $this->assertInstanceOf(PaginatedResponse::class, $issues);
+        $this->assertIsArray($issues->items());
+        $this->assertCount(1, $issues->items());
+        $this->assertEquals(100, $issues->perPage());
+        $this->assertEquals(0, $issues->offset());
+        $this->assertEquals(1, $issues->total());
+        $this->assertInstanceOf(Issue::class, $issues->items()[0]);
+        $this->assertEquals($this->issue['id'], $issues->items()[0]->id);
+        $this->assertIsArray($issues->items()[0]->toArray());
     }
 
     /** @test */

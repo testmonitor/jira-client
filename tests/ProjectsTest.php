@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use TestMonitor\Jira\Resources\Project;
 use TestMonitor\Jira\Exceptions\Exception;
+use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
@@ -44,17 +45,23 @@ class ProjectsTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(['values' => [$this->project]])));
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'values' => [$this->project],
+                'maxResults' => 100,
+                'startAt' => 0,
+                'total' => 1,
+            ])));
 
         // When
         $projects = $jira->projects();
 
         // Then
-        $this->assertIsArray($projects);
-        $this->assertCount(1, $projects);
-        $this->assertInstanceOf(Project::class, $projects[0]);
-        $this->assertEquals($this->project['id'], $projects[0]->id);
-        $this->assertIsArray($projects[0]->toArray());
+        $this->assertInstanceOf(PaginatedResponse::class, $projects);
+        $this->assertIsArray($projects->items());
+        $this->assertCount(1, $projects->items());
+        $this->assertInstanceOf(Project::class, $projects->items()[0]);
+        $this->assertEquals($this->project['id'], $projects->items()[0]->id);
+        $this->assertIsArray($projects->items()[0]->toArray());
     }
 
     /** @test */
