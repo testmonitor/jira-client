@@ -4,6 +4,7 @@ namespace TestMonitor\Jira\Actions;
 
 use TestMonitor\Jira\Resources\Webhook;
 use TestMonitor\Jira\Transforms\TransformsWebhooks;
+use TestMonitor\Jira\Exceptions\FailedActionException;
 
 trait ManagesWebhooks
 {
@@ -40,6 +41,10 @@ trait ManagesWebhooks
     public function createWebhook(Webhook $webhook): Webhook
     {
         $response = $this->post('webhook', ['json' => $this->toJiraWebhook($webhook)]);
+
+        if (array_key_exists('errors', $response['webhookRegistrationResult'][0])) {
+            throw new FailedActionException($response['webhookRegistrationResult'][0]['errors'][0]);
+        }
 
         $webhook->id = $response['webhookRegistrationResult'][0]['createdWebhookId'];
 
