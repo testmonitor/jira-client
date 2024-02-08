@@ -14,7 +14,7 @@ trait ManagesAccounts
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\User
+     * @return \TestMonitor\Jira\Resources\Account[]
      */
     public function accounts()
     {
