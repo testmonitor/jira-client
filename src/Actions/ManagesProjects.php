@@ -45,7 +45,7 @@ trait ManagesProjects
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\Issue
+     * @return \TestMonitor\Jira\Resources\Project
      */
     public function project($id)
     {
