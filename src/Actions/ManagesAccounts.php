@@ -24,4 +24,20 @@ trait ManagesAccounts
 
         return $this->fromJiraAccounts($response);
     }
+
+    /**
+     * Get the cloud ID for the specified URL.
+     *
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return string
+     */
+    public function cloudId(string $instanceUrl): string
+    {
+        $response = $this->get("{$instanceUrl}/_edge/tenant_info");
+
+        Validator::isArray($response);
+
+        return $response['cloudId'];
+    }
 }
