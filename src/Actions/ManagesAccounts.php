@@ -28,9 +28,9 @@ trait ManagesAccounts
     /**
      * Get the cloud ID for the specified URL.
      *
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      * @return string
      *
-     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      */
     public function cloudId(string $instanceUrl): string
     {
