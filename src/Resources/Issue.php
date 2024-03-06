@@ -2,6 +2,7 @@
 
 namespace TestMonitor\Jira\Resources;
 
+use DH\Adf\Node\Block\Document;
 use TestMonitor\Jira\Validator;
 use DH\Adf\Exporter\Html\Block\DocumentExporter;
 
@@ -100,6 +101,10 @@ class Issue extends Resource
      */
     public function getDescriptionAsHTML(): string
     {
+        if (! $this->description instanceof Document) {
+            return (string) $this->description;
+        }
+
         $document = new DocumentExporter($this->description);
 
         return $document->export();
