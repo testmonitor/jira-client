@@ -2,11 +2,11 @@
 
 namespace TestMonitor\Jira\Transforms;
 
-use TestMonitor\Jira\Parsers\Adf\Document;
 use TestMonitor\Jira\Validator;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\Project;
 use TestMonitor\Jira\Resources\IssueType;
+use TestMonitor\Jira\Parsers\Adf\Document;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Resources\IssuePriority;
 
