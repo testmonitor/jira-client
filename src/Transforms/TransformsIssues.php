@@ -2,11 +2,11 @@
 
 namespace TestMonitor\Jira\Transforms;
 
+use TestMonitor\Jira\Parsers\Adf\Document;
 use TestMonitor\Jira\Validator;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\Project;
 use TestMonitor\Jira\Resources\IssueType;
-use TestMonitor\Jira\Parsers\Adf\Document;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Resources\IssuePriority;
 
@@ -82,7 +82,8 @@ trait TransformsIssues
             'self' => $issue['self'] ?? '',
             'summary' => $issue['fields']['summary'] ?? '',
 
-            'description' => (new Document($issue['fields']['description']))->toBlockNode(),
+            'description' => isset($issue['fields']['description']) ?
+                (new Document($issue['fields']['description']))->toBlockNode() : null,
 
             'type' => isset($issue['fields']['issuetype']) ?
                 new IssueType($issue['fields']['issuetype']) : null,
