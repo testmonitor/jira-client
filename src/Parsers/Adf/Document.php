@@ -39,8 +39,8 @@ class Document
      * Returns the document content as a blocknode.
      *
      * @throws \InvalidArgumentException
-     * @return null|\DH\Adf\Node\BlockNode
      *
+     * @return null|\DH\Adf\Node\BlockNode
      */
     public function toBlockNode(): ?BlockNode
     {
@@ -57,18 +57,16 @@ class Document
      * Removes unsupported node types from the content.
      *
      * @param array $node
-     *
      * @return array
      */
     protected function filterUnsupportedNodeTypes(array $node): array
     {
-        if (!$this->nodeTypeIsSupported($node)) {
+        if (! $this->nodeTypeIsSupported($node)) {
             return [];
         }
 
         if (array_key_exists('content', $node)) {
             foreach ($node['content'] as $key => $content) {
-
                 $node['content'][$key] = $this->filterUnsupportedNodeTypes($content);
 
                 // Discard empty content
@@ -85,12 +83,11 @@ class Document
      * Determines if the node type is supported.
      *
      * @param array $node
-     *
      * @return bool
      */
     protected function nodeTypeIsSupported(array $node): bool
     {
-        return !isset($node['type']) || in_array($node['type'], $this->supportedNodeTypes());
+        return ! isset($node['type']) || in_array($node['type'], $this->supportedNodeTypes());
     }
 
     /**

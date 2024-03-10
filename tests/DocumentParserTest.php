@@ -26,15 +26,15 @@ class DocumentParserTest extends TestCase
     {
         // Given
         $content = [
-            "type" => "doc",
-            "version" => 1,
-            "content" => [
+            'type' => 'doc',
+            'version' => 1,
+            'content' => [
                 [
-                    "type" => "paragraph",
-                    "content" => [
+                    'type' => 'paragraph',
+                    'content' => [
                         [
-                            "type" => "text",
-                            "text" => "test",
+                            'type' => 'text',
+                            'text' => 'test',
                         ],
                     ],
                 ],
@@ -54,15 +54,15 @@ class DocumentParserTest extends TestCase
     {
         // Given
         $content = [
-            "type" => "doc",
-            "version" => 1,
-            "content" => [
+            'type' => 'doc',
+            'version' => 1,
+            'content' => [
                 [
-                    "type" => "paragraph",
-                    "content" => [
+                    'type' => 'paragraph',
+                    'content' => [
                         [
-                            "type" => "text",
-                            "text" => "test",
+                            'type' => 'text',
+                            'text' => 'test',
                         ],
                     ],
                 ],
@@ -83,27 +83,27 @@ class DocumentParserTest extends TestCase
     {
         // Given
         $content = [
-            "type" => "doc",
-            "version" => 1,
-            "content" => [
+            'type' => 'doc',
+            'version' => 1,
+            'content' => [
                 [
-                    "type" => "paragraph",
-                    "content" => [
+                    'type' => 'paragraph',
+                    'content' => [
                         [
-                            "type" => "text",
-                            "text" => "lorem",
+                            'type' => 'text',
+                            'text' => 'lorem',
                         ],
                         [
-                            "type" => "mediaInline",
-                            "attrs" => [
-                                "id" => "12345",
-                                "collection" => "",
-                                "type" => "file",
+                            'type' => 'mediaInline',
+                            'attrs' => [
+                                'id' => '12345',
+                                'collection' => '',
+                                'type' => 'file',
                             ],
                         ],
                         [
-                            "type" => "text",
-                            "text" => "ipsum",
+                            'type' => 'text',
+                            'text' => 'ipsum',
                         ],
                     ],
                 ],
