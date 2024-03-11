@@ -19,7 +19,8 @@ class Document extends AdfDocument
     public static function load(array $data, ?BlockNode $parent = null): BlockNode
     {
         return AdfDocument::load(
-            static::filterUnsupportedNodeTypes($data), $parent
+            static::filterUnsupportedNodeTypes($data),
+            $parent
         );
     }
 
