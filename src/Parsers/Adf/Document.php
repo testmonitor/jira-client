@@ -6,50 +6,20 @@ use DH\Adf\Node\Node;
 use DH\Adf\Node\BlockNode;
 use DH\Adf\Node\Block\Document as AdfDocument;
 
-class Document
+class Document extends AdfDocument
 {
     /**
-     * Document content.
+     * Load array as document and filter out unsupported node types.
      *
-     * @var array
-     */
-    protected array $content;
-
-    /**
-     * Document constructor.
+     * @param array $data
+     * @param null|\DH\Adf\Node\BlockNode $parent
      *
-     * @param array $content
+     * @return \DH\Adf\Node\BlockNode
      */
-    public function __construct(array $content = [])
+    public static function load(array $data, ?BlockNode $parent = null): BlockNode
     {
-        $this->content = $content;
-    }
-
-    /**
-     * Returns the document content as an array.
-     *
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return $this->content;
-    }
-
-    /**
-     * Returns the document content as a blocknode.
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return null|\DH\Adf\Node\BlockNode
-     */
-    public function toBlockNode(): ?BlockNode
-    {
-        if (empty($this->content)) {
-            return null;
-        }
-
         return AdfDocument::load(
-            $this->filterUnsupportedNodeTypes($this->content)
+            static::filterUnsupportedNodeTypes($data), $parent
         );
     }
 
@@ -59,15 +29,15 @@ class Document
      * @param array $node
      * @return array
      */
-    protected function filterUnsupportedNodeTypes(array $node): array
+    protected static function filterUnsupportedNodeTypes(array $node): array
     {
-        if (! $this->nodeTypeIsSupported($node)) {
+        if (! static::nodeTypeIsSupported($node)) {
             return [];
         }
 
         if (array_key_exists('content', $node)) {
             foreach ($node['content'] as $key => $content) {
-                $node['content'][$key] = $this->filterUnsupportedNodeTypes($content);
+                $node['content'][$key] = static::filterUnsupportedNodeTypes($content);
 
                 // Discard empty content
                 if (empty($node['content'][$key])) {
@@ -85,9 +55,9 @@ class Document
      * @param array $node
      * @return bool
      */
-    protected function nodeTypeIsSupported(array $node): bool
+    protected static function nodeTypeIsSupported(array $node): bool
     {
-        return ! isset($node['type']) || in_array($node['type'], $this->supportedNodeTypes());
+        return ! isset($node['type']) || in_array($node['type'], static::supportedNodeTypes());
     }
 
     /**
@@ -95,7 +65,7 @@ class Document
      *
      * @return array
      */
-    protected function supportedNodeTypes(): array
+    protected static function supportedNodeTypes(): array
     {
         return array_keys(Node::NODE_MAPPING);
     }

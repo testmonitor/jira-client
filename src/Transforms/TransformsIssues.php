@@ -83,7 +83,7 @@ trait TransformsIssues
             'summary' => $issue['fields']['summary'] ?? '',
 
             'description' => isset($issue['fields']['description']) ?
-                (new Document($issue['fields']['description']))->toBlockNode() : null,
+                Document::load($issue['fields']['description']) : null,
 
             'type' => isset($issue['fields']['issuetype']) ?
                 new IssueType($issue['fields']['issuetype']) : null,

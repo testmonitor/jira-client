@@ -42,40 +42,12 @@ class DocumentParserTest extends TestCase
         ];
 
         // When
-        $document = (new Document($content));
+        $document = Document::load($content);
 
         // Then
-        $this->assertInstanceOf(Document::class, $document);
-        $this->assertEquals($content, $document->toArray());
-    }
-
-    /** @test */
-    public function it_should_parse_content_as_a_blocknode()
-    {
-        // Given
-        $content = [
-            'type' => 'doc',
-            'version' => 1,
-            'content' => [
-                [
-                    'type' => 'paragraph',
-                    'content' => [
-                        [
-                            'type' => 'text',
-                            'text' => 'test',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        // When
-        $blocknode = (new Document($content))->toBlockNode();
-
-        // Then
-        $this->assertInstanceOf(BlockNode::class, $blocknode);
-        $this->assertIsArray($blocknode->getContent());
-        $this->assertEquals((new BlockDocument)->paragraph()->text('test')->end(), $blocknode);
+        $this->assertInstanceOf(BlockNode::class, $document);
+        $this->assertIsArray($document->getContent());
+        $this->assertEquals((new BlockDocument)->paragraph()->text('test')->end(), $document);
     }
 
     /** @test */
@@ -111,11 +83,11 @@ class DocumentParserTest extends TestCase
         ];
 
         // When
-        $blocknode = (new Document($content))->toBlockNode();
+        $document = Document::load($content);
 
         // Then
-        $this->assertInstanceOf(BlockNode::class, $blocknode);
-        $this->assertIsArray($blocknode->getContent());
-        $this->assertEquals((new BlockDocument)->paragraph()->text('lorem')->text('ipsum')->end(), $blocknode);
+        $this->assertInstanceOf(BlockNode::class, $document);
+        $this->assertIsArray($document->getContent());
+        $this->assertEquals((new BlockDocument)->paragraph()->text('lorem')->text('ipsum')->end(), $document);
     }
 }
