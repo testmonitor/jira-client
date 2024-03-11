@@ -13,7 +13,6 @@ class Document extends AdfDocument
      *
      * @param array $data
      * @param null|\DH\Adf\Node\BlockNode $parent
-     *
      * @return \DH\Adf\Node\BlockNode
      */
     public static function load(array $data, ?BlockNode $parent = null): BlockNode
