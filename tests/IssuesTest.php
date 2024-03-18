@@ -229,11 +229,10 @@ class IssuesTest extends TestCase
             ])));
 
         // When
-        $issue = $jira->issue($this->issue['id']);
+        $description = $jira->issue($this->issue['id'])->getDescriptionAsHTML();
 
         // Then
-        $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertEquals('<div class="adf-container"><p>My Description</p></div>', $issue->getDescriptionAsHTML());
+        $this->assertEquals('<div class="adf-container"><p>My Description</p></div>', $description);
     }
 
     /** @test */
