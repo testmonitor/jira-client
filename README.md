@@ -12,14 +12,14 @@ This package provides a very basic, convenient, and unified wrapper for Jira.
 
 ## Table of Contents
 
--   [Installation](#installation)
--   [Usage](#usage)
--   [Examples](#examples)
--   [Tests](#tests)
--   [Changelog](#changelog)
--   [Contributing](#contributing)
--   [Credits](#credits)
--   [License](#license)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Tests](#tests)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
+- [Credits](#credits)
+- [License](#license)
 
 ## Installation
 
@@ -151,9 +151,9 @@ Refer to [CONTRIBUTING](CONTRIBUTING.md) for contributing details.
 
 ## Credits
 
--   **Thijs Kok** - _Lead developer_ - [ThijsKok](https://github.com/thijskok)
--   **Stephan Grootveld** - _Developer_ - [Stefanius](https://github.com/stefanius)
--   **Frank Keulen** - _Developer_ - [FrankIsGek](https://github.com/frankisgek)
+- **Thijs Kok** - _Lead developer_ - [ThijsKok](https://github.com/thijskok)
+- **Stephan Grootveld** - _Developer_ - [Stefanius](https://github.com/stefanius)
+- **Frank Keulen** - _Developer_ - [FrankIsGek](https://github.com/frankisgek)
 
 ## License
 
