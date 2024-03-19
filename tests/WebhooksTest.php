@@ -6,19 +6,18 @@ use Mockery;
 use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use TestMonitor\Jira\Resources\Project;
+use TestMonitor\Jira\Resources\Webhook;
 use TestMonitor\Jira\Exceptions\Exception;
-use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
 
-class ProjectsTest extends TestCase
+class WebhooksTest extends TestCase
 {
     protected $token;
 
-    protected $project;
+    protected $webhook;
 
     protected function setUp(): void
     {
@@ -27,7 +26,7 @@ class ProjectsTest extends TestCase
         $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
         $this->token->shouldReceive('expired')->andReturnFalse();
 
-        $this->project = ['id' => '1', 'key' => 'KEY', 'name' => 'Project'];
+        $this->webhook = ['id' => '1', 'url' => 'https://testmonitor.com'];
     }
 
     public function tearDown(): void
@@ -36,7 +35,7 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_a_list_of_projects()
+    public function it_should_return_a_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -45,27 +44,21 @@ class ProjectsTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'values' => [$this->project],
-                'maxResults' => 100,
-                'startAt' => 0,
-                'total' => 1,
-            ])));
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(['values' => [$this->webhook]])));
 
         // When
-        $projects = $jira->projects();
+        $webhooks = $jira->webhooks();
 
         // Then
-        $this->assertInstanceOf(PaginatedResponse::class, $projects);
-        $this->assertIsArray($projects->items());
-        $this->assertCount(1, $projects->items());
-        $this->assertInstanceOf(Project::class, $projects->items()[0]);
-        $this->assertEquals($this->project['id'], $projects->items()[0]->id);
-        $this->assertIsArray($projects->items()[0]->toArray());
+        $this->assertIsArray($webhooks);
+        $this->assertCount(1, $webhooks);
+        $this->assertInstanceOf(Webhook::class, $webhooks[0]);
+        $this->assertEquals($this->webhook['id'], $webhooks[0]->id);
+        $this->assertIsArray($webhooks[0]->toArray());
     }
 
     /** @test */
-    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_projects()
+    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -79,11 +72,11 @@ class ProjectsTest extends TestCase
         $this->expectException(FailedActionException::class);
 
         // When
-        $jira->projects();
+        $jira->webhooks();
     }
 
     /** @test */
-    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_projects()
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -97,11 +90,11 @@ class ProjectsTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         // When
-        $jira->projects();
+        $jira->webhooks();
     }
 
     /** @test */
-    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_projects()
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -115,11 +108,11 @@ class ProjectsTest extends TestCase
         $this->expectException(UnauthorizedException::class);
 
         // When
-        $jira->projects();
+        $jira->webhooks();
     }
 
     /** @test */
-    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_projects()
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -133,11 +126,11 @@ class ProjectsTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // When
-        $jira->projects();
+        $jira->webhooks();
     }
 
     /** @test */
-    public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_projects()
+    public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -150,7 +143,7 @@ class ProjectsTest extends TestCase
 
         // When
         try {
-            $jira->projects();
+            $jira->webhooks();
         } catch (ValidationException $exception) {
             // Then
             $this->assertIsArray($exception->errors());
@@ -159,7 +152,7 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_projects()
+    public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -173,11 +166,11 @@ class ProjectsTest extends TestCase
         $this->expectException(Exception::class);
 
         // When
-        $jira->projects();
+        $jira->webhooks();
     }
 
     /** @test */
-    public function it_should_return_a_single_project()
+    public function it_should_delete_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -186,21 +179,17 @@ class ProjectsTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(
-                $this->project
-            )));
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], ''));
 
         // When
-        $project = $jira->project($this->project['id']);
+        $response = $jira->deleteWebhooks([1, 2, 3]);
 
         // Then
-        $this->assertInstanceOf(Project::class, $project);
-        $this->assertEquals($this->project['id'], $project->id);
-        $this->assertIsArray($project->toArray());
+        $this->assertTrue($response);
     }
 
     /** @test */
-    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_single_project()
+    public function it_should_throw_an_exception_when_delete_webhooks_without_given_webhook_ids()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -209,11 +198,14 @@ class ProjectsTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(401, ['Content-Type' => 'application/json'], null));
+            ->andReturn(new Response(400, ['Content-Type' => 'application/json'], ''));
 
-        $this->expectException(UnauthorizedException::class);
+        $this->expectException(FailedActionException::class);
 
         // When
-        $jira->projects();
+        $response = $jira->deleteWebhooks([]);
+
+        // Then
+        $this->assertTrue($response);
     }
 }

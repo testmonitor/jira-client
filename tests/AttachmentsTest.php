@@ -4,27 +4,34 @@ namespace TestMonitor\Jira\Tests;
 
 use Mockery;
 use TestMonitor\Jira\Client;
-use JiraRestApi\JiraException;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\Attachment;
+use TestMonitor\Jira\Exceptions\NotFoundException;
+use TestMonitor\Jira\Exceptions\ValidationException;
+use TestMonitor\Jira\Exceptions\FailedActionException;
+use TestMonitor\Jira\Exceptions\UnauthorizedException;
 
 class AttachmentsTest extends TestCase
 {
-    /**
-     * @var \JiraRestApi\Issue\Attachment
-     */
+    protected $token;
+
+    protected $project;
+
+    protected $issue;
+
     protected $attachment;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->attachment = Mockery::mock('\JiraRestApi\Issue\Attachment');
+        $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
+        $this->token->shouldReceive('expired')->andReturnFalse();
 
-        $this->attachment->id = '1';
-        $this->attachment->filename = 'file.jpg';
-        $this->attachment->content = 'https://jira.atlassian.net/TST/secure/1';
+        $this->project = ['id' => '1', 'name' => 'Project'];
+        $this->issue = ['id' => 1];
+        $this->attachment = ['id' => 1, 'filename' => 'logo.png', 'size' => 100, 'mimeType' => 'jpeg'];
     }
 
     public function tearDown(): void
@@ -36,34 +43,113 @@ class AttachmentsTest extends TestCase
     public function it_should_add_an_attachment_to_an_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
-        $service->shouldReceive('addAttachments')->once()->andReturn([$this->attachment]);
+        // Second, adding the attachment to the issue
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([$this->attachment])));
 
         // When
-        $attachment = $jira->addAttachment('TST', 'file.jpg');
+        $attachments = $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
 
         // Then
-        $this->assertInstanceOf(Attachment::class, $attachment);
-        $this->assertEquals($this->attachment->id, $attachment->id);
-        $this->assertEquals($this->attachment->filename, $attachment->filename);
+        $this->assertIsArray($attachments);
+        $this->assertInstanceOf(Attachment::class, $attachments[0]);
+        $this->assertIsArray($attachments[0]->toArray());
     }
 
     /** @test */
-    public function it_should_throw_an_exception_when_client_fails_to_add_an_attachment()
+    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_adding_an_attachment_to_a_issue()
     {
         // Given
-        $jira = new Client('url', 'user', 'pass');
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setIssueService($service = Mockery::mock('JiraRestApi\Issue\IssueService'));
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
-        $service->shouldReceive('addAttachments')->once()->andThrow(new JiraException());
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(400, ['Content-Type' => 'application/json'], null));
 
-        $this->expectException(Exception::class);
+        $this->expectException(FailedActionException::class);
 
         // When
-        $jira->addAttachment('Attach', 'Me');
+        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+    }
+
+    /** @test */
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_adding_an_attachment_to_a_issue()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(404, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(NotFoundException::class);
+
+        // When
+        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+    }
+
+    /** @test */
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_adding_an_attachment_to_a_issue()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(401, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(UnauthorizedException::class);
+
+        // When
+        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+    }
+
+    /** @test */
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_adding_an_attachment_to_a_issue()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(422, ['Content-Type' => 'application/json'], json_encode(['message' => 'invalid'])));
+
+        $this->expectException(ValidationException::class);
+
+        // When
+        $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+    }
+
+    /** @test */
+    public function it_should_retrieve_an_attachment()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        // Second, adding the attachment to the issue
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'image/jpg'], 'foobar'));
+
+        // When
+        $attachment = $jira->attachment('1');
+
+        // Then
+        $this->assertEquals('foobar', $attachment);
     }
 }

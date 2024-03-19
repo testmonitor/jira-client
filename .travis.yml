@@ -11,19 +11,19 @@ sudo: false
 
 ## Cache composer
 cache:
-    directories:
-        - $HOME/.composer/cache
+  directories:
+    - $HOME/.composer/cache
 
 env:
-    matrix:
-        - COMPOSER_FLAGS=""
+  matrix:
+    - COMPOSER_FLAGS=""
 
 before_script:
-    - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
-    - vendor/bin/phpcs --standard=psr2 src/
-    - XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+  - vendor/bin/phpcs --standard=psr2 src/
+  - XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:
-    - vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
+  - vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover

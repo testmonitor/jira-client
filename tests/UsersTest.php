@@ -6,24 +6,19 @@ use Mockery;
 use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use TestMonitor\Jira\Resources\Issue;
-use TestMonitor\Jira\Resources\Project;
-use TestMonitor\Jira\Resources\IssueType;
+use TestMonitor\Jira\Resources\User;
 use TestMonitor\Jira\Exceptions\Exception;
-use TestMonitor\Jira\Resources\IssueStatus;
-use TestMonitor\Jira\Resources\IssuePriority;
 use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
-use TestMonitor\Jira\Exceptions\InvalidDataException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
 
-class IssuesTest extends TestCase
+class UsersTest extends TestCase
 {
     protected $token;
 
-    protected $issue;
+    protected $user;
 
     protected function setUp(): void
     {
@@ -32,7 +27,12 @@ class IssuesTest extends TestCase
         $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
         $this->token->shouldReceive('expired')->andReturnFalse();
 
-        $this->issue = ['id' => '1', 'key' => 'KEY', 'summary' => 'My Issue', 'description' => 'My Description'];
+        $this->user = [
+            'accountId' => '1',
+            'emailAddress' => 'johndoe@testmonitor.com',
+            'displayName' => 'John Doe',
+            'timeZone' => 'Crusty/Crab',
+        ];
     }
 
     public function tearDown(): void
@@ -41,7 +41,7 @@ class IssuesTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_a_list_of_issues()
+    public function it_should_return_a_list_of_users()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -50,30 +50,22 @@ class IssuesTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'issues' => [$this->issue],
-                'maxResults' => 100,
-                'startAt' => 0,
-                'total' => 1,
-            ])));
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([$this->user])));
 
         // When
-        $issues = $jira->issues();
+        $users = $jira->users('123456789');
 
         // Then
-        $this->assertInstanceOf(PaginatedResponse::class, $issues);
-        $this->assertIsArray($issues->items());
-        $this->assertCount(1, $issues->items());
-        $this->assertEquals(100, $issues->perPage());
-        $this->assertEquals(0, $issues->offset());
-        $this->assertEquals(1, $issues->total());
-        $this->assertInstanceOf(Issue::class, $issues->items()[0]);
-        $this->assertEquals($this->issue['id'], $issues->items()[0]->id);
-        $this->assertIsArray($issues->items()[0]->toArray());
+        $this->assertInstanceOf(PaginatedResponse::class, $users);
+        $this->assertIsArray($users->items());
+        $this->assertCount(1, $users->items());
+        $this->assertInstanceOf(User::class, $users->items()[0]);
+        $this->assertEquals($this->user['accountId'], $users->items()[0]->id);
+        $this->assertIsArray($users->items()[0]->toArray());
     }
 
     /** @test */
-    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_issues()
+    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_users()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -87,11 +79,11 @@ class IssuesTest extends TestCase
         $this->expectException(FailedActionException::class);
 
         // When
-        $jira->issues();
+        $jira->users('123456789');
     }
 
     /** @test */
-    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_issues()
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_users()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -105,11 +97,11 @@ class IssuesTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         // When
-        $jira->issues();
+        $jira->users('123456789');
     }
 
     /** @test */
-    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_issues()
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_users()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -123,11 +115,11 @@ class IssuesTest extends TestCase
         $this->expectException(UnauthorizedException::class);
 
         // When
-        $jira->issues();
+        $jira->users('123456789');
     }
 
     /** @test */
-    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_issues()
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_users()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -141,11 +133,11 @@ class IssuesTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // When
-        $jira->issues();
+        $jira->users('123456789');
     }
 
     /** @test */
-    public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_issues()
+    public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_users()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -158,7 +150,7 @@ class IssuesTest extends TestCase
 
         // When
         try {
-            $jira->issues();
+            $jira->users('123456789');
         } catch (ValidationException $exception) {
             // Then
             $this->assertIsArray($exception->errors());
@@ -167,7 +159,7 @@ class IssuesTest extends TestCase
     }
 
     /** @test */
-    public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_issues()
+    public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_users()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -181,11 +173,11 @@ class IssuesTest extends TestCase
         $this->expectException(Exception::class);
 
         // When
-        $jira->issues();
+        $jira->users('123456789');
     }
 
     /** @test */
-    public function it_should_return_a_single_issue()
+    public function it_should_return_the_profile_of_the_current_authenticated_user()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -194,20 +186,19 @@ class IssuesTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($this->issue)));
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($this->user)));
 
         // When
-        $issue = $jira->issue($this->issue['id']);
+        $user = $jira->myself();
 
         // Then
-        $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertEquals($this->issue['id'], $issue->id);
-        $this->assertEquals($this->issue['key'], $issue->key);
-        $this->assertIsArray($issue->toArray());
+        $this->assertIsObject($user);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($this->user['accountId'], $user->id);
     }
 
     /** @test */
-    public function it_should_create_an_issue()
+    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_the_profile_of_the_current_authenticated_user()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -216,52 +207,16 @@ class IssuesTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(201, ['Content-Type' => 'application/json'], json_encode($this->issue)));
+            ->andReturn(new Response(400, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(FailedActionException::class);
 
         // When
-        $issue = $jira->createIssue(new Issue([
-            'id' => '1',
-            'key' => 'KEY',
-            'summary' => 'Issue',
-            'description' => 'Issue',
-            'project' => new Project(['id' => 1]),
-            'type' => new IssueType(['id' => 1]),
-            'priority' => new IssuePriority(['id' => 1]),
-            'status' => new IssueStatus(['id' => 1]),
-        ]));
-
-        // Then
-        $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertEquals($this->issue['id'], $issue->id);
+        $jira->myself();
     }
 
     /** @test */
-    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_creating_an_invalid_issue()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient(Mockery::mock('\GuzzleHttp\Client'));
-
-        $this->expectException(InvalidDataException::class);
-
-        // When
-        $issue = $jira->createIssue(new Issue([
-            'id' => '1',
-            'key' => 'KEY',
-            'project' => new Project(['id' => 1]),
-            'type' => new IssueType(['id' => 1]),
-            'priority' => new IssuePriority(['id' => 1]),
-            'status' => new IssueStatus(['id' => 1]),
-        ]));
-
-        // Then
-        $this->assertInstanceOf(Issue::class, $issue);
-        $this->assertEquals($this->issue['id'], $issue->id);
-    }
-
-    /** @test */
-    public function it_should_get_a_html_description_of_an_issue()
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_the_profile_of_the_current_authenticated_user()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -270,22 +225,51 @@ class IssuesTest extends TestCase
 
         $service->shouldReceive('request')
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'id' => '1',
-                'key' => 'KEY',
-                'summary' => 'My Issue',
-                'fields' => ['description' => [
-                    'type' => 'doc',
-                    'content' => [[
-                        'type' => 'paragraph',
-                        'content' => [['type' => 'text', 'text' => 'My Description']],
-                    ]]]],
-            ])));
+            ->andReturn(new Response(404, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(NotFoundException::class);
 
         // When
-        $description = $jira->issue($this->issue['id'])->getDescriptionAsHTML();
+        $jira->myself();
+    }
 
-        // Then
-        $this->assertEquals('<div class="adf-container"><p>My Description</p></div>', $description);
+    /** @test */
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_the_profile_of_the_current_authenticated_user()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(422, ['Content-Type' => 'application/json'], json_encode(['message' => 'invalid'])));
+
+        $this->expectException(ValidationException::class);
+
+        // When
+        $jira->myself();
+    }
+
+    /** @test */
+    public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_the_profile_of_the_current_authenticated_user()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(422, ['Content-Type' => 'application/json'], json_encode(['errors' => ['invalid']])));
+
+        // When
+        try {
+            $jira->myself();
+        } catch (ValidationException $exception) {
+            // Then
+            $this->assertIsArray($exception->errors());
+            $this->assertEquals('invalid', $exception->errors()['errors'][0]);
+        }
     }
 }

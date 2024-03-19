@@ -2,9 +2,7 @@
 
 namespace TestMonitor\Jira\Actions;
 
-use JiraRestApi\JiraException;
-use TestMonitor\Jira\Resources\Project;
-use TestMonitor\Jira\Exceptions\Exception;
+use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Transforms\TransformsProjects;
 
 trait ManagesProjects
@@ -12,42 +10,47 @@ trait ManagesProjects
     use TransformsProjects;
 
     /**
-     * Get a list of of projects.
+     * Get a list of projects.
      *
-     * @throws \TestMonitor\Jira\Exceptions\Exception
+     * @param string $query
+     * @param int $offset
+     * @param int $limit
      *
-     * @return Project[]
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return \TestMonitor\Jira\Responses\PaginatedResponse
      */
-    public function projects()
+    public function projects(string $query = '', int $offset = 0, int $limit = 50)
     {
-        try {
-            $projects = $this->projectService()->getAllProjects();
+        $response = $this->get('project/search', [
+            'query' => [
+                'query' => $query,
+                'startAt' => $offset,
+                'maxResults' => $limit,
+            ],
+        ]);
 
-            return array_map(function ($project) {
-                return $this->fromJiraProject($project);
-            }, $projects->getArrayCopy());
-        } catch (JiraException $exception) {
-            throw new Exception($exception->getMessage());
-        }
+        return new PaginatedResponse(
+            $this->fromJiraProjects($response['values'] ?? []),
+            $response['total'],
+            $response['maxResults'],
+            $response['startAt']
+        );
     }
 
     /**
      * Get a single project.
      *
-     * @param string $key
+     * @param string $id
      *
-     * @throws \TestMonitor\Jira\Exceptions\Exception
+     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return Project
+     * @return \TestMonitor\Jira\Resources\Project
      */
-    public function project($key)
+    public function project($id)
     {
-        try {
-            $project = $this->projectService()->get($key);
+        $response = $this->get("project/{$id}");
 
-            return $this->fromJiraProject($project);
-        } catch (JiraException $exception) {
-            throw new Exception($exception->getMessage());
-        }
+        return $this->fromJiraProject($response);
     }
 }

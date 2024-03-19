@@ -6,19 +6,19 @@ use Mockery;
 use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use TestMonitor\Jira\Resources\Project;
-use TestMonitor\Jira\Exceptions\Exception;
-use TestMonitor\Jira\Responses\PaginatedResponse;
+use TestMonitor\Jira\Resources\Account;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
 
-class ProjectsTest extends TestCase
+class AccountsTest extends TestCase
 {
     protected $token;
 
-    protected $project;
+    protected $account;
+
+    protected $tenantInfo;
 
     protected function setUp(): void
     {
@@ -27,7 +27,15 @@ class ProjectsTest extends TestCase
         $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
         $this->token->shouldReceive('expired')->andReturnFalse();
 
-        $this->project = ['id' => '1', 'key' => 'KEY', 'name' => 'Project'];
+        $this->account = [
+            'id' => 1,
+            'url' => 'https://my.jira.account',
+            'name' => 'Harry the Horse',
+            'scopes' => ['do-this'],
+            'avatarUrl' => 'https://my.jira.avatar',
+        ];
+
+        $this->tenantInfo = ['cloudId' => '12345-abcde-12345-abcde'];
     }
 
     public function tearDown(): void
@@ -36,7 +44,7 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_a_list_of_projects()
+    public function it_should_return_a_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -46,26 +54,21 @@ class ProjectsTest extends TestCase
         $service->shouldReceive('request')
             ->once()
             ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'values' => [$this->project],
-                'maxResults' => 100,
-                'startAt' => 0,
-                'total' => 1,
+                $this->account,
             ])));
 
         // When
-        $projects = $jira->projects();
+        $accounts = $jira->accounts();
 
         // Then
-        $this->assertInstanceOf(PaginatedResponse::class, $projects);
-        $this->assertIsArray($projects->items());
-        $this->assertCount(1, $projects->items());
-        $this->assertInstanceOf(Project::class, $projects->items()[0]);
-        $this->assertEquals($this->project['id'], $projects->items()[0]->id);
-        $this->assertIsArray($projects->items()[0]->toArray());
+        $this->assertIsArray($accounts);
+        $this->assertCount(1, $accounts);
+        $this->assertInstanceOf(Account::class, $accounts[0]);
+        $this->assertEquals($this->account['id'], $accounts[0]->id);
     }
 
     /** @test */
-    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_projects()
+    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -79,11 +82,11 @@ class ProjectsTest extends TestCase
         $this->expectException(FailedActionException::class);
 
         // When
-        $jira->projects();
+        $jira->accounts();
     }
 
     /** @test */
-    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_projects()
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -97,11 +100,11 @@ class ProjectsTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         // When
-        $jira->projects();
+        $jira->accounts();
     }
 
     /** @test */
-    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_projects()
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -115,11 +118,11 @@ class ProjectsTest extends TestCase
         $this->expectException(UnauthorizedException::class);
 
         // When
-        $jira->projects();
+        $jira->accounts();
     }
 
     /** @test */
-    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_projects()
+    public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_accounts()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -133,51 +136,11 @@ class ProjectsTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // When
-        $jira->projects();
+        $jira->accounts();
     }
 
     /** @test */
-    public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_projects()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
-
-        $service->shouldReceive('request')
-            ->once()
-            ->andReturn(new Response(422, ['Content-Type' => 'application/json'], json_encode(['errors' => ['invalid']])));
-
-        // When
-        try {
-            $jira->projects();
-        } catch (ValidationException $exception) {
-            // Then
-            $this->assertIsArray($exception->errors());
-            $this->assertEquals('invalid', $exception->errors()['errors'][0]);
-        }
-    }
-
-    /** @test */
-    public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_projects()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
-
-        $service->shouldReceive('request')
-            ->once()
-            ->andReturn(new Response(418, ['Content-Type' => 'application/json'], json_encode(['rooibos' => 'anyone?'])));
-
-        $this->expectException(Exception::class);
-
-        // When
-        $jira->projects();
-    }
-
-    /** @test */
-    public function it_should_return_a_single_project()
+    public function it_should_return_your_cloud_id()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -187,20 +150,19 @@ class ProjectsTest extends TestCase
         $service->shouldReceive('request')
             ->once()
             ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(
-                $this->project
+                $this->tenantInfo
             )));
 
         // When
-        $project = $jira->project($this->project['id']);
+        $cloudId = $jira->cloudId('https://my.jira.url');
 
         // Then
-        $this->assertInstanceOf(Project::class, $project);
-        $this->assertEquals($this->project['id'], $project->id);
-        $this->assertIsArray($project->toArray());
+        $this->assertIsString($cloudId);
+        $this->assertEquals('12345-abcde-12345-abcde', $cloudId);
     }
 
     /** @test */
-    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_single_project()
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_your_cloud_id()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -214,6 +176,6 @@ class ProjectsTest extends TestCase
         $this->expectException(UnauthorizedException::class);
 
         // When
-        $jira->projects();
+        $jira->cloudId('https://my.jira.url');
     }
 }

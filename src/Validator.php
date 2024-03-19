@@ -87,38 +87,4 @@ class Validator
 
         return true;
     }
-
-    /**
-     * @param mixed $object
-     * @param string $property
-     *
-     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return bool
-     */
-    public static function hasProperty($object, $property)
-    {
-        if (! property_exists($object, $property)) {
-            throw new \TestMonitor\Jira\Exceptions\InvalidDataException($object);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param mixed $object
-     * @param array $properties
-     *
-     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return bool
-     */
-    public static function hasProperties($object, array $properties)
-    {
-        foreach ($properties as $property) {
-            self::hasProperty($object, $property);
-        }
-
-        return true;
-    }
 }

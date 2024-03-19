@@ -8,7 +8,7 @@
 [![StyleCI](https://styleci.io/repos/222957448/shield)](https://styleci.io/repos/222957448)
 [![License](https://poser.pugx.org/testmonitor/jira-client/license)](https://packagist.org/packages/testmonitor/jira-client)
 
-This package provides a very basic, convenient, and unified wrapper for the [PHP JIRA Rest Client](https://github.com/lesstif/php-jira-rest-client).
+This package provides a very basic, convenient, and unified wrapper for Jira.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ This package provides a very basic, convenient, and unified wrapper for the [PHP
 
 To install the client you need to require the package using composer:
 
-	$ composer require testmonitor/jira-client
+    $ composer require testmonitor/jira-client
 
 Use composer's autoload:
 
@@ -37,30 +37,101 @@ You're all set up now!
 
 ## Usage
 
-You'll have to instantiate the client using your credentials:
+This client only supports **oAuth authentication**. You'll need an Atlassian Jira application to proceed. If you haven't done so,
+please read up with the [Jira authentication docs](https://developer.atlassian.com/console/myapps/) on how
+to create an application.
+
+When your Jira application is up and running, start with the oAuth authorization:
 
 ```php
-$jira = new \TestMonitor\Jira\Client('https://myjira.atlassian.net', 'username', token');
+$oauth = [
+    'clientId' => '12345',
+    'clientSecret' => 'abcdef',
+    'redirectUrl' => 'https://redirect.myapp.com/',
+];
+
+$jira = new \TestMonitor\Jira\Client($oauth);
+
+header('Location: ' . $jira->authorizationUrl());
+exit();
 ```
 
-Next, you can start interacting with Jira.
+This will redirect the user to a page asking confirmation for your app getting access to Jira. Make sure your redirectUrl points
+back to your app. This URL should point to the following code:
+
+```php
+$oauth = [
+    'clientId' => '12345',
+    'clientSecret' => 'abcdef',
+    'redirectUrl' => 'https://redirect.myapp.com/',
+];
+
+$jira = new \TestMonitor\Jira\Client($oauth);
+
+$token = $jira->fetchToken($_REQUEST['code']);
+```
+
+When everything went ok, you should have an access token (available through Token object).
+
+For any subsequent action, you'll need to retrieve your cloud ID to proceed:
+
+```php
+$oauth = [
+    'clientId' => '12345',
+    'clientSecret' => 'abcdef',
+    'redirectUrl' => 'https://redirect.myapp.com/',
+];
+
+$token = new \TestMonitor\Jira\AccessToken('eyJ0...', '0/34ccc...', 1574601877); // the token you got last time
+$jira = new \TestMonitor\Jira\Client($oauth, null, $token);
+
+$account = $jira->account();
+```
+
+Use the cloud ID as a parameter when instantiating the client:
+
+```php
+$oauth = [
+    'clientId' => '12345',
+    'clientSecret' => 'abcdef',
+    'redirectUrl' => 'https://redirect.myapp.com/',
+];
+
+$token = new \TestMonitor\Jira\AccessToken('eyJ0...', '0/34ccc...', 1574601877);
+$jira = new \TestMonitor\Jira\Client($oauth, $account->id, $token);
+```
+
+That's it!
+
+Please note that the access token will be valid for **one hour**. When it expires, you'll need to refresh it:
+
+```php
+if ($token->expired()) {
+    $newToken = $jira->refreshToken();
+}
+```
+
+The new token will be valid again for the next hour.
 
 ## Examples
 
-Get a list of Jira projects:
+Retrieve the details for a project using its key:
 
 ```php
-$projects = $jira->projects();
+$project = $jira->project('KEY');
 ```
 
-Or creating an issue, for example (using type 'Bug' and project key 'PROJ'):
+Or create a new issue using the first available issue type:
 
 ```php
+$issueTypes = $jira->issueTypes('KEY');
+
 $issue = $jira->createIssue(new \TestMonitor\Jira\Resources\Issue([
-    'summary' => 'Some issue',
-    'description' => 'A better description',
-    'type' => 'Bug',
-]), 'PROJ');
+    'summary' => 'It is time Marty!',
+    'description' => 'Great Scot!',
+    'project' => $project,
+    'type' => $issueType[0],
+]));
 ```
 
 ## Tests
@@ -68,6 +139,7 @@ $issue = $jira->createIssue(new \TestMonitor\Jira\Resources\Issue([
 The package contains integration tests. You can run them using PHPUnit.
 
     $ vendor/bin/phpunit
+
 
 ## Changelog
 
@@ -79,10 +151,9 @@ Refer to [CONTRIBUTING](CONTRIBUTING.md) for contributing details.
 
 ## Credits
 
-* **Thijs Kok** - *Lead developer* - [ThijsKok](https://github.com/thijskok)
-* **Stephan Grootveld** - *Developer* - [Stefanius](https://github.com/stefanius)
-* **Frank Keulen** - *Developer* - [FrankIsGek](https://github.com/frankisgek)
-* **Muriel Nooder** - *Developer* - [ThaNoodle](https://github.com/thanoodle)
+- **Thijs Kok** - _Lead developer_ - [ThijsKok](https://github.com/thijskok)
+- **Stephan Grootveld** - _Developer_ - [Stefanius](https://github.com/stefanius)
+- **Frank Keulen** - _Developer_ - [FrankIsGek](https://github.com/frankisgek)
 
 ## License
 
