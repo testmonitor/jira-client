@@ -62,26 +62,6 @@ class AttachmentsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_retrieve_an_attachment()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
-
-        // Second, adding the attachment to the issue
-        $service->shouldReceive('request')
-            ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'image/jpg'], 'foobar'));
-
-        // When
-        $attachment = $jira->attachment('1');
-
-        // Then
-        $this->assertEquals('foobar', $attachment);
-    }
-
-    /** @test */
     public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_adding_an_attachment_to_a_issue()
     {
         // Given
@@ -151,5 +131,25 @@ class AttachmentsTest extends TestCase
 
         // When
         $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
+    }
+
+    /** @test */
+    public function it_should_retrieve_an_attachment()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        // Second, adding the attachment to the issue
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'image/jpg'], 'foobar'));
+
+        // When
+        $attachment = $jira->attachment('1');
+
+        // Then
+        $this->assertEquals('foobar', $attachment);
     }
 }

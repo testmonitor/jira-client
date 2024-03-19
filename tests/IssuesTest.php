@@ -207,35 +207,6 @@ class IssuesTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_a_html_description_of_an_issue()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
-
-        $service->shouldReceive('request')
-            ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'id' => '1',
-                'key' => 'KEY',
-                'summary' => 'My Issue',
-                'fields' => ['description' => [
-                    'type' => 'doc',
-                    'content' => [[
-                        'type' => 'paragraph',
-                        'content' => [['type' => 'text', 'text' => 'My Description']],
-                    ]]]],
-            ])));
-
-        // When
-        $description = $jira->issue($this->issue['id'])->getDescriptionAsHTML();
-
-        // Then
-        $this->assertEquals('<div class="adf-container"><p>My Description</p></div>', $description);
-    }
-
-    /** @test */
     public function it_should_create_an_issue()
     {
         // Given
@@ -287,5 +258,34 @@ class IssuesTest extends TestCase
         // Then
         $this->assertInstanceOf(Issue::class, $issue);
         $this->assertEquals($this->issue['id'], $issue->id);
+    }
+
+    /** @test */
+    public function it_should_get_a_html_description_of_an_issue()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'id' => '1',
+                'key' => 'KEY',
+                'summary' => 'My Issue',
+                'fields' => ['description' => [
+                    'type' => 'doc',
+                    'content' => [[
+                        'type' => 'paragraph',
+                        'content' => [['type' => 'text', 'text' => 'My Description']],
+                    ]]]],
+            ])));
+
+        // When
+        $description = $jira->issue($this->issue['id'])->getDescriptionAsHTML();
+
+        // Then
+        $this->assertEquals('<div class="adf-container"><p>My Description</p></div>', $description);
     }
 }

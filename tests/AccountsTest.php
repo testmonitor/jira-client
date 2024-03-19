@@ -68,28 +68,6 @@ class AccountsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_your_cloud_id()
-    {
-        // Given
-        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
-
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
-
-        $service->shouldReceive('request')
-            ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(
-                $this->tenantInfo
-            )));
-
-        // When
-        $cloudId = $jira->cloudId('https://my.jira.url');
-
-        // Then
-        $this->assertIsString($cloudId);
-        $this->assertEquals('12345-abcde-12345-abcde', $cloudId);
-    }
-
-    /** @test */
     public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_accounts()
     {
         // Given
@@ -159,5 +137,45 @@ class AccountsTest extends TestCase
 
         // When
         $jira->accounts();
+    }
+
+    /** @test */
+    public function it_should_return_your_cloud_id()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode(
+                $this->tenantInfo
+            )));
+
+        // When
+        $cloudId = $jira->cloudId('https://my.jira.url');
+
+        // Then
+        $this->assertIsString($cloudId);
+        $this->assertEquals('12345-abcde-12345-abcde', $cloudId);
+    }
+
+    /** @test */
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_your_cloud_id()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(401, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(UnauthorizedException::class);
+
+        // When
+        $jira->cloudId('https://my.jira.url');
     }
 }
