@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Managing issues
 
 ### Removed
+- PHP 8.0 support
 - Atlassian Jira Server support
 
 ## [1.4.0] - 2023-04-10
