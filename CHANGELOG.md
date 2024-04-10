@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.0] - 2024-04-10
 ### Added
+- PHP 8.2 support
 - oAuth support
 - JQL support
 - ADF support for issue descriptions
