@@ -8,17 +8,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - oAuth support
 - JQL support
-- ADF support
-- Update and transition Jira Issues
-- Managing Webhooks
+- ADF support for issue descriptions
+- Update and transition issues
+- Managing webhooks
 - Managing projects
 - Managing project versions
 - Managing issue priorities
 - Managing issue types
 - Managing issue statuses
 
+### Updated
+- Managing issues
+
 ### Removed
-- Atlassian Jira support
+- Atlassian Jira Server support
 
 ## [1.4.0] - 2023-04-10
 ### Changed
