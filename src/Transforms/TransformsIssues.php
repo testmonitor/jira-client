@@ -2,11 +2,13 @@
 
 namespace TestMonitor\Jira\Transforms;
 
+use Exception;
+use DH\Adf\Node\BlockNode;
+use DH\Adf\Node\Block\Document;
 use TestMonitor\Jira\Validator;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\Project;
 use TestMonitor\Jira\Resources\IssueType;
-use TestMonitor\Jira\Parsers\Adf\Document;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Resources\IssuePriority;
 
@@ -83,7 +85,7 @@ trait TransformsIssues
             'summary' => $issue['fields']['summary'] ?? '',
 
             'description' => isset($issue['fields']['description']) ?
-                Document::load($issue['fields']['description']) : null,
+                $this->loadDocument($issue['fields']['description']) : null,
 
             'type' => isset($issue['fields']['issuetype']) ?
                 new IssueType($issue['fields']['issuetype']) : null,
@@ -98,5 +100,22 @@ trait TransformsIssues
             'project' => isset($issue['fields']['project']) ?
                 new Project($issue['fields']['project']) : null,
         ]);
+    }
+
+    /**
+     * Try parse an ADF document.
+     *
+     * @param mixed $document
+     * @return \DH\Adf\Node\BlockNode
+     */
+    protected function loadDocument($document): BlockNode
+    {
+        try {
+            return Document::load($document);
+        } catch (Exception $exception) {
+            // Ignore errors
+        }
+
+        return new Document();
     }
 }

@@ -4,8 +4,7 @@ namespace TestMonitor\Jira\Tests;
 
 use DH\Adf\Node\BlockNode;
 use PHPUnit\Framework\TestCase;
-use TestMonitor\Jira\Parsers\Adf\Document;
-use DH\Adf\Node\Block\Document as BlockDocument;
+use DH\Adf\Node\Block\Document;
 
 class DocumentParserTest extends TestCase
 {
@@ -47,7 +46,7 @@ class DocumentParserTest extends TestCase
         // Then
         $this->assertInstanceOf(BlockNode::class, $document);
         $this->assertIsArray($document->getContent());
-        $this->assertEquals((new BlockDocument)->paragraph()->text('test')->end(), $document);
+        $this->assertEquals((new Document)->paragraph()->text('test')->end(), $document);
     }
 
     /** @test */
@@ -88,6 +87,6 @@ class DocumentParserTest extends TestCase
         // Then
         $this->assertInstanceOf(BlockNode::class, $document);
         $this->assertIsArray($document->getContent());
-        $this->assertEquals((new BlockDocument)->paragraph()->text('lorem')->text('ipsum')->end(), $document);
+        $this->assertEquals((new Document)->paragraph()->text('lorem')->text('ipsum')->end(), $document);
     }
 }
