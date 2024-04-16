@@ -2,7 +2,7 @@
 
 namespace TestMonitor\Jira\Transforms;
 
-use Exception;
+use Throwable;
 use DH\Adf\Node\BlockNode;
 use DH\Adf\Node\Block\Document;
 use TestMonitor\Jira\Validator;
@@ -112,7 +112,7 @@ trait TransformsIssues
     {
         try {
             return Document::load($document);
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             // Ignore errors
         }
 
