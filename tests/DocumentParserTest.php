@@ -3,8 +3,8 @@
 namespace TestMonitor\Jira\Tests;
 
 use DH\Adf\Node\BlockNode;
-use PHPUnit\Framework\TestCase;
 use DH\Adf\Node\Block\Document;
+use PHPUnit\Framework\TestCase;
 
 class DocumentParserTest extends TestCase
 {
