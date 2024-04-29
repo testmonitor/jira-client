@@ -94,11 +94,20 @@ trait ManagesIssues
      * Update the status of an issue.
      *
      * @param \TestMonitor\Jira\Resources\Issue $issue
+     *
+     * @throws \TestMonitor\Jira\Exceptions\FailedActionException
+     *
      * @return \TestMonitor\Jira\Resources\Issue
      */
     public function updateIssueStatus($issueId, IssueStatus $status): Issue
     {
         $transition = $this->findTransitionForStatus($issueId, $status);
+
+        if (empty($transition)) {
+            throw new FailedActionException(json_encode([
+                "errorMessages" => ["Unable to transition this issue to requested status."],
+            ]), 400);
+        }
 
         $this->post("issue/{$issueId}/transitions", [
             'json' => [
@@ -115,11 +124,9 @@ trait ManagesIssues
      * @param string $issueId
      * @param \TestMonitor\Jira\Resources\IssueStatus $status
      *
-     * @throws \TestMonitor\Jira\Exceptions\FailedActionException
-     *
-     * @return array
+     * @return null|array
      */
-    protected function findTransitionForStatus($issueId, IssueStatus $status): array
+    protected function findTransitionForStatus($issueId, IssueStatus $status): ?array
     {
         // Get the available transitions for this issue.
         $response = $this->get("issue/{$issueId}/transitions");
@@ -129,10 +136,6 @@ trait ManagesIssues
             $response['transitions'],
             fn (array $transition) => $transition['to']['id'] === $status->id
         );
-
-        if (empty($transitions)) {
-            throw new FailedActionException('The provided status ID is not available for this issue.');
-        }
 
         // Return the first matching transition
         return array_shift($transitions);
