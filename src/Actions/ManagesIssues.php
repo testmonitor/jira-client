@@ -105,7 +105,7 @@ trait ManagesIssues
 
         if (empty($transition)) {
             throw new FailedActionException(json_encode([
-                "errorMessages" => ["Unable to transition this issue to requested status."],
+                'errorMessages' => ['Unable to transition this issue to requested status.'],
             ]), 400);
         }
 
@@ -123,7 +123,6 @@ trait ManagesIssues
      *
      * @param string $issueId
      * @param \TestMonitor\Jira\Resources\IssueStatus $status
-     *
      * @return null|array
      */
     protected function findTransitionForStatus($issueId, IssueStatus $status): ?array
