@@ -10,6 +10,7 @@ use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\TokenExpiredException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
 use Mrjoops\OAuth2\Client\Provider\Jira as JiraProvider;
+use Mrjoops\OAuth2\Client\Provider\Exception\JiraIdentityProviderException;
 
 class Client
 {
@@ -133,14 +134,18 @@ class Client
     public function refreshToken(): AccessToken
     {
         if (empty($this->token)) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('Invalid access token');
         }
 
-        $token = $this->provider->getAccessToken('refresh_token', [
-            'refresh_token' => $this->token->refreshToken,
-        ]);
+        try {
+            $token = $this->provider->getAccessToken('refresh_token', [
+                'refresh_token' => $this->token->refreshToken,
+            ]);
 
-        $this->token = AccessToken::fromJira($token);
+            $this->token = AccessToken::fromJira($token);
+        } catch (JiraIdentityProviderException $exception) {
+            throw new UnauthorizedException((string) $exception->getResponseBody(), $exception->getCode(), $exception);
+        }
 
         return $this->token;
     }
