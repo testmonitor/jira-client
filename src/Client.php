@@ -127,7 +127,7 @@ class Client
     /**
      * Refresh the current access token.
      *
-     * @throws \Exception
+     * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
      *
      * @return \TestMonitor\Jira\AccessToken
      */
