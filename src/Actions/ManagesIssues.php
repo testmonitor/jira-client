@@ -104,9 +104,7 @@ trait ManagesIssues
         $transition = $this->findTransitionForStatus($issueId, $status);
 
         if (empty($transition)) {
-            throw new FailedActionException(json_encode([
-                'errorMessages' => ['Unable to transition this issue to requested status.'],
-            ]), 400);
+            throw new FailedActionException('Unable to transition this issue to requested status');
         }
 
         $this->post("issue/{$issueId}/transitions", [
