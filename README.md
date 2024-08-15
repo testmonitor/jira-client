@@ -2,10 +2,8 @@
 
 [![Latest Stable Version](https://poser.pugx.org/testmonitor/jira-client/v/stable)](https://packagist.org/packages/testmonitor/jira-client)
 [![CircleCI](https://img.shields.io/circleci/project/github/testmonitor/jira-client.svg)](https://circleci.com/gh/testmonitor/jira-client)
-[![Travis Build](https://travis-ci.com/testmonitor/jira-client.svg?branch=master)](https://app.travis-ci.com/github/testmonitor/jira-client)
-[![Code Coverage](https://scrutinizer-ci.com/g/testmonitor/jira-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/testmonitor/jira-client/?branch=master)
-[![Code Quality](https://scrutinizer-ci.com/g/testmonitor/jira-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/testmonitor/jira-client/?branch=master)
 [![StyleCI](https://styleci.io/repos/222957448/shield)](https://styleci.io/repos/222957448)
+[![codecov](https://codecov.io/gh/testmonitor/jira-client/graph/badge.svg?token=2G489JEVA8)](https://codecov.io/gh/testmonitor/jira-client)
 [![License](https://poser.pugx.org/testmonitor/jira-client/license)](https://packagist.org/packages/testmonitor/jira-client)
 
 This package provides a very basic, convenient, and unified wrapper for Jira.
