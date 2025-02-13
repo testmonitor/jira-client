@@ -140,6 +140,7 @@ class Client
         try {
             $token = $this->provider->getAccessToken('refresh_token', [
                 'refresh_token' => $this->token->refreshToken,
+                'scope' => $this->scopes,
             ]);
 
             $this->token = AccessToken::fromJira($token);
