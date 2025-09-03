@@ -8,6 +8,7 @@ use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Transforms\TransformsIssues;
 use TestMonitor\Jira\Exceptions\FailedActionException;
+use TestMonitor\Jira\Responses\CursorResponse;
 
 trait ManagesIssues
 {
@@ -38,24 +39,39 @@ trait ManagesIssues
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Responses\PaginatedResponse
+     * @return \TestMonitor\Jira\Responses\CursorResponse
      */
-    public function issues(Jql $query = null, int $offset = 0, int $limit = 50)
+    public function issues(Jql $query = null, int $offset = 0, int $limit = 50, string $nextPageToken = '', array $fields = ['linked', 'issuetype', 'description', 'status', 'summary'])
     {
-        $response = $this->get('search', [
+        $totalIssues = $this->countIssues($query);
+
+        $response = $this->get('search/jql', [
             'query' => [
                 'jql' => $query instanceof Jql ? $query->getQuery() : '',
-                'startAt' => $offset,
                 'maxResults' => $limit,
+                'fields' => implode(',', $fields),
+                'nextPageToken' => $nextPageToken,
             ],
         ]);
 
-        return new PaginatedResponse(
+        return new CursorResponse(
             $this->fromJiraIssues($response['issues'] ?? []),
-            $response['total'],
-            $response['maxResults'],
-            $response['startAt']
+            $totalIssues,
+            $limit,
+            $response['nextPageToken'] ?? '',
+            $response['isLast'] ?? false
         );
+    }
+
+    public function countIssues(Jql $query = null)
+    {
+        $response = $this->post('search/approximate-count', [
+            'json' => [
+                'jql' => $query instanceof Jql ? $query->getQuery() : '',
+            ]
+        ]);
+
+        return $response['count'];
     }
 
     /**
