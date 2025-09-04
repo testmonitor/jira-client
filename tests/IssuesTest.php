@@ -12,12 +12,12 @@ use TestMonitor\Jira\Resources\IssueType;
 use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Resources\IssuePriority;
-use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\InvalidDataException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
+use TestMonitor\Jira\Responses\TokenPaginatedResponse;
 
 class IssuesTest extends TestCase
 {
@@ -49,6 +49,9 @@ class IssuesTest extends TestCase
         $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
         $service->shouldReceive('request')
+            ->withArgs(function ($verb) {
+                return $verb === 'GET';
+            })
             ->once()
             ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
                 'issues' => [$this->issue],
@@ -57,15 +60,24 @@ class IssuesTest extends TestCase
                 'total' => 1,
             ])));
 
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'POST'
+                    && $uri === 'search/approximate-count';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'count' => 1,
+            ])));
+
         // When
         $issues = $jira->issues();
 
         // Then
-        $this->assertInstanceOf(PaginatedResponse::class, $issues);
+        $this->assertInstanceOf(TokenPaginatedResponse::class, $issues);
         $this->assertIsArray($issues->items());
         $this->assertCount(1, $issues->items());
-        $this->assertEquals(100, $issues->perPage());
-        $this->assertEquals(0, $issues->offset());
+        $this->assertEquals(50, $issues->perPage());
         $this->assertEquals(1, $issues->total());
         $this->assertInstanceOf(Issue::class, $issues->items()[0]);
         $this->assertEquals($this->issue['id'], $issues->items()[0]->id);
@@ -287,5 +299,27 @@ class IssuesTest extends TestCase
 
         // Then
         $this->assertEquals('<div class="adf-container"><p>My Description</p></div>', $description);
+    }
+
+    /** @test */
+    public function it_should_return_the_number_of_issues()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'count' => 1,
+            ])));
+
+        // When
+        $issueCount = $jira->countIssues();
+
+        // Then
+        $this->assertIsNumeric($issueCount);
+        $this->assertEquals(1, $issueCount);
     }
 }

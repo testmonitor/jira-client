@@ -8,11 +8,11 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use TestMonitor\Jira\Resources\Project;
 use TestMonitor\Jira\Exceptions\Exception;
-use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
+use TestMonitor\Jira\Responses\LengthAwarePaginatedResponse;
 
 class ProjectsTest extends TestCase
 {
@@ -56,7 +56,7 @@ class ProjectsTest extends TestCase
         $projects = $jira->projects();
 
         // Then
-        $this->assertInstanceOf(PaginatedResponse::class, $projects);
+        $this->assertInstanceOf(LengthAwarePaginatedResponse::class, $projects);
         $this->assertIsArray($projects->items());
         $this->assertCount(1, $projects->items());
         $this->assertInstanceOf(Project::class, $projects->items()[0]);

@@ -2,8 +2,8 @@
 
 namespace TestMonitor\Jira\Actions;
 
-use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Transforms\TransformsProjects;
+use TestMonitor\Jira\Responses\LengthAwarePaginatedResponse;
 
 trait ManagesProjects
 {
@@ -18,7 +18,7 @@ trait ManagesProjects
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Responses\PaginatedResponse
+     * @return \TestMonitor\Jira\Responses\LengthAwarePaginatedResponse
      */
     public function projects(string $query = '', int $offset = 0, int $limit = 50)
     {
@@ -30,7 +30,7 @@ trait ManagesProjects
             ],
         ]);
 
-        return new PaginatedResponse(
+        return new LengthAwarePaginatedResponse(
             $this->fromJiraProjects($response['values'] ?? []),
             $response['total'],
             $response['maxResults'],

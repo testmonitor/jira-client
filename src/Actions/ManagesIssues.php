@@ -5,9 +5,9 @@ namespace TestMonitor\Jira\Actions;
 use JqlBuilder\Jql;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\IssueStatus;
-use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Transforms\TransformsIssues;
 use TestMonitor\Jira\Exceptions\FailedActionException;
+use TestMonitor\Jira\Responses\TokenPaginatedResponse;
 
 trait ManagesIssues
 {
@@ -33,29 +33,53 @@ trait ManagesIssues
      * Get a list of issues.
      *
      * @param \JqlBuilder\Jql|null $query
-     * @param int $offset
      * @param int $limit
+     * @param string|null $nextPageToken
+     * @param array $fields
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Responses\PaginatedResponse
+     * @return \TestMonitor\Jira\Responses\TokenPaginatedResponse
      */
-    public function issues(Jql $query = null, int $offset = 0, int $limit = 50)
-    {
-        $response = $this->get('search', [
+    public function issues(
+        ?Jql $query = null,
+        int $limit = 50,
+        ?string $nextPageToken = null,
+        array $fields = ['*navigable']
+    ) {
+        $response = $this->get('search/jql', [
             'query' => [
                 'jql' => $query instanceof Jql ? $query->getQuery() : '',
-                'startAt' => $offset,
                 'maxResults' => $limit,
+                'fields' => implode(',', $fields),
+                'nextPageToken' => $nextPageToken,
             ],
         ]);
 
-        return new PaginatedResponse(
+        return new TokenPaginatedResponse(
             $this->fromJiraIssues($response['issues'] ?? []),
-            $response['total'],
-            $response['maxResults'],
-            $response['startAt']
+            $this->countIssues($query),
+            $limit,
+            $response['nextPageToken'] ?? '',
+            $response['isLast'] ?? false
         );
+    }
+
+    /**
+     * Count the number of Jira issues.
+     *
+     * @param \JqlBuilder\Jql|null $query
+     * @return int
+     */
+    public function countIssues(?Jql $query = null)
+    {
+        $response = $this->post('search/approximate-count', [
+            'json' => [
+                'jql' => $query instanceof Jql ? $query->getQuery() : '',
+            ],
+        ]);
+
+        return $response['count'];
     }
 
     /**

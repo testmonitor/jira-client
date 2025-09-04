@@ -2,10 +2,10 @@
 
 namespace TestMonitor\Jira\Responses;
 
-class PaginatedResponse
+class TokenPaginatedResponse
 {
     /**
-     * All of the items being paginated.
+     * The items being paginated.
      *
      * @var array
      */
@@ -26,11 +26,11 @@ class PaginatedResponse
     protected int $perPage;
 
     /**
-     * The current item offset.
+     * The token for the next page.
      *
-     * @var int
+     * @var string
      */
-    protected int $offset;
+    protected string $nextPageToken;
 
     /**
      * Create a new paginated response instance.
@@ -38,14 +38,15 @@ class PaginatedResponse
      * @param array $items
      * @param int $total
      * @param int $perPage
-     * @param int $offset
+     * @param bool $lastPage
+     * @param string|null $nextPageToken
      */
-    public function __construct(array $items, int $total, int $perPage, int $offset = 0)
+    public function __construct(array $items, int $total, int $perPage, ?string $nextPageToken = null)
     {
         $this->items = $items;
         $this->total = $total;
         $this->perPage = $perPage;
-        $this->offset = $offset;
+        $this->nextPageToken = $nextPageToken;
     }
 
     /**
@@ -56,6 +57,16 @@ class PaginatedResponse
     public function items(): array
     {
         return $this->items;
+    }
+
+    /**
+     * The next page token.
+     *
+     * @return string|null
+     */
+    public function nextPageToken(): ?string
+    {
+        return $this->nextPageToken;
     }
 
     /**
@@ -79,26 +90,22 @@ class PaginatedResponse
     }
 
     /**
-     * Get the current item offset.
+     * Determines if this is the last page.
      *
-     * @return int
+     * @return bool
      */
-    public function offset(): int
+    public function isLastPage(): bool
     {
-        return $this->offset;
+        return empty($this->nextPageToken());
     }
 
     /**
-     * Determine the current page.
+     * Determines if there's a next page of items.
      *
-     * @return int
+     * @return bool
      */
-    public function currentPage(): int
+    public function hasNextPage(): bool
     {
-        if ($this->offset === 0) {
-            return 1;
-        }
-
-        return floor($this->offset / $this->perPage) + 1;
+        return ! $this->isLastPage();
     }
 }
