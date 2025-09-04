@@ -40,7 +40,7 @@ trait ManagesIssues
      *
      * @return \TestMonitor\Jira\Responses\TokenPaginatedResponse
      */
-    public function issues(Jql $query = null, int $offset = 0, int $limit = 50, string $nextPageToken = '', array $fields = ['linked', 'issuetype', 'description', 'status', 'summary'])
+    public function issues(Jql $query = null, int $limit = 50, string $nextPageToken = '', array $fields = ['*navigable'])
     {
         $totalIssues = $this->countIssues($query);
 
