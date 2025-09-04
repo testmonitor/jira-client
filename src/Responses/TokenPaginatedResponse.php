@@ -33,13 +33,6 @@ class TokenPaginatedResponse
     protected string $nextPageToken;
 
     /**
-     * Last page.
-     *
-     * @var bool
-     */
-    protected bool $lastPage;
-
-    /**
      * Create a new paginated response instance.
      *
      * @param array $items
@@ -47,12 +40,11 @@ class TokenPaginatedResponse
      * @param int $perPage
      * @param bool $lastPage
      */
-    public function __construct(array $items, int $total, int $perPage, string $nextPageToken, bool $lastPage = false)
+    public function __construct(array $items, int $total, int $perPage, ?string $nextPageToken = null)
     {
         $this->items = $items;
         $this->total = $total;
         $this->perPage = $perPage;
-        $this->lastPage = $lastPage;
         $this->nextPageToken = $nextPageToken;
     }
 
@@ -87,17 +79,17 @@ class TokenPaginatedResponse
     }
 
     /**
-     * Is last page.
+     * Determines if this is the last page.
      *
      * @return bool
      */
     public function isLastPage(): bool
     {
-        return $this->lastPage;
+        return empty($this->nextPageToken());
     }
 
     /**
-     * Has next page.
+     * Determines if there's a next page of items.
      *
      * @return bool
      */
@@ -109,9 +101,9 @@ class TokenPaginatedResponse
     /**
      * The next page token.
      *
-     * @return string
+     * @return string | null
      */
-    public function nextPageToken(): string
+    public function nextPageToken(): string | null
     {
         return $this->nextPageToken;
     }

@@ -38,7 +38,7 @@
         "testmonitor/adf-tools": "^1.2"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.87",
+        "friendsofphp/php-cs-fixer": "^3.1",
         "mockery/mockery": "~1.0",
         "phpunit/phpunit": "^10.0",
         "squizlabs/php_codesniffer": "^3.7"
