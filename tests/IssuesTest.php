@@ -17,7 +17,6 @@ use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\InvalidDataException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
-use TestMonitor\Jira\Responses\LengthAwarePaginatedResponse;
 use TestMonitor\Jira\Responses\TokenPaginatedResponse;
 
 class IssuesTest extends TestCase
