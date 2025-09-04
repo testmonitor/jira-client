@@ -85,6 +85,28 @@ class IssuesTest extends TestCase
     }
 
     /** @test */
+    public function it_should_return_the_issue_count()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'count' => 1,
+            ])));
+
+        // When
+        $issueCount = $jira->countIssues();
+
+        // Then
+        $this->assertIsNumeric($issueCount);
+        $this->assertEquals(1, $issueCount);
+    }
+
+    /** @test */
     public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_issues()
     {
         // Given
