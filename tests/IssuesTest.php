@@ -85,7 +85,7 @@ class IssuesTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_the_issue_count()
+    public function it_should_return_the_number_of_issues()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
