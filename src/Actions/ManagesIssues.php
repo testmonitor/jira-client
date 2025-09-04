@@ -32,7 +32,7 @@ trait ManagesIssues
     /**
      * Get a list of issues.
      *
-     * @param @param \JqlBuilder\Jql|null $query
+     * @param \JqlBuilder\Jql|null $query
      * @param int $limit
      * @param string $nextPageToken
      * @param array $fields
@@ -44,10 +44,9 @@ trait ManagesIssues
     public function issues(
         ?Jql $query = null,
         int $limit = 50,
-        string $nextPageToken = '',
+        ?string $nextPageToken = null,
         array $fields = ['*navigable']
     ) {
-        $totalIssues = $this->countIssues($query);
 
         $response = $this->get('search/jql', [
             'query' => [
@@ -60,7 +59,7 @@ trait ManagesIssues
 
         return new TokenPaginatedResponse(
             $this->fromJiraIssues($response['issues'] ?? []),
-            $totalIssues,
+            $this->countIssues($query),
             $limit,
             $response['nextPageToken'] ?? '',
             $response['isLast'] ?? false

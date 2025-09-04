@@ -5,7 +5,7 @@ namespace TestMonitor\Jira\Responses;
 class TokenPaginatedResponse
 {
     /**
-     * All of the items being paginated.
+     * The items being paginated.
      *
      * @var array
      */
@@ -39,6 +39,7 @@ class TokenPaginatedResponse
      * @param int $total
      * @param int $perPage
      * @param bool $lastPage
+     * @param string | null $nextPageToken
      */
     public function __construct(array $items, int $total, int $perPage, ?string $nextPageToken = null)
     {
@@ -56,6 +57,16 @@ class TokenPaginatedResponse
     public function items(): array
     {
         return $this->items;
+    }
+
+    /**
+     * The next page token.
+     *
+     * @return string | null
+     */
+    public function nextPageToken(): string | null
+    {
+        return $this->nextPageToken;
     }
 
     /**
@@ -96,15 +107,5 @@ class TokenPaginatedResponse
     public function hasNextPage(): bool
     {
         return ! $this->isLastPage();
-    }
-
-    /**
-     * The next page token.
-     *
-     * @return string | null
-     */
-    public function nextPageToken(): string | null
-    {
-        return $this->nextPageToken;
     }
 }
