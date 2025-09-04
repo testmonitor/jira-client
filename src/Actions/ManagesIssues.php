@@ -33,7 +33,7 @@ trait ManagesIssues
      * Get a list of issues.
      *
      * @param @param \JqlBuilder\Jql|null $query
-     * @param integer $limit
+     * @param int $limit
      * @param string $nextPageToken
      * @param array $fields
      *
@@ -42,7 +42,7 @@ trait ManagesIssues
      * @return \TestMonitor\Jira\Responses\TokenPaginatedResponse
      */
     public function issues(
-        Jql $query = null,
+        ?Jql $query = null,
         int $limit = 50,
         string $nextPageToken = '',
         array $fields = ['*navigable']
@@ -74,7 +74,7 @@ trait ManagesIssues
      *
      * @return int
      */
-    public function countIssues(Jql $query = null)
+    public function countIssues(?Jql $query = null)
     {
         $response = $this->post('search/approximate-count', [
             'json' => [
