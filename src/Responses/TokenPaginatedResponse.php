@@ -103,7 +103,7 @@ class TokenPaginatedResponse
      */
     public function hasNextPage(): bool
     {
-        return !$this->isLastPage();
+        return ! $this->isLastPage();
     }
 
     /**
