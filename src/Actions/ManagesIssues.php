@@ -62,6 +62,13 @@ trait ManagesIssues
         );
     }
 
+    /**
+     * Count the number of Jira issues.
+     *
+     * @param \JqlBuilder\Jql|null $query
+     *
+     * @return int
+     */
     public function countIssues(Jql $query = null)
     {
         $response = $this->post('search/approximate-count', [
