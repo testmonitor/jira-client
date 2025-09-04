@@ -5,10 +5,9 @@ namespace TestMonitor\Jira\Actions;
 use JqlBuilder\Jql;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\IssueStatus;
-use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Transforms\TransformsIssues;
 use TestMonitor\Jira\Exceptions\FailedActionException;
-use TestMonitor\Jira\Responses\CursorResponse;
+use TestMonitor\Jira\Responses\TokenPaginatedResponse;
 
 trait ManagesIssues
 {
@@ -39,7 +38,7 @@ trait ManagesIssues
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Responses\CursorResponse
+     * @return \TestMonitor\Jira\Responses\TokenPaginatedResponse
      */
     public function issues(Jql $query = null, int $offset = 0, int $limit = 50, string $nextPageToken = '', array $fields = ['linked', 'issuetype', 'description', 'status', 'summary'])
     {
@@ -54,7 +53,7 @@ trait ManagesIssues
             ],
         ]);
 
-        return new CursorResponse(
+        return new TokenPaginatedResponse(
             $this->fromJiraIssues($response['issues'] ?? []),
             $totalIssues,
             $limit,
@@ -68,7 +67,7 @@ trait ManagesIssues
         $response = $this->post('search/approximate-count', [
             'json' => [
                 'jql' => $query instanceof Jql ? $query->getQuery() : '',
-            ]
+            ],
         ]);
 
         return $response['count'];

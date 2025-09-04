@@ -12,12 +12,12 @@ use TestMonitor\Jira\Resources\IssueType;
 use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Resources\IssuePriority;
-use TestMonitor\Jira\Responses\PaginatedResponse;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
 use TestMonitor\Jira\Exceptions\InvalidDataException;
 use TestMonitor\Jira\Exceptions\FailedActionException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
+use TestMonitor\Jira\Responses\LengthAwarePaginatedResponse;
 
 class IssuesTest extends TestCase
 {
@@ -61,7 +61,7 @@ class IssuesTest extends TestCase
         $issues = $jira->issues();
 
         // Then
-        $this->assertInstanceOf(PaginatedResponse::class, $issues);
+        $this->assertInstanceOf(LengthAwarePaginatedResponse::class, $issues);
         $this->assertIsArray($issues->items());
         $this->assertCount(1, $issues->items());
         $this->assertEquals(100, $issues->perPage());

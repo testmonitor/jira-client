@@ -2,7 +2,7 @@
 
 namespace TestMonitor\Jira\Responses;
 
-class PaginatedResponse
+class LengthAwarePaginatedResponse
 {
     /**
      * All of the items being paginated.

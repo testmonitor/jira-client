@@ -2,7 +2,7 @@
 
 namespace TestMonitor\Jira\Responses;
 
-class CursorResponse
+class TokenPaginatedResponse
 {
     /**
      * All of the items being paginated.

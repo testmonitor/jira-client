@@ -3,7 +3,7 @@
 namespace TestMonitor\Jira\Actions;
 
 use TestMonitor\Jira\Transforms\TransformsUsers;
-use TestMonitor\Jira\Responses\PaginatedResponse;
+use TestMonitor\Jira\Responses\LengthAwarePaginatedResponse;
 
 trait ManagesUsers
 {
@@ -19,7 +19,7 @@ trait ManagesUsers
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Responses\PaginatedResponse
+     * @return \TestMonitor\Jira\Responses\LengthAwarePaginatedResponse
      */
     public function users($projectId, string $query = '', int $offset = 0, int $limit = 50)
     {
@@ -32,7 +32,7 @@ trait ManagesUsers
             ],
         ]);
 
-        return new PaginatedResponse(
+        return new LengthAwarePaginatedResponse(
             $this->fromJiraUsers($response ?? []),
             count($response),
             $limit,
