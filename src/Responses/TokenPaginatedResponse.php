@@ -46,7 +46,6 @@ class TokenPaginatedResponse
      * @param int $total
      * @param int $perPage
      * @param bool $lastPage
-
      */
     public function __construct(array $items, int $total, int $perPage, string $nextPageToken, bool $lastPage = false)
     {
@@ -90,7 +89,7 @@ class TokenPaginatedResponse
     /**
      * Is last page.
      *
-     * @return boolean
+     * @return bool
      */
     public function isLastPage(): bool
     {
@@ -100,7 +99,7 @@ class TokenPaginatedResponse
     /**
      * Has next page.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasNextPage(): bool
     {
