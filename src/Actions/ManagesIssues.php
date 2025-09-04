@@ -34,7 +34,7 @@ trait ManagesIssues
      *
      * @param \JqlBuilder\Jql|null $query
      * @param int $limit
-     * @param string $nextPageToken
+     * @param string|null $nextPageToken
      * @param array $fields
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
@@ -47,7 +47,6 @@ trait ManagesIssues
         ?string $nextPageToken = null,
         array $fields = ['*navigable']
     ) {
-
         $response = $this->get('search/jql', [
             'query' => [
                 'jql' => $query instanceof Jql ? $query->getQuery() : '',

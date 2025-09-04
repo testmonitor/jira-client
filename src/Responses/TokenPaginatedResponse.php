@@ -39,7 +39,7 @@ class TokenPaginatedResponse
      * @param int $total
      * @param int $perPage
      * @param bool $lastPage
-     * @param string | null $nextPageToken
+     * @param string|null $nextPageToken
      */
     public function __construct(array $items, int $total, int $perPage, ?string $nextPageToken = null)
     {
@@ -62,9 +62,9 @@ class TokenPaginatedResponse
     /**
      * The next page token.
      *
-     * @return string | null
+     * @return string|null
      */
-    public function nextPageToken(): string | null
+    public function nextPageToken(): ?string
     {
         return $this->nextPageToken;
     }
