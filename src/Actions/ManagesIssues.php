@@ -32,16 +32,21 @@ trait ManagesIssues
     /**
      * Get a list of issues.
      *
-     * @param \JqlBuilder\Jql|null $query
-     * @param int $offset
-     * @param int $limit
+     * @param @param \JqlBuilder\Jql|null $query
+     * @param integer $limit
+     * @param string $nextPageToken
+     * @param array $fields
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
      * @return \TestMonitor\Jira\Responses\TokenPaginatedResponse
      */
-    public function issues(Jql $query = null, int $limit = 50, string $nextPageToken = '', array $fields = ['*navigable'])
-    {
+    public function issues(
+        Jql $query = null,
+        int $limit = 50,
+        string $nextPageToken = '',
+        array $fields = ['*navigable']
+    ) {
         $totalIssues = $this->countIssues($query);
 
         $response = $this->get('search/jql', [
