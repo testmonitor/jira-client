@@ -80,7 +80,7 @@ class Client
     public function __construct(
         array $credentials,
         string $cloudId = '',
-        AccessToken $token = null,
+        ?AccessToken $token = null,
         $provider = null
     ) {
         $this->token = $token;
