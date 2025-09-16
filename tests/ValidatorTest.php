@@ -3,8 +3,8 @@
 namespace TestMonitor\Jira\Tests;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Validator;
+use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Exceptions\InvalidDataException;
 
 class ValidatorTest extends TestCase
