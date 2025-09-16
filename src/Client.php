@@ -74,7 +74,7 @@ class Client
      *
      * @param array $credentials
      * @param string $cloudId
-     * @param \TestMonitor\Jira\AccessToken $token
+     * @param \TestMonitor\Jira\AccessToken|null $token
      * @param \Mrjoops\OAuth2\Client\Provider\Jira $provider
      */
     public function __construct(
