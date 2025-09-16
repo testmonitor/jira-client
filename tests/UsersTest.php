@@ -6,7 +6,6 @@ use Mockery;
 use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Resources\User;
 use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Exceptions\Exception;

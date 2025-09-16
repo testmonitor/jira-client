@@ -5,7 +5,6 @@ namespace TestMonitor\Jira\Tests;
 use Mockery;
 use TestMonitor\Jira\Client;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\AccessToken;
 use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Exceptions\TokenExpiredException;
