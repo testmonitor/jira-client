@@ -5,6 +5,7 @@ namespace TestMonitor\Jira\Tests;
 use Mockery;
 use TestMonitor\Jira\Client;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\AccessToken;
 use TestMonitor\Jira\Exceptions\TokenExpiredException;
 use TestMonitor\Jira\Exceptions\UnauthorizedException;
@@ -16,7 +17,7 @@ class OauthTest extends TestCase
         Mockery::close();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_create_a_token()
     {
         // When
@@ -28,7 +29,7 @@ class OauthTest extends TestCase
         $this->assertFalse($token->expired());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_detect_an_expired_token()
     {
         // Given
@@ -48,7 +49,7 @@ class OauthTest extends TestCase
         $this->assertTrue($expired);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_provide_a_client_with_an_expired_token()
     {
         // Given
@@ -65,7 +66,7 @@ class OauthTest extends TestCase
         $jira = $jira->accounts();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_provide_an_authorization_url()
     {
         // Given
@@ -83,7 +84,7 @@ class OauthTest extends TestCase
         $this->assertEquals($expectedUrl, $url);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_fetch_a_token()
     {
         // Given
@@ -107,7 +108,7 @@ class OauthTest extends TestCase
         $this->assertEquals($token->refreshToken, $newToken->getRefreshToken());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_refresh_a_token()
     {
         // Given
@@ -132,7 +133,7 @@ class OauthTest extends TestCase
         $this->assertEquals($token->refreshToken, $refreshToken->getRefreshToken());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_refresh_a_token_without_a_refresh_token()
     {
         // Given
@@ -144,7 +145,7 @@ class OauthTest extends TestCase
         $jira->refreshToken();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_provide_a_client_without_a_token()
     {
         // Given

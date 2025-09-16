@@ -5,10 +5,11 @@ namespace TestMonitor\Jira\Tests;
 use DH\Adf\Node\BlockNode;
 use DH\Adf\Node\Block\Document;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class DocumentParserTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_return_a_document_parser()
     {
         // Given
@@ -20,7 +21,7 @@ class DocumentParserTest extends TestCase
         $this->assertInstanceOf(Document::class, $document);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_parse_content()
     {
         // Given
@@ -49,7 +50,7 @@ class DocumentParserTest extends TestCase
         $this->assertEquals((new Document)->paragraph()->text('test')->end(), $document);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_filter_out_unknown_node_types()
     {
         // Given

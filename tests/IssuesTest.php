@@ -6,6 +6,7 @@ use Mockery;
 use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\Project;
 use TestMonitor\Jira\Resources\IssueType;
@@ -40,7 +41,7 @@ class IssuesTest extends TestCase
         Mockery::close();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_list_of_issues()
     {
         // Given
@@ -84,7 +85,7 @@ class IssuesTest extends TestCase
         $this->assertIsArray($issues->items()[0]->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_issues()
     {
         // Given
@@ -102,7 +103,7 @@ class IssuesTest extends TestCase
         $jira->issues();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_issues()
     {
         // Given
@@ -120,7 +121,7 @@ class IssuesTest extends TestCase
         $jira->issues();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_issues()
     {
         // Given
@@ -138,7 +139,7 @@ class IssuesTest extends TestCase
         $jira->issues();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_issues()
     {
         // Given
@@ -156,7 +157,7 @@ class IssuesTest extends TestCase
         $jira->issues();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_issues()
     {
         // Given
@@ -178,7 +179,7 @@ class IssuesTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_issues()
     {
         // Given
@@ -196,7 +197,7 @@ class IssuesTest extends TestCase
         $jira->issues();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_single_issue()
     {
         // Given
@@ -218,7 +219,7 @@ class IssuesTest extends TestCase
         $this->assertIsArray($issue->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_create_an_issue()
     {
         // Given
@@ -247,7 +248,7 @@ class IssuesTest extends TestCase
         $this->assertEquals($this->issue['id'], $issue->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_creating_an_invalid_issue()
     {
         // Given
@@ -272,7 +273,7 @@ class IssuesTest extends TestCase
         $this->assertEquals($this->issue['id'], $issue->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_get_a_html_description_of_an_issue()
     {
         // Given
@@ -301,7 +302,7 @@ class IssuesTest extends TestCase
         $this->assertEquals('<div class="adf-container"><p>My Description</p></div>', $description);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_the_number_of_issues()
     {
         // Given

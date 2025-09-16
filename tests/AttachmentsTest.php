@@ -6,6 +6,7 @@ use Mockery;
 use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Resources\Attachment;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
@@ -39,7 +40,7 @@ class AttachmentsTest extends TestCase
         Mockery::close();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_add_an_attachment_to_an_issue()
     {
         // Given
@@ -61,7 +62,7 @@ class AttachmentsTest extends TestCase
         $this->assertIsArray($attachments[0]->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_adding_an_attachment_to_a_issue()
     {
         // Given
@@ -79,7 +80,7 @@ class AttachmentsTest extends TestCase
         $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_adding_an_attachment_to_a_issue()
     {
         // Given
@@ -97,7 +98,7 @@ class AttachmentsTest extends TestCase
         $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_adding_an_attachment_to_a_issue()
     {
         // Given
@@ -115,7 +116,7 @@ class AttachmentsTest extends TestCase
         $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_adding_an_attachment_to_a_issue()
     {
         // Given
@@ -133,7 +134,7 @@ class AttachmentsTest extends TestCase
         $jira->addAttachmentToIssue($this->issue['id'], __DIR__ . '/files/logo.png');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_retrieve_an_attachment()
     {
         // Given
