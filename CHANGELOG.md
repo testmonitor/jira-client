@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.0.0] - 2025-09-16
 ### Updated
-- Support the new issues-endpoint
+- Replaced issues endpoint due to Jira deprecation
+- Introduced TokenPaginatedResponse
+- Refactored PaginatedResponse to LengthAwarePaginatedResponse
+- Fix null-value code style
 
 ## [2.3.0] - 2025-02-13
 ### Updated
