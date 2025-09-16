@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2025-09-16
+### Updated
+- Support the new issues-endpoint
+
 ## [2.3.0] - 2025-02-13
 ### Updated
 - Replaced Travis / Scrutinizer with Codecov
