@@ -78,8 +78,11 @@ class IssuesTest extends TestCase
         $this->assertInstanceOf(TokenPaginatedResponse::class, $issues);
         $this->assertIsArray($issues->items());
         $this->assertCount(1, $issues->items());
-        $this->assertEquals(50, $issues->perPage());
+        $this->assertEquals('', $issues->nextPageToken());
         $this->assertEquals(1, $issues->total());
+        $this->assertEquals(50, $issues->perPage());
+        $this->assertTrue($issues->isLastPage());
+        $this->assertFalse($issues->hasNextPage());
         $this->assertInstanceOf(Issue::class, $issues->items()[0]);
         $this->assertEquals($this->issue['id'], $issues->items()[0]->id);
         $this->assertIsArray($issues->items()[0]->toArray());
@@ -198,6 +201,28 @@ class IssuesTest extends TestCase
     }
 
     #[Test]
+    public function it_should_return_the_number_of_issues()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'count' => 1,
+            ])));
+
+        // When
+        $issueCount = $jira->countIssues();
+
+        // Then
+        $this->assertIsNumeric($issueCount);
+        $this->assertEquals(1, $issueCount);
+    }
+
+    #[Test]
     public function it_should_return_a_single_issue()
     {
         // Given
@@ -303,24 +328,144 @@ class IssuesTest extends TestCase
     }
 
     #[Test]
-    public function it_should_return_the_number_of_issues()
+    public function it_should_update_an_issue()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
         $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
 
+        $updatedIssue = [
+            'id' => '1',
+            'key' => 'KEY',
+            'fields' => [
+                'summary' => 'Updated Issue',
+                'description' => 'Updated Description',
+            ],
+        ];
+
         $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'PUT' && $uri === 'issue/1';
+            })
             ->once()
-            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'count' => 1,
-            ])));
+            ->andReturn(new Response(204, ['Content-Type' => 'application/json'], null));
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'GET' && $uri === 'issue/1';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($updatedIssue)));
 
         // When
-        $issueCount = $jira->countIssues();
+        $issue = $jira->updateIssue('1', [
+            'summary' => 'Updated Issue',
+            'type' => new IssueType(['id' => 1]),
+            'priority' => new IssuePriority(['id' => 1]),
+        ]);
 
         // Then
-        $this->assertIsNumeric($issueCount);
-        $this->assertEquals(1, $issueCount);
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertEquals($updatedIssue['id'], $issue->id);
+        $this->assertEquals($updatedIssue['fields']['summary'], $issue->summary);
+    }
+
+    #[Test]
+    public function it_should_update_an_issue_status()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $transitions = [
+            'transitions' => [
+                [
+                    'id' => '11',
+                    'name' => 'To Do',
+                    'to' => ['id' => '10001', 'name' => 'To Do'],
+                ],
+                [
+                    'id' => '21',
+                    'name' => 'In Progress',
+                    'to' => ['id' => '3', 'name' => 'In Progress'],
+                ],
+            ],
+        ];
+
+        $updatedIssue = [
+            'id' => '1',
+            'key' => 'KEY',
+            'fields' => [
+                'summary' => 'My Issue',
+                'status' => ['id' => '3', 'name' => 'In Progress'],
+            ],
+        ];
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'GET' && $uri === 'issue/1/transitions';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($transitions)));
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'POST' && $uri === 'issue/1/transitions';
+            })
+            ->once()
+            ->andReturn(new Response(204, ['Content-Type' => 'application/json'], null));
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'GET' && $uri === 'issue/1';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($updatedIssue)));
+
+        // When
+        $issue = $jira->updateIssueStatus('1', new IssueStatus(['id' => '3', 'name' => 'In Progress']));
+
+        // Then
+        $this->assertInstanceOf(Issue::class, $issue);
+        $this->assertEquals($updatedIssue['id'], $issue->id);
+        $this->assertEquals($updatedIssue['key'], $issue->key);
+    }
+
+    #[Test]
+    public function it_should_throw_a_failed_action_exception_when_no_transition_is_available_for_requested_status()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $transitions = [
+            'transitions' => [
+                [
+                    'id' => '11',
+                    'name' => 'To Do',
+                    'to' => ['id' => '10001', 'name' => 'To Do'],
+                ],
+                [
+                    'id' => '21',
+                    'name' => 'In Progress',
+                    'to' => ['id' => '3', 'name' => 'In Progress'],
+                ],
+            ],
+        ];
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'GET' && $uri === 'issue/1/transitions';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode($transitions)));
+
+        $this->expectException(FailedActionException::class);
+
+        // When
+        $jira->updateIssueStatus('1', new IssueStatus(['id' => '999', 'name' => 'Unavailable Status']));
     }
 }
