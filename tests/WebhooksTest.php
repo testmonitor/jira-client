@@ -59,7 +59,7 @@ class WebhooksTest extends TestCase
     }
 
     #[Test]
-    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_webhooks()
+    public function it_should_throw_a_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -208,5 +208,147 @@ class WebhooksTest extends TestCase
 
         // Then
         $this->assertTrue($response);
+    }
+
+    #[Test]
+    public function it_should_create_a_webhook()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $webhookData = [
+            'url' => 'https://testmonitor.com/webhook',
+            'events' => ['jira:issue_created', 'jira:issue_updated'],
+            'jqlFilter' => 'project = TEST',
+        ];
+
+        $webhook = new Webhook($webhookData);
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'webhookRegistrationResult' => [
+                    ['createdWebhookId' => '12345'],
+                ],
+            ])));
+
+        // When
+        $result = $jira->createWebhook($webhook);
+
+        // Then
+        $this->assertInstanceOf(Webhook::class, $result);
+        $this->assertEquals('12345', $result->id);
+        $this->assertEquals($webhookData['url'], $result->url);
+        $this->assertEquals($webhookData['events'], $result->events);
+        $this->assertEquals($webhookData['jqlFilter'], $result->jqlFilter);
+    }
+
+    #[Test]
+    public function it_should_throw_an_exception_when_create_webhook_fails()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $webhookData = [
+            'url' => 'https://testmonitor.com/webhook',
+            'events' => ['jira:issue_created'],
+        ];
+
+        $webhook = new Webhook($webhookData);
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'webhookRegistrationResult' => [
+                    ['errors' => ['Invalid webhook URL']],
+                ],
+            ])));
+
+        $this->expectException(FailedActionException::class);
+
+        // When
+        $jira->createWebhook($webhook);
+    }
+
+    #[Test]
+    public function it_should_extend_webhook_lifetimes()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $webhookIds = [1, 2, 3];
+        $expirationDate = '2024-12-31T23:59:59.999+0000';
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'expirationDate' => $expirationDate,
+            ])));
+
+        // When
+        $result = $jira->extendWebhookLifetimes($webhookIds);
+
+        // Then
+        $this->assertEquals($expirationDate, $result);
+    }
+
+    #[Test]
+    public function it_should_throw_a_failed_action_exception_when_client_receives_bad_request_while_extending_webhook_lifetimes()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(400, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(FailedActionException::class);
+
+        // When
+        $jira->extendWebhookLifetimes([1, 2, 3]);
+    }
+
+    #[Test]
+    public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_extending_webhook_lifetimes()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(401, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(UnauthorizedException::class);
+
+        // When
+        $jira->extendWebhookLifetimes([1, 2, 3]);
+    }
+
+    #[Test]
+    public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_extending_webhook_lifetimes()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->once()
+            ->andReturn(new Response(404, ['Content-Type' => 'application/json'], null));
+
+        $this->expectException(NotFoundException::class);
+
+        // When
+        $jira->extendWebhookLifetimes([1, 2, 3]);
     }
 }
