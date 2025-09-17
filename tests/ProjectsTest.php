@@ -60,6 +60,10 @@ class ProjectsTest extends TestCase
         $this->assertInstanceOf(LengthAwarePaginatedResponse::class, $projects);
         $this->assertIsArray($projects->items());
         $this->assertCount(1, $projects->items());
+        $this->assertEquals(1, $projects->total());
+        $this->assertEquals(100, $projects->perPage());
+        $this->assertEquals(0, $projects->offset());
+        $this->assertEquals(1, $projects->currentPage());
         $this->assertInstanceOf(Project::class, $projects->items()[0]);
         $this->assertEquals($this->project['id'], $projects->items()[0]->id);
         $this->assertIsArray($projects->items()[0]->toArray());

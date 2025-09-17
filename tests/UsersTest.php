@@ -60,6 +60,10 @@ class UsersTest extends TestCase
         $this->assertInstanceOf(LengthAwarePaginatedResponse::class, $users);
         $this->assertIsArray($users->items());
         $this->assertCount(1, $users->items());
+        $this->assertEquals(1, $users->total());
+        $this->assertEquals(50, $users->perPage());
+        $this->assertEquals(0, $users->offset());
+        $this->assertEquals(1, $users->currentPage());
         $this->assertInstanceOf(User::class, $users->items()[0]);
         $this->assertEquals($this->user['accountId'], $users->items()[0]->id);
         $this->assertIsArray($users->items()[0]->toArray());
