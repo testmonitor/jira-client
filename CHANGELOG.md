@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.0.0] - 2025-09-16
+### Added
+- Better test coverage for updating issues, creating / updating webhooks
+  
 ### Updated
 - Replaced issues endpoint due to Jira deprecation
 - Introduced TokenPaginatedResponse
