@@ -7,6 +7,7 @@ use TestMonitor\Jira\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use TestMonitor\Jira\Resources\User;
+use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Exceptions\Exception;
 use TestMonitor\Jira\Exceptions\NotFoundException;
 use TestMonitor\Jira\Exceptions\ValidationException;
@@ -40,7 +41,7 @@ class UsersTest extends TestCase
         Mockery::close();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_list_of_users()
     {
         // Given
@@ -64,7 +65,7 @@ class UsersTest extends TestCase
         $this->assertIsArray($users->items()[0]->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_users()
     {
         // Given
@@ -82,7 +83,7 @@ class UsersTest extends TestCase
         $jira->users('123456789');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_a_list_of_users()
     {
         // Given
@@ -100,7 +101,7 @@ class UsersTest extends TestCase
         $jira->users('123456789');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_an_unauthorized_exception_when_client_lacks_authorization_for_getting_a_list_of_users()
     {
         // Given
@@ -118,7 +119,7 @@ class UsersTest extends TestCase
         $jira->users('123456789');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_list_of_users()
     {
         // Given
@@ -136,7 +137,7 @@ class UsersTest extends TestCase
         $jira->users('123456789');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_list_of_users()
     {
         // Given
@@ -158,7 +159,7 @@ class UsersTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_generic_exception_when_client_suddenly_becomes_a_teapot_while_getting_list_of_users()
     {
         // Given
@@ -176,7 +177,7 @@ class UsersTest extends TestCase
         $jira->users('123456789');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_the_profile_of_the_current_authenticated_user()
     {
         // Given
@@ -197,7 +198,7 @@ class UsersTest extends TestCase
         $this->assertEquals($this->user['accountId'], $user->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_the_profile_of_the_current_authenticated_user()
     {
         // Given
@@ -215,7 +216,7 @@ class UsersTest extends TestCase
         $jira->myself();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_notfound_exception_when_client_receives_not_found_while_getting_the_profile_of_the_current_authenticated_user()
     {
         // Given
@@ -233,7 +234,7 @@ class UsersTest extends TestCase
         $jira->myself();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_throw_a_validation_exception_when_client_provides_invalid_data_while_getting_the_profile_of_the_current_authenticated_user()
     {
         // Given
@@ -251,7 +252,7 @@ class UsersTest extends TestCase
         $jira->myself();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_error_message_when_client_provides_invalid_data_while_getting_the_profile_of_the_current_authenticated_user()
     {
         // Given
