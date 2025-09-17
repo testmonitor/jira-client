@@ -59,7 +59,7 @@ class WebhooksTest extends TestCase
     }
 
     #[Test]
-    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_webhooks()
+    public function it_should_throw_a_failed_action_exception_when_client_receives_bad_request_while_getting_a_list_of_webhooks()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
@@ -299,7 +299,7 @@ class WebhooksTest extends TestCase
     }
 
     #[Test]
-    public function it_should_throw_an_failed_action_exception_when_client_receives_bad_request_while_extending_webhook_lifetimes()
+    public function it_should_throw_a_failed_action_exception_when_client_receives_bad_request_while_extending_webhook_lifetimes()
     {
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
