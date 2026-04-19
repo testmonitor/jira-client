@@ -6,9 +6,9 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TestMonitor\Jira\Builders\Jql;
 use TestMonitor\Jira\Builders\Field;
+use PHPUnit\Framework\Attributes\Test;
 use TestMonitor\Jira\Builders\Keyword;
 use TestMonitor\Jira\Builders\Operator;
-use PHPUnit\Framework\Attributes\Test;
 
 class JqlTest extends TestCase
 {

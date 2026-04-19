@@ -3,8 +3,8 @@
 namespace TestMonitor\Jira\Builders;
 
 use Closure;
-use InvalidArgumentException;
 use Stringable;
+use InvalidArgumentException;
 
 class Jql implements Stringable
 {
@@ -77,7 +77,6 @@ class Jql implements Stringable
      *
      * @param mixed $value
      * @param callable $callback
-     *
      * @return $this
      */
     public function when(mixed $value, callable $callback): self
@@ -96,7 +95,6 @@ class Jql implements Stringable
      *
      * @param mixed $value
      * @param callable $callback
-     *
      * @return $this
      */
     public function whenNot(mixed $value, callable $callback): self
@@ -115,7 +113,6 @@ class Jql implements Stringable
      *
      * @param string $column
      * @param string $direction
-     *
      * @return $this
      */
     public function orderBy(string $column, string $direction): self
@@ -129,7 +126,6 @@ class Jql implements Stringable
      * Add a raw query string.
      *
      * @param string $query
-     *
      * @return $this
      */
     public function rawQuery(string $query): self
