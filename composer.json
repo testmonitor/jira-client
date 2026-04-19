@@ -31,7 +31,6 @@
     "require": {
         "php": "^8.1",
         "ext-json": "*",
-        "devmoath/jql-builder": "^1.4",
         "guzzlehttp/guzzle": "^7.0",
         "league/oauth2-client": "^2.7",
         "mrjoops/oauth2-jira": "^0.3",

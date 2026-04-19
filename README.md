@@ -132,6 +132,29 @@ $issue = $jira->createIssue(new \TestMonitor\Jira\Resources\Issue([
 ]));
 ```
 
+The package also includes a JQL builder to help construct issue search queries. Use it to filter issues by project, status, assignee, and more:
+
+```php
+$query = (new \TestMonitor\Jira\Builders\Jql)
+    ->where(\TestMonitor\Jira\Builders\Field::PROJECT, 'KEY')
+    ->where(\TestMonitor\Jira\Builders\Field::STATUS, \TestMonitor\Jira\Builders\Operator::NOT_IN, ['Done', 'Cancelled'])
+    ->orderBy(\TestMonitor\Jira\Builders\Field::CREATED, 'DESC');
+
+$issues = $jira->issues($query);
+```
+
+The `when` method allows you to conditionally add clauses, which is useful when building queries from user input:
+
+```php
+$query = (new \TestMonitor\Jira\Builders\Jql)
+    ->where(\TestMonitor\Jira\Builders\Field::PROJECT, 'KEY')
+    ->when($assignee, function ($jql, $value) {
+        $jql->where(\TestMonitor\Jira\Builders\Field::ASSIGNEE, $value);
+    });
+
+$issues = $jira->issues($query);
+```
+
 ## Tests
 
 The package contains integration tests. You can run them using PHPUnit.
