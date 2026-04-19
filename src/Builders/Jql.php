@@ -84,7 +84,7 @@ class Jql implements Stringable
         $value = $value instanceof Closure ? $value($this) : $value;
 
         if ($value) {
-            return $callback($this, $value) ?? $this;
+            $callback($this, $value);
         }
 
         return $this;
@@ -102,7 +102,7 @@ class Jql implements Stringable
         $value = $value instanceof Closure ? $value($this) : $value;
 
         if (! $value) {
-            return $callback($this, $value) ?? $this;
+            $callback($this, $value);
         }
 
         return $this;
@@ -181,7 +181,7 @@ class Jql implements Stringable
      */
     protected function quote(string $operator, mixed $value): string
     {
-        if (in_array($operator, [Operator::IN, Operator::NOT_IN, Operator::WAS_IN, Operator::WAS_NOT_IN], true)) {
+        if (in_array($operator, Operator::acceptList(), true)) {
             $items = array_map(
                 fn ($item) => '"' . str_replace('"', '\\"', (string) $item) . '"',
                 is_array($value) ? $value : [$value]

@@ -27,19 +27,17 @@ class Field
 
     public const CREATOR = 'creator';
 
-    public const CUSTOMER_REQUEST_TYPE = '"Customer Request Type"';
-
     public const DESCRIPTION = 'description';
 
     public const DUE = 'due';
 
     public const ENVIRONMENT = 'environment';
 
-    public const EPIC_LINK = '"epic link"';
-
     public const FILTER = 'filter';
 
     public const FIX_VERSION = 'fixVersion';
+
+    public const HIERARCHY_LEVEL = 'hierarchyLevel';
 
     public const ISSUE_KEY = 'issueKey';
 
@@ -59,6 +57,8 @@ class Field
 
     public const PARENT = 'parent';
 
+    public const PARENT_SPACE = 'parentSpace';
+
     public const PRIORITY = 'priority';
 
     public const PROJECT = 'project';
@@ -73,9 +73,13 @@ class Field
 
     public const REQUEST_LAST_ACTIVITY_TIME = 'request-last-activity-time';
 
+    public const REQUEST_TYPE = '"Request Type"';
+
     public const RESOLUTION = 'resolution';
 
     public const RESOLVED = 'resolved';
+
+    public const SPACE_TYPE = 'spaceType';
 
     public const SPRINT = 'sprint';
 
@@ -84,6 +88,8 @@ class Field
     public const SUMMARY = 'summary';
 
     public const TEXT = 'text';
+
+    public const TEXT_FIELDS = 'textfields';
 
     public const TIME_SPENT = 'timeSpent';
 
@@ -98,6 +104,12 @@ class Field
     public const WATCHER = 'watcher';
 
     public const WATCHERS = 'watchers';
+
+    public const WORK_ITEM_KEY = 'workItemKey';
+
+    public const WORK_ITEM_LINK = 'workItemLink';
+
+    public const WORK_ITEM_LINK_TYPE = 'workItemLinkType';
 
     public const WORKLOG_COMMENT = 'worklogComment';
 
