@@ -12,10 +12,7 @@ trait ManagesAttachments
      * Get the attachment content.
      *
      * @param string $id
-     *
-     * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\Attachment
+     * @return mixed
      */
     public function attachment($id)
     {
