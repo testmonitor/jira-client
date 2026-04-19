@@ -56,6 +56,7 @@ class ProjectVersion extends Resource
     {
         $this->id = $attributes['id'] ?? null;
         $this->name = $attributes['name'] ?? null;
+        $this->description = $attributes['description'] ?? null;
         $this->archived = $attributes['archived'] ?? null;
         $this->released = $attributes['released'] ?? null;
     }

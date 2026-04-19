@@ -37,6 +37,7 @@ trait TransformsProjectVersions
         return new ProjectVersion([
             'id' => $projectVersion['id'],
             'name' => $projectVersion['name'] ?? null,
+            'description' => $projectVersion['description'] ?? null,
             'archived' => $projectVersion['archived'] ?? null,
             'released' => $projectVersion['released'] ?? null,
         ]);
