@@ -12,7 +12,6 @@ trait ManagesAttachments
      * Get the attachment content.
      *
      * @param string $id
-     *
      * @return mixed
      */
     public function attachment($id)
