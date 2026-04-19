@@ -28,9 +28,9 @@ class TokenPaginatedResponse
     /**
      * The token for the next page.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $nextPageToken;
+    protected ?string $nextPageToken;
 
     /**
      * Whether this is the last page.

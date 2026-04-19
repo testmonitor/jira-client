@@ -468,4 +468,78 @@ class IssuesTest extends TestCase
         // When
         $jira->updateIssueStatus('1', new IssueStatus(['id' => '999', 'name' => 'Unavailable Status']));
     }
+
+    #[Test]
+    public function it_should_indicate_there_is_a_next_page_when_a_next_page_token_is_present()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb) {
+                return $verb === 'GET';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'issues' => [$this->issue],
+                'nextPageToken' => 'abc123',
+                'isLast' => false,
+            ])));
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'POST' && $uri === 'search/approximate-count';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'count' => 10,
+            ])));
+
+        // When
+        $issues = $jira->issues();
+
+        // Then
+        $this->assertEquals('abc123', $issues->nextPageToken());
+        $this->assertFalse($issues->isLastPage());
+        $this->assertTrue($issues->hasNextPage());
+    }
+
+    #[Test]
+    public function it_should_indicate_the_last_page_when_is_last_is_true_even_with_a_next_page_token_present()
+    {
+        // Given
+        $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
+
+        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb) {
+                return $verb === 'GET';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'issues' => [$this->issue],
+                'nextPageToken' => 'abc123',
+                'isLast' => true,
+            ])));
+
+        $service->shouldReceive('request')
+            ->withArgs(function ($verb, $uri) {
+                return $verb === 'POST' && $uri === 'search/approximate-count';
+            })
+            ->once()
+            ->andReturn(new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'count' => 10,
+            ])));
+
+        // When
+        $issues = $jira->issues();
+
+        // Then
+        $this->assertEquals('abc123', $issues->nextPageToken());
+        $this->assertTrue($issues->isLastPage());
+        $this->assertFalse($issues->hasNextPage());
+    }
 }
