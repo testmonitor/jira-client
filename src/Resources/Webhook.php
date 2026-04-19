@@ -2,8 +2,6 @@
 
 namespace TestMonitor\Jira\Resources;
 
-use JqlBuilder\Jql;
-
 class Webhook extends Resource
 {
     /**

@@ -2,7 +2,7 @@
 
 namespace TestMonitor\Jira\Actions;
 
-use JqlBuilder\Jql;
+use TestMonitor\Jira\Builders\Jql;
 use TestMonitor\Jira\Resources\Issue;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Transforms\TransformsIssues;
@@ -32,7 +32,7 @@ trait ManagesIssues
     /**
      * Get a list of issues.
      *
-     * @param \JqlBuilder\Jql|null $query
+     * @param \TestMonitor\Jira\Builders\Jql|null $query
      * @param int $limit
      * @param string|null $nextPageToken
      * @param array $fields
@@ -68,7 +68,7 @@ trait ManagesIssues
     /**
      * Count the number of Jira issues.
      *
-     * @param \JqlBuilder\Jql|null $query
+     * @param \TestMonitor\Jira\Builders\Jql|null $query
      * @return int
      */
     public function countIssues(?Jql $query = null)
