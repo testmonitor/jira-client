@@ -48,8 +48,13 @@ class TokenPaginatedResponse
      * @param string|null $nextPageToken
      * @param bool $isLast
      */
-    public function __construct(array $items, int $total, int $perPage, ?string $nextPageToken = null, bool $isLast = false)
-    {
+    public function __construct(
+        array $items,
+        int $total,
+        int $perPage,
+        ?string $nextPageToken = null,
+        bool $isLast = false
+    ) {
         $this->items = $items;
         $this->total = $total;
         $this->perPage = $perPage;
