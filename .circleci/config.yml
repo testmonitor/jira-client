@@ -1,14 +1,14 @@
 version: 2.1
 
 orbs:
-    codecov: codecov/codecov@4.1.0
+    codecov: codecov/codecov@5.4.3
 
 jobs:
     build:
         working_directory: ~/testmonitor/jira-client
 
         docker:
-            - image: cimg/php:8.2
+            - image: cimg/php:8.4
 
         steps:
             - run:
@@ -27,7 +27,7 @@ jobs:
         working_directory: ~/testmonitor/jira-client
 
         docker:
-            - image: cimg/php:8.2
+            - image: cimg/php:8.4
 
         steps:
             - attach_workspace:
@@ -56,7 +56,7 @@ jobs:
         working_directory: ~/testmonitor/jira-client
 
         docker:
-            - image: cimg/php:8.2
+            - image: cimg/php:8.4
 
         steps:
             - attach_workspace:
@@ -72,16 +72,18 @@ jobs:
                   command: |
                       mkdir -p ./logs/phpunit
                       vendor/bin/phpunit -d memory_limit=1G --coverage-clover coverage.xml --log-junit logs/phpunit/junit.xml --testdox-html logs/phpunit/testdox.html
-            - codecov/upload:
-                  file: coverage.xml
             - store_artifacts:
                   path: ./logs/phpunit
                   destination: phpunit
             - store_test_results:
                   path: ./logs
+            - codecov/upload:
+                  report_type: coverage
+            - codecov/upload:
+                  report_type: test_results
+                  files: logs/phpunit/junit.xml
 
 workflows:
-    version: 2
     build_analyze_test:
         jobs:
             - build
