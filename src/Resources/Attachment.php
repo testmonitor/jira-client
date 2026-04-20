@@ -12,7 +12,7 @@ class Attachment extends Resource
 
     public string $mimeType;
 
-    public int|string $size;
+    public int $size;
 
     /**
      * Create a new resource instance.

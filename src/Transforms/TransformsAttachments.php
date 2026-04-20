@@ -24,7 +24,7 @@ trait TransformsAttachments
         return new Attachment([
             'id' => $attachment['id'],
             'filename' => $attachment['filename'] ?? '',
-            'size' => $attachment['size'] ?? '',
+            'size' => $attachment['size'] ?? 0,
             'mimeType' => $attachment['mimeType'] ?? '',
         ]);
     }

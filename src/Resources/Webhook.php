@@ -21,7 +21,7 @@ class Webhook extends Resource
     {
         $this->id = $webhook['id'] ?? '';
         $this->url = $webhook['url'] ?? '';
-        $this->events = $webhook['events'];
+        $this->events = $webhook['events'] ?? [];
 
         $this->jqlFilter = $webhook['jqlFilter'] ?? '';
 
