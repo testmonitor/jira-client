@@ -16,15 +16,15 @@ class Issue extends Resource
 
     public mixed $description;
 
-    public IssueType|null $type;
+    public ?IssueType $type;
 
-    public IssueStatus|null $status;
+    public ?IssueStatus $status;
 
-    public IssuePriority|null $priority;
+    public ?IssuePriority $priority;
 
-    public array|null $attachments;
+    public ?array $attachments;
 
-    public Project|null $project;
+    public ?Project $project;
 
     /**
      * Create a new resource instance.

@@ -15,7 +15,12 @@ trait ManagesUsers
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      */
-    public function users(string $projectId, string $query = '', int $offset = 0, int $limit = 50): LengthAwarePaginatedResponse
+    public function users(
+        string $projectId,
+        string $query = '',
+        int $offset = 0,
+        int $limit = 50
+    ): LengthAwarePaginatedResponse
     {
         $response = $this->get('user/assignable/search', [
             'query' => [
