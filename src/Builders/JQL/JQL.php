@@ -1,12 +1,12 @@
 <?php
 
-namespace TestMonitor\Jira\Builders;
+namespace TestMonitor\Jira\Builders\JQL;
 
 use Closure;
 use Stringable;
 use InvalidArgumentException;
 
-class Jql implements Stringable
+class JQL implements Stringable
 {
     protected string $query = '';
 

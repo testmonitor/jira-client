@@ -2,8 +2,8 @@
 
 namespace TestMonitor\Jira\Actions;
 
-use TestMonitor\Jira\Builders\Jql;
 use TestMonitor\Jira\Resources\Issue;
+use TestMonitor\Jira\Builders\JQL\JQL;
 use TestMonitor\Jira\Resources\IssueStatus;
 use TestMonitor\Jira\Transforms\TransformsIssues;
 use TestMonitor\Jira\Exceptions\FailedActionException;
@@ -32,7 +32,7 @@ trait ManagesIssues
     /**
      * Get a list of issues.
      *
-     * @param \TestMonitor\Jira\Builders\Jql|null $query
+     * @param \TestMonitor\Jira\Builders\JQL\JQL|null $query
      * @param int $limit
      * @param string|null $nextPageToken
      * @param array $fields
@@ -42,14 +42,14 @@ trait ManagesIssues
      * @return \TestMonitor\Jira\Responses\TokenPaginatedResponse
      */
     public function issues(
-        ?Jql $query = null,
+        ?JQL $query = null,
         int $limit = 50,
         ?string $nextPageToken = null,
         array $fields = ['*navigable']
     ) {
         $response = $this->get('search/jql', [
             'query' => [
-                'jql' => $query instanceof Jql ? $query->getQuery() : '',
+                'jql' => $query instanceof JQL ? $query->getQuery() : '',
                 'maxResults' => $limit,
                 'fields' => implode(',', $fields),
                 'nextPageToken' => $nextPageToken,
@@ -68,14 +68,14 @@ trait ManagesIssues
     /**
      * Count the number of Jira issues.
      *
-     * @param \TestMonitor\Jira\Builders\Jql|null $query
+     * @param \TestMonitor\Jira\Builders\JQL\JQL|null $query
      * @return int
      */
-    public function countIssues(?Jql $query = null)
+    public function countIssues(?JQL $query = null)
     {
         $response = $this->post('search/approximate-count', [
             'json' => [
-                'jql' => $query instanceof Jql ? $query->getQuery() : '',
+                'jql' => $query instanceof JQL ? $query->getQuery() : '',
             ],
         ]);
 
