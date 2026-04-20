@@ -32,7 +32,7 @@ trait ManagesIssues
     /**
      * Get a list of issues.
      *
-     * @param \TestMonitor\Jira\Builders\JQL|null $query
+     * @param \TestMonitor\Jira\Builders\JQL\JQL|null $query
      * @param int $limit
      * @param string|null $nextPageToken
      * @param array $fields
@@ -68,7 +68,7 @@ trait ManagesIssues
     /**
      * Count the number of Jira issues.
      *
-     * @param \TestMonitor\Jira\Builders\JQL|null $query
+     * @param \TestMonitor\Jira\Builders\JQL\JQL|null $query
      * @return int
      */
     public function countIssues(?JQL $query = null)
