@@ -20,8 +20,7 @@ trait ManagesUsers
         string $query = '',
         int $offset = 0,
         int $limit = 50
-    ): LengthAwarePaginatedResponse
-    {
+    ): LengthAwarePaginatedResponse {
         $response = $this->get('user/assignable/search', [
             'query' => [
                 'project' => $projectId,
