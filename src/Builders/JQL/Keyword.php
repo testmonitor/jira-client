@@ -1,6 +1,6 @@
 <?php
 
-namespace TestMonitor\Jira\Builders;
+namespace TestMonitor\Jira\Builders\JQL;
 
 /**
  * @see https://support.atlassian.com/jira-software-cloud/docs/advanced-search-reference-jql-keywords
