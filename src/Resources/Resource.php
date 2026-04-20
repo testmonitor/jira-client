@@ -5,9 +5,9 @@ namespace TestMonitor\Jira\Resources;
 class Resource
 {
     /**
-     * @return array
+     * Returns the resource as an array.
      */
-    public function toArray()
+    public function toArray(): array
     {
         return get_object_vars($this);
     }

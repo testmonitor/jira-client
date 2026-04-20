@@ -4,45 +4,18 @@ namespace TestMonitor\Jira\Resources;
 
 class Webhook extends Resource
 {
-    /**
-     * The id of the webhook.
-     *
-     * @var string
-     */
-    public $id;
+    public string $id;
 
-    /**
-     * The URL of the webhook.
-     *
-     * @var string
-     */
-    public $url;
+    public string $url;
 
-    /**
-     * The webhook JQL filter.
-     *
-     * @var string
-     */
-    public $jqlFilter;
+    public string $jqlFilter;
 
-    /**
-     * The events of the webhook.
-     *
-     * @var array
-     */
-    public $events;
+    public array $events;
 
-    /**
-     * The expiration date of the webhook.
-     *
-     * @var string
-     */
-    public $expirationDate;
+    public string $expirationDate;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $webhook
      */
     public function __construct(array $webhook)
     {

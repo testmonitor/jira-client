@@ -4,41 +4,16 @@ namespace TestMonitor\Jira\Responses;
 
 class LengthAwarePaginatedResponse
 {
-    /**
-     * All of the items being paginated.
-     *
-     * @var array
-     */
     protected array $items;
 
-    /**
-     * The total number of items before slicing.
-     *
-     * @var int
-     */
     protected int $total;
 
-    /**
-     * The number of items to be shown per page.
-     *
-     * @var int
-     */
     protected int $perPage;
 
-    /**
-     * The current item offset.
-     *
-     * @var int
-     */
     protected int $offset;
 
     /**
      * Create a new paginated response instance.
-     *
-     * @param array $items
-     * @param int $total
-     * @param int $perPage
-     * @param int $offset
      */
     public function __construct(array $items, int $total, int $perPage, int $offset = 0)
     {
@@ -50,8 +25,6 @@ class LengthAwarePaginatedResponse
 
     /**
      * Get the items being paginated.
-     *
-     * @return array
      */
     public function items(): array
     {
@@ -60,8 +33,6 @@ class LengthAwarePaginatedResponse
 
     /**
      * Get the total number of items being paginated.
-     *
-     * @return int
      */
     public function total(): int
     {
@@ -70,8 +41,6 @@ class LengthAwarePaginatedResponse
 
     /**
      * Get the number of items shown per page.
-     *
-     * @return int
      */
     public function perPage(): int
     {
@@ -80,8 +49,6 @@ class LengthAwarePaginatedResponse
 
     /**
      * Get the current item offset.
-     *
-     * @return int
      */
     public function offset(): int
     {
@@ -90,8 +57,6 @@ class LengthAwarePaginatedResponse
 
     /**
      * Determine the current page.
-     *
-     * @return int
      */
     public function currentPage(): int
     {

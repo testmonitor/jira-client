@@ -4,45 +4,18 @@ namespace TestMonitor\Jira\Resources;
 
 class Account extends Resource
 {
-    /**
-     * The ID of the account.
-     *
-     * @var string
-     */
-    public $id;
+    public string $id;
 
-    /**
-     * The URL for the account.
-     *
-     * @var string
-     */
-    public $url;
+    public string $url;
 
-    /**
-     * The name of the account.
-     *
-     * @var string
-     */
-    public $name;
+    public string $name;
 
-    /**
-     * The scopes for the account.
-     *
-     * @var array
-     */
-    public $scopes;
+    public array $scopes;
 
-    /**
-     * The avatar URL of the account.
-     *
-     * @var string
-     */
-    public $avatarUrl;
+    public string $avatarUrl;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $attributes
      */
     public function __construct(array $attributes)
     {

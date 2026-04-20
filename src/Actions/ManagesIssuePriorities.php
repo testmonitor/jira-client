@@ -9,15 +9,11 @@ trait ManagesIssuePriorities
     use TransformsIssuePriorities;
 
     /**
-     * Get a list of issue priorities from a project.
-     *
-     * @param string $projectId
+     * Get a list of issue priorities for a project.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\IssuePriority[]
      */
-    public function issuePriorities(string $projectId)
+    public function issuePriorities(string $projectId): array
     {
         $response = $this->get('priority/search', [
             'query' => ['projectId' => $projectId],

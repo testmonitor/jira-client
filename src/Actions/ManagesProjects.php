@@ -2,6 +2,7 @@
 
 namespace TestMonitor\Jira\Actions;
 
+use TestMonitor\Jira\Resources\Project;
 use TestMonitor\Jira\Transforms\TransformsProjects;
 use TestMonitor\Jira\Responses\LengthAwarePaginatedResponse;
 
@@ -12,15 +13,9 @@ trait ManagesProjects
     /**
      * Get a list of projects.
      *
-     * @param string $query
-     * @param int $offset
-     * @param int $limit
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Responses\LengthAwarePaginatedResponse
      */
-    public function projects(string $query = '', int $offset = 0, int $limit = 50)
+    public function projects(string $query = '', int $offset = 0, int $limit = 50): LengthAwarePaginatedResponse
     {
         $response = $this->get('project/search', [
             'query' => [
@@ -41,13 +36,9 @@ trait ManagesProjects
     /**
      * Get a single project.
      *
-     * @param string $id
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\Project
      */
-    public function project($id)
+    public function project(string $id): Project
     {
         $response = $this->get("project/{$id}");
 

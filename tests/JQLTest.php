@@ -16,7 +16,7 @@ class JQLTest extends TestCase
     public function it_should_build_a_simple_where_clause()
     {
         // When
-        $query = (new JQL)->where(Field::STATUS, Operator::EQUALS, 'Open');
+        $query = (new JQL())->where(Field::STATUS, Operator::EQUALS, 'Open');
 
         // Then
         $this->assertEquals('status = "Open"', (string) $query);
@@ -26,7 +26,7 @@ class JQLTest extends TestCase
     public function it_should_build_a_where_clause_using_two_arguments()
     {
         // When
-        $query = (new JQL)->where(Field::STATUS, 'Open');
+        $query = (new JQL())->where(Field::STATUS, 'Open');
 
         // Then
         $this->assertEquals('status = "Open"', (string) $query);
@@ -36,7 +36,7 @@ class JQLTest extends TestCase
     public function it_should_build_a_where_in_clause_when_passing_an_array_as_second_argument()
     {
         // When
-        $query = (new JQL)->where(Field::STATUS, ['Open', 'In Progress']);
+        $query = (new JQL())->where(Field::STATUS, ['Open', 'In Progress']);
 
         // Then
         $this->assertEquals('status in ("Open", "In Progress")', (string) $query);
@@ -46,7 +46,7 @@ class JQLTest extends TestCase
     public function it_should_build_a_where_in_clause_with_an_explicit_in_operator()
     {
         // When
-        $query = (new JQL)->where(Field::PROJECT, Operator::IN, ['FOO', 'BAR']);
+        $query = (new JQL())->where(Field::PROJECT, Operator::IN, ['FOO', 'BAR']);
 
         // Then
         $this->assertEquals('project in ("FOO", "BAR")', (string) $query);
@@ -56,7 +56,7 @@ class JQLTest extends TestCase
     public function it_should_build_a_where_not_in_clause()
     {
         // When
-        $query = (new JQL)->where(Field::PROJECT, Operator::NOT_IN, ['FOO', 'BAR']);
+        $query = (new JQL())->where(Field::PROJECT, Operator::NOT_IN, ['FOO', 'BAR']);
 
         // Then
         $this->assertEquals('project not in ("FOO", "BAR")', (string) $query);
@@ -66,7 +66,7 @@ class JQLTest extends TestCase
     public function it_should_chain_multiple_where_clauses_with_and()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::PROJECT, 'FOO')
             ->where(Field::STATUS, 'Open');
 
@@ -78,7 +78,7 @@ class JQLTest extends TestCase
     public function it_should_build_an_or_where_clause()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::STATUS, 'Open')
             ->orWhere(Field::STATUS, 'In Progress');
 
@@ -90,7 +90,7 @@ class JQLTest extends TestCase
     public function it_should_build_an_or_where_clause_using_two_arguments()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::STATUS, 'Open')
             ->orWhere(Field::STATUS, ['In Progress', 'Done']);
 
@@ -102,7 +102,7 @@ class JQLTest extends TestCase
     public function it_should_group_clauses_using_a_closure()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::PROJECT, 'FOO')
             ->where(function (JQL $jql) {
                 $jql->where(Field::STATUS, 'Open')
@@ -117,7 +117,7 @@ class JQLTest extends TestCase
     public function it_should_start_a_query_with_a_grouped_closure()
     {
         // When
-        $query = (new JQL)->where(function (JQL $jql) {
+        $query = (new JQL())->where(function (JQL $jql) {
             $jql->where(Field::STATUS, 'Open')
                 ->orWhere(Field::STATUS, 'In Progress');
         });
@@ -130,7 +130,7 @@ class JQLTest extends TestCase
     public function it_should_apply_a_callback_when_value_is_truthy()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::PROJECT, 'FOO')
             ->when('Open', function (JQL $jql, $value) {
                 $jql->where(Field::STATUS, $value);
@@ -144,7 +144,7 @@ class JQLTest extends TestCase
     public function it_should_skip_the_callback_when_value_is_falsy()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::PROJECT, 'FOO')
             ->when(null, function (JQL $jql) {
                 $jql->where(Field::STATUS, 'Open');
@@ -158,7 +158,7 @@ class JQLTest extends TestCase
     public function it_should_apply_a_callback_when_value_is_falsy_using_when_not()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::PROJECT, 'FOO')
             ->whenNot(null, function (JQL $jql) {
                 $jql->where(Field::STATUS, 'Open');
@@ -172,7 +172,7 @@ class JQLTest extends TestCase
     public function it_should_skip_the_callback_when_value_is_truthy_using_when_not()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::PROJECT, 'FOO')
             ->whenNot('something', function (JQL $jql) {
                 $jql->where(Field::STATUS, 'Open');
@@ -186,7 +186,7 @@ class JQLTest extends TestCase
     public function it_should_add_an_order_by_clause()
     {
         // When
-        $query = (new JQL)
+        $query = (new JQL())
             ->where(Field::PROJECT, 'FOO')
             ->orderBy(Field::CREATED, 'DESC');
 
@@ -198,7 +198,7 @@ class JQLTest extends TestCase
     public function it_should_add_a_raw_query()
     {
         // When
-        $query = (new JQL)->rawQuery('project = "FOO" and status = "Open"');
+        $query = (new JQL())->rawQuery('project = "FOO" and status = "Open"');
 
         // Then
         $this->assertEquals('project = "FOO" and status = "Open"', (string) $query);
@@ -208,7 +208,7 @@ class JQLTest extends TestCase
     public function it_should_reset_the_query()
     {
         // Given
-        $jql = (new JQL)->where(Field::PROJECT, 'FOO');
+        $jql = (new JQL())->where(Field::PROJECT, 'FOO');
 
         // When
         $jql->reset();
@@ -221,7 +221,7 @@ class JQLTest extends TestCase
     public function it_should_escape_column_names_containing_spaces()
     {
         // When
-        $query = (new JQL)->where('custom field', Operator::EQUALS, 'value');
+        $query = (new JQL())->where('custom field', Operator::EQUALS, 'value');
 
         // Then
         $this->assertEquals('"custom field" = "value"', (string) $query);
@@ -231,7 +231,7 @@ class JQLTest extends TestCase
     public function it_should_escape_double_quotes_in_values()
     {
         // When
-        $query = (new JQL)->where(Field::SUMMARY, Operator::CONTAINS, 'say "hello"');
+        $query = (new JQL())->where(Field::SUMMARY, Operator::CONTAINS, 'say "hello"');
 
         // Then
         $this->assertEquals('summary ~ "say \"hello\""', (string) $query);
@@ -244,7 +244,7 @@ class JQLTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         // When
-        (new JQL)->where(Field::STATUS, Operator::EQUALS, 'Open', 'invalid');
+        (new JQL())->where(Field::STATUS, Operator::EQUALS, 'Open', 'invalid');
     }
 
     #[Test]
@@ -254,7 +254,7 @@ class JQLTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         // When
-        (new JQL)->where(Field::STATUS, Operator::EQUALS, ['Open', 'Closed']);
+        (new JQL())->where(Field::STATUS, Operator::EQUALS, ['Open', 'Closed']);
     }
 
     #[Test]

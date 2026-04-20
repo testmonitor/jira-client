@@ -8,73 +8,26 @@ use DH\Adf\Exporter\Html\Block\DocumentExporter;
 
 class Issue extends Resource
 {
-    /**
-     * The ID of the issue.
-     *
-     * @var string
-     */
-    public $id;
+    public ?string $id;
 
-    /**
-     * The key of the issue.
-     *
-     * @var string
-     */
-    public $key;
+    public ?string $key;
 
-    /**
-     * The summary of the issue.
-     *
-     * @var string
-     */
-    public $summary;
+    public string $summary;
 
-    /**
-     * The description of the issue.
-     *
-     * @var \DH\Adf\Node\Block\Document|null
-     */
-    public $description;
+    public mixed $description;
 
-    /**
-     * The issue type.
-     *
-     * @var \TestMonitor\Jira\Resources\IssueType
-     */
-    public $type;
+    public IssueType|null $type;
 
-    /**
-     * The issue status.
-     *
-     * @var \TestMonitor\Jira\Resources\IssueStatus
-     */
-    public $status;
+    public IssueStatus|null $status;
 
-    /**
-     * The issue priority.
-     *
-     * @var \TestMonitor\Jira\Resources\IssuePriority
-     */
-    public $priority;
+    public IssuePriority|null $priority;
 
-    /**
-     * The list of attachments.
-     *
-     * @var array
-     */
-    public $attachments;
+    public array|null $attachments;
 
-    /**
-     * The project of the issue.
-     *
-     * @var \TestMonitor\Jira\Resources\Project
-     */
-    public $project;
+    public Project|null $project;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $issue
      */
     public function __construct(array $issue)
     {
@@ -96,8 +49,6 @@ class Issue extends Resource
 
     /**
      * Returns the description field as HTML.
-     *
-     * @return string
      */
     public function getDescriptionAsHTML(): string
     {

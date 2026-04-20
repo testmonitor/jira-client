@@ -4,45 +4,18 @@ namespace TestMonitor\Jira\Resources;
 
 class User extends Resource
 {
-    /**
-     * The ID of the user.
-     *
-     * @var string
-     */
-    public $id;
+    public string $id;
 
-    /**
-     * The account type of the user.
-     *
-     * @var string
-     */
-    public $type;
+    public string $type;
 
-    /**
-     * The name of the user.
-     *
-     * @var string
-     */
-    public $name;
+    public string $name;
 
-    /**
-     * The email of the user.
-     *
-     * @var string
-     */
-    public $emailAddress;
+    public string $emailAddress;
 
-    /**
-     * The timezone for the user.
-     *
-     * @var string
-     */
-    public $timezone;
+    public string $timezone;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $attributes
      */
     public function __construct(array $attributes)
     {

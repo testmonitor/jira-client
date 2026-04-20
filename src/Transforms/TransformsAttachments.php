@@ -8,13 +8,9 @@ use TestMonitor\Jira\Resources\Attachment;
 trait TransformsAttachments
 {
     /**
-     * @param array $attachments
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\Attachment[]
      */
-    protected function fromJiraAttachments($attachments): array
+    protected function fromJiraAttachments(mixed $attachments): array
     {
         Validator::isArray($attachments);
 
@@ -23,9 +19,6 @@ trait TransformsAttachments
         }, $attachments);
     }
 
-    /**
-     * @return \TestMonitor\Jira\Resources\Attachment
-     */
     protected function fromJiraAttachment(array $attachment): Attachment
     {
         return new Attachment([

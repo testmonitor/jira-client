@@ -16,10 +16,6 @@ trait TransformsIssues
 {
     use TransformsAttachments;
 
-    /**
-     * @param \TestMonitor\Jira\Resources\Issue $issue
-     * @return array
-     */
     protected function toUpdateIssue(array $attributes): array
     {
         return [
@@ -34,10 +30,6 @@ trait TransformsIssues
         ];
     }
 
-    /**
-     * @param \TestMonitor\Jira\Resources\Issue $issue
-     * @return array
-     */
     protected function toNewIssue(Issue $issue): array
     {
         return [
@@ -52,13 +44,9 @@ trait TransformsIssues
     }
 
     /**
-     * @param array $issues
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\Issue[]
      */
-    protected function fromJiraIssues($issues): array
+    protected function fromJiraIssues(mixed $issues): array
     {
         Validator::isArray($issues);
 
@@ -68,11 +56,7 @@ trait TransformsIssues
     }
 
     /**
-     * @param array $issue
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\Issue
      */
     protected function fromJiraIssue(array $issue): Issue
     {
@@ -103,16 +87,13 @@ trait TransformsIssues
     }
 
     /**
-     * Try parse an ADF document.
-     *
-     * @param mixed $document
-     * @return \DH\Adf\Node\BlockNode
+     * Try to parse an ADF document.
      */
-    protected function loadDocument($document): BlockNode
+    protected function loadDocument(mixed $document): BlockNode
     {
         try {
             return Document::load($document);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             // Ignore errors
         }
 

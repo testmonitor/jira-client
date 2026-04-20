@@ -8,13 +8,9 @@ use TestMonitor\Jira\Resources\ProjectVersion;
 trait TransformsProjectVersions
 {
     /**
-     * @param array $projects
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\ProjectVersion[]
      */
-    protected function fromJiraProjectVersions($projectVersions): array
+    protected function fromJiraProjectVersions(mixed $projectVersions): array
     {
         Validator::isArray($projectVersions);
 
@@ -24,11 +20,7 @@ trait TransformsProjectVersions
     }
 
     /**
-     * @param array $projectVersion
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\ProjectVersion
      */
     protected function fromJiraProjectVersion(array $projectVersion): ProjectVersion
     {

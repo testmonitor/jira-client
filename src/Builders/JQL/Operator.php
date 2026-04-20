@@ -7,39 +7,39 @@ namespace TestMonitor\Jira\Builders\JQL;
  */
 class Operator
 {
-    public const EQUALS = '=';
+    public const string EQUALS = '=';
 
-    public const NOT_EQUALS = '!=';
+    public const string NOT_EQUALS = '!=';
 
-    public const GREATER_THAN = '>';
+    public const string GREATER_THAN = '>';
 
-    public const GREATER_THAN_EQUALS = '>=';
+    public const string GREATER_THAN_EQUALS = '>=';
 
-    public const LESS_THAN = '<';
+    public const string LESS_THAN = '<';
 
-    public const LESS_THAN_EQUALS = '<=';
+    public const string LESS_THAN_EQUALS = '<=';
 
-    public const IN = 'in';
+    public const string IN = 'in';
 
-    public const NOT_IN = 'not in';
+    public const string NOT_IN = 'not in';
 
-    public const CONTAINS = '~';
+    public const string CONTAINS = '~';
 
-    public const DOES_NOT_CONTAIN = '!~';
+    public const string DOES_NOT_CONTAIN = '!~';
 
-    public const IS = 'is';
+    public const string IS = 'is';
 
-    public const IS_NOT = 'is not';
+    public const string IS_NOT = 'is not';
 
-    public const WAS = 'was';
+    public const string WAS = 'was';
 
-    public const WAS_IN = 'was in';
+    public const string WAS_IN = 'was in';
 
-    public const WAS_NOT_IN = 'was not in';
+    public const string WAS_NOT_IN = 'was not in';
 
-    public const WAS_NOT = 'was not';
+    public const string WAS_NOT = 'was not';
 
-    public const CHANGED = 'changed';
+    public const string CHANGED = 'changed';
 
     /**
      * Returns the list of operators that accept a list of values.

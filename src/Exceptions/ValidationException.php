@@ -4,17 +4,10 @@ namespace TestMonitor\Jira\Exceptions;
 
 class ValidationException extends Exception
 {
-    /**
-     * The array of errors.
-     *
-     * @var array
-     */
-    protected $errors;
+    protected array $errors;
 
     /**
-     * Create a new exception instance.
-     *
-     * @param array $errors
+     * Create a new validation exception instance.
      */
     public function __construct(array $errors)
     {
@@ -24,11 +17,9 @@ class ValidationException extends Exception
     }
 
     /**
-     * The array of errors.
-     *
-     * @return array
+     * Returns the validation errors.
      */
-    public function errors()
+    public function errors(): array
     {
         return $this->errors;
     }

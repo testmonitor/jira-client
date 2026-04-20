@@ -47,7 +47,7 @@ class DocumentParserTest extends TestCase
         // Then
         $this->assertInstanceOf(BlockNode::class, $document);
         $this->assertIsArray($document->getContent());
-        $this->assertEquals((new Document)->paragraph()->text('test')->end(), $document);
+        $this->assertEquals((new Document())->paragraph()->text('test')->end(), $document);
     }
 
     #[Test]
@@ -88,6 +88,6 @@ class DocumentParserTest extends TestCase
         // Then
         $this->assertInstanceOf(BlockNode::class, $document);
         $this->assertIsArray($document->getContent());
-        $this->assertEquals((new Document)->paragraph()->text('lorem')->text('ipsum')->end(), $document);
+        $this->assertEquals((new Document())->paragraph()->text('lorem')->text('ipsum')->end(), $document);
     }
 }

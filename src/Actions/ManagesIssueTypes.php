@@ -9,15 +9,11 @@ trait ManagesIssueTypes
     use TransformsIssueTypes;
 
     /**
-     * Get a list of issue types from a project.
-     *
-     * @param string $projectId
+     * Get a list of issue types for a project.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\IssueType[]
      */
-    public function issueTypes(string $projectId)
+    public function issueTypes(string $projectId): array
     {
         $response = $this->get('issuetype/project', [
             'query' => ['projectId' => $projectId],

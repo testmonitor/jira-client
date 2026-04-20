@@ -9,15 +9,11 @@ trait ManagesIssueStatuses
     use TransformsIssueStatuses;
 
     /**
-     * Get a list of issue statuses from a project.
-     *
-     * @param string $projectId
+     * Get a list of issue statuses for a project.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\IssueStatus[]
      */
-    public function issueStatuses(string $projectId)
+    public function issueStatuses(string $projectId): array
     {
         $response = $this->get('statuses/search', [
             'query' => ['projectId' => $projectId],
@@ -29,14 +25,9 @@ trait ManagesIssueStatuses
     /**
      * Get a list of issue statuses for an issue type.
      *
-     * @param string $projectId
-     * @param string $typeId
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\IssueStatus[]
      */
-    public function issueStatusesForType(string $projectId, string $typeId)
+    public function issueStatusesForType(string $projectId, string $typeId): array
     {
         $response = $this->get("project/{$projectId}/statuses");
 
