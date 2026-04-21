@@ -14,53 +14,35 @@ use Mrjoops\OAuth2\Client\Provider\Exception\JiraIdentityProviderException;
 
 class Client
 {
-    use Actions\ManagesAccounts,
-        Actions\ManagesAttachments,
-        Actions\ManagesIssues,
-        Actions\ManagesIssuePriorities,
-        Actions\ManagesIssueStatuses,
-        Actions\ManagesIssueTypes,
-        Actions\ManagesProjects,
-        Actions\ManagesProjectVersions,
-        Actions\ManagesUsers,
-        Actions\ManagesWebhooks;
+    use Actions\ManagesAccounts;
+    use Actions\ManagesAttachments;
+    use Actions\ManagesIssues;
+    use Actions\ManagesIssuePriorities;
+    use Actions\ManagesIssueStatuses;
+    use Actions\ManagesIssueTypes;
+    use Actions\ManagesProjects;
+    use Actions\ManagesProjectVersions;
+    use Actions\ManagesUsers;
+    use Actions\ManagesWebhooks;
 
-    /**
-     * @var \TestMonitor\Jira\AccessToken
-     */
-    protected $token;
+    protected ?AccessToken $token;
 
-    /**
-     * @var string
-     */
-    protected $cloudId;
+    protected string $cloudId;
 
-    /**
-     * @var string
-     */
-    protected $baseUrl = 'https://api.atlassian.com/ex/jira';
+    protected string $baseUrl = 'https://api.atlassian.com/ex/jira';
 
-    /**
-     * @var string
-     */
-    protected $apiVersion = '3';
+    protected string $apiVersion = '3';
 
-    /**
-     * @var \GuzzleHttp\Client
-     */
-    protected $client;
+    protected ?\GuzzleHttp\Client $client = null;
 
-    /**
-     * @var \Mrjoops\OAuth2\Client\Provider\Jira
-     */
-    protected $provider;
+    protected JiraProvider $provider;
 
     /**
      * oAuth scopes.
      *
-     * @var array
+     * @var array<string>
      */
-    protected $scopes = [
+    protected array $scopes = [
         'manage:jira-configuration',
         'manage:jira-webhook',
         'read:jira-user',
@@ -71,17 +53,12 @@ class Client
 
     /**
      * Create a new client instance.
-     *
-     * @param array $credentials
-     * @param string $cloudId
-     * @param \TestMonitor\Jira\AccessToken|null $token
-     * @param \Mrjoops\OAuth2\Client\Provider\Jira $provider
      */
     public function __construct(
         array $credentials,
         string $cloudId = '',
         ?AccessToken $token = null,
-        $provider = null
+        ?JiraProvider $provider = null
     ) {
         $this->token = $token;
         $this->cloudId = $cloudId;
@@ -95,11 +72,8 @@ class Client
 
     /**
      * Create a new authorization URL for the given state.
-     *
-     * @param string $state
-     * @return string
      */
-    public function authorizationUrl($state)
+    public function authorizationUrl(string $state): string
     {
         return $this->provider->getAuthorizationUrl([
             'state' => $state,
@@ -109,9 +83,6 @@ class Client
 
     /**
      * Fetch the access and refresh token based on the authorization code.
-     *
-     * @param string $code
-     * @return \TestMonitor\Jira\AccessToken
      */
     public function fetchToken(string $code): AccessToken
     {
@@ -128,8 +99,6 @@ class Client
      * Refresh the current access token.
      *
      * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
-     *
-     * @return \TestMonitor\Jira\AccessToken
      */
     public function refreshToken(): AccessToken
     {
@@ -153,26 +122,34 @@ class Client
 
     /**
      * Determines if the current access token has expired.
-     *
-     * @return bool
      */
-    public function tokenExpired()
+    public function tokenExpired(): bool
     {
+        if (empty($this->token)) {
+            throw new UnauthorizedException('Invalid access token');
+        }
+
         return $this->token->expired();
     }
 
     /**
-     * Returns an Guzzle client instance.
+     * Set the Guzzle HTTP client instance.
+     */
+    public function setClient(\GuzzleHttp\Client $client): void
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * Returns a Guzzle client instance.
      *
      * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
      * @throws \TestMonitor\Jira\Exceptions\TokenExpiredException
-     *
-     * @return \GuzzleHttp\Client
      */
-    protected function client()
+    protected function client(): \GuzzleHttp\Client
     {
         if (empty($this->token)) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('Invalid access token');
         }
 
         if ($this->token->expired()) {
@@ -191,18 +168,7 @@ class Client
     }
 
     /**
-     * @param \GuzzleHttp\Client $client
-     */
-    public function setClient(\GuzzleHttp\Client $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
      * Make a GET request to Jira servers and return the response.
-     *
-     * @param string $uri
-     * @param array $payload
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
@@ -210,10 +176,8 @@ class Client
      * @throws \TestMonitor\Jira\Exceptions\TokenExpiredException
      * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
      * @throws \TestMonitor\Jira\Exceptions\ValidationException
-     *
-     * @return mixed
      */
-    protected function get($uri, array $payload = [])
+    protected function get(string $uri, array $payload = []): mixed
     {
         return $this->request('GET', $uri, $payload);
     }
@@ -221,28 +185,20 @@ class Client
     /**
      * Make a POST request to Jira servers and return the response.
      *
-     * @param string $uri
-     * @param array $payload
-     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
      * @throws \TestMonitor\Jira\Exceptions\NotFoundException
      * @throws \TestMonitor\Jira\Exceptions\TokenExpiredException
      * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
      * @throws \TestMonitor\Jira\Exceptions\ValidationException
-     *
-     * @return mixed
      */
-    protected function post($uri, array $payload = [])
+    protected function post(string $uri, array $payload = []): mixed
     {
         return $this->request('POST', $uri, $payload);
     }
 
     /**
-     * Make a PUT request to Forge servers and return the response.
-     *
-     * @param string $uri
-     * @param array $payload
+     * Make a PUT request to Jira servers and return the response.
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
@@ -250,10 +206,8 @@ class Client
      * @throws \TestMonitor\Jira\Exceptions\TokenExpiredException
      * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
      * @throws \TestMonitor\Jira\Exceptions\ValidationException
-     *
-     * @return mixed
      */
-    protected function put($uri, array $payload = [])
+    protected function put(string $uri, array $payload = []): mixed
     {
         return $this->request('PUT', $uri, $payload);
     }
@@ -261,29 +215,20 @@ class Client
     /**
      * Make a DELETE request to Jira servers and return the response.
      *
-     * @param string $uri
-     * @param array $payload
-     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
      * @throws \TestMonitor\Jira\Exceptions\NotFoundException
      * @throws \TestMonitor\Jira\Exceptions\TokenExpiredException
      * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
      * @throws \TestMonitor\Jira\Exceptions\ValidationException
-     *
-     * @return mixed
      */
-    protected function delete($uri, array $payload = [])
+    protected function delete(string $uri, array $payload = []): mixed
     {
         return $this->request('DELETE', $uri, $payload);
     }
 
     /**
-     * Make request to Jira servers and return the response.
-     *
-     * @param string $verb
-     * @param string $uri
-     * @param array $payload
+     * Make a request to Jira servers and return the response.
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
@@ -291,10 +236,8 @@ class Client
      * @throws \TestMonitor\Jira\Exceptions\TokenExpiredException
      * @throws \TestMonitor\Jira\Exceptions\UnauthorizedException
      * @throws \TestMonitor\Jira\Exceptions\ValidationException
-     *
-     * @return mixed
      */
-    protected function request($verb, $uri, array $payload = [])
+    protected function request(string $verb, string $uri, array $payload = []): mixed
     {
         $response = $this->client()->request(
             $verb,
@@ -312,16 +255,12 @@ class Client
     }
 
     /**
-     * @param  \Psr\Http\Message\ResponseInterface $response
-     *
      * @throws \TestMonitor\Jira\Exceptions\ValidationException
      * @throws \TestMonitor\Jira\Exceptions\NotFoundException
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
      * @throws \Exception
-     *
-     * @return void
      */
-    protected function handleRequestError(ResponseInterface $response)
+    protected function handleRequestError(ResponseInterface $response): never
     {
         if ($response->getStatusCode() == 422) {
             throw new ValidationException(json_decode((string) $response->getBody(), true));

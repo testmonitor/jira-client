@@ -10,13 +10,13 @@ trait ManagesAccounts
     use TransformsAccounts;
 
     /**
-     * Get a list of atlassian cloud accounts associated to the user.
+     * Get a list of Atlassian cloud accounts associated to the user.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\Account[]
+     * @return array<\TestMonitor\Jira\Resources\Account>
      */
-    public function accounts()
+    public function accounts(): array
     {
         $response = $this->get('https://api.atlassian.com/oauth/token/accessible-resources');
 
@@ -29,8 +29,6 @@ trait ManagesAccounts
      * Get the cloud ID for the specified URL.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return string
      */
     public function cloudId(string $instanceUrl): string
     {

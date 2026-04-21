@@ -4,19 +4,12 @@ namespace TestMonitor\Jira\Exceptions;
 
 class InvalidDataException extends Exception
 {
-    /**
-     * The given data.
-     *
-     * @var mixed
-     */
-    protected $data;
+    protected mixed $data;
 
     /**
-     * Create a new exception instance.
-     *
-     * @param mixed $data
+     * Create a new invalid data exception instance.
      */
-    public function __construct($data)
+    public function __construct(mixed $data)
     {
         parent::__construct('The given data contains invalid data and cannot be decoded.');
 
@@ -24,11 +17,9 @@ class InvalidDataException extends Exception
     }
 
     /**
-     * The given data.
-     *
-     * @return mixed
+     * Returns the invalid data.
      */
-    public function data()
+    public function data(): mixed
     {
         return $this->data;
     }

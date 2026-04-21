@@ -4,38 +4,16 @@ namespace TestMonitor\Jira\Resources;
 
 class IssueStatus extends Resource
 {
-    /**
-     * The ID of the issue status.
-     *
-     * @var string
-     */
-    public $id;
+    public string $id;
 
-    /**
-     * The name of the issue status.
-     *
-     * @var string
-     */
-    public $name;
+    public string $name;
 
-    /**
-     * The description of the issue status.
-     *
-     * @var string
-     */
-    public $description;
+    public string $description;
 
-    /**
-     * The icon url for the issue status.
-     *
-     * @var string
-     */
-    public $iconUrl;
+    public string $iconUrl;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $attributes
      */
     public function __construct(array $attributes)
     {

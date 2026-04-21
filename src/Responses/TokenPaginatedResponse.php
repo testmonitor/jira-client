@@ -4,49 +4,18 @@ namespace TestMonitor\Jira\Responses;
 
 class TokenPaginatedResponse
 {
-    /**
-     * The items being paginated.
-     *
-     * @var array
-     */
     protected array $items;
 
-    /**
-     * The total number of items before slicing.
-     *
-     * @var int
-     */
     protected int $total;
 
-    /**
-     * The number of items to be shown per page.
-     *
-     * @var int
-     */
     protected int $perPage;
 
-    /**
-     * The token for the next page.
-     *
-     * @var string|null
-     */
     protected ?string $nextPageToken;
 
-    /**
-     * Whether this is the last page.
-     *
-     * @var bool
-     */
     protected bool $isLast;
 
     /**
      * Create a new paginated response instance.
-     *
-     * @param array $items
-     * @param int $total
-     * @param int $perPage
-     * @param string|null $nextPageToken
-     * @param bool $isLast
      */
     public function __construct(
         array $items,
@@ -64,8 +33,6 @@ class TokenPaginatedResponse
 
     /**
      * Get the items being paginated.
-     *
-     * @return array
      */
     public function items(): array
     {
@@ -73,9 +40,7 @@ class TokenPaginatedResponse
     }
 
     /**
-     * The next page token.
-     *
-     * @return string|null
+     * Get the next page token.
      */
     public function nextPageToken(): ?string
     {
@@ -84,8 +49,6 @@ class TokenPaginatedResponse
 
     /**
      * Get the total number of items being paginated.
-     *
-     * @return int
      */
     public function total(): int
     {
@@ -94,8 +57,6 @@ class TokenPaginatedResponse
 
     /**
      * Get the number of items shown per page.
-     *
-     * @return int
      */
     public function perPage(): int
     {
@@ -104,8 +65,6 @@ class TokenPaginatedResponse
 
     /**
      * Determines if this is the last page.
-     *
-     * @return bool
      */
     public function isLastPage(): bool
     {
@@ -114,8 +73,6 @@ class TokenPaginatedResponse
 
     /**
      * Determines if there's a next page of items.
-     *
-     * @return bool
      */
     public function hasNextPage(): bool
     {

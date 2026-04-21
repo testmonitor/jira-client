@@ -8,13 +8,11 @@ use TestMonitor\Jira\Resources\Project;
 trait TransformsProjects
 {
     /**
-     * @param array $projects
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\Project[]
+     * @return array<\TestMonitor\Jira\Resources\Project>
      */
-    protected function fromJiraProjects($projects): array
+    protected function fromJiraProjects(mixed $projects): array
     {
         Validator::isArray($projects);
 
@@ -24,11 +22,7 @@ trait TransformsProjects
     }
 
     /**
-     * @param array $project
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\Project
      */
     protected function fromJiraProject(array $project): Project
     {

@@ -30,7 +30,7 @@ class IssuesTest extends TestCase
     {
         parent::setUp();
 
-        $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
+        $this->token = Mockery::mock(\TestMonitor\Jira\AccessToken::class);
         $this->token->shouldReceive('expired')->andReturnFalse();
 
         $this->issue = ['id' => '1', 'key' => 'KEY', 'summary' => 'My Issue', 'description' => 'My Description'];
@@ -47,7 +47,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->withArgs(function ($verb) {
@@ -94,7 +94,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -112,7 +112,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -130,7 +130,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -148,7 +148,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -166,7 +166,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -188,7 +188,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -206,7 +206,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -228,7 +228,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -250,7 +250,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -279,7 +279,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient(Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient(Mockery::mock(\GuzzleHttp\Client::class));
 
         $this->expectException(InvalidDataException::class);
 
@@ -304,7 +304,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -333,7 +333,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $updatedIssue = [
             'id' => '1',
@@ -377,7 +377,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $transitions = [
             'transitions' => [
@@ -439,7 +439,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $transitions = [
             'transitions' => [
@@ -475,7 +475,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->withArgs(function ($verb) {
@@ -512,7 +512,7 @@ class IssuesTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->withArgs(function ($verb) {

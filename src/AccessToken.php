@@ -6,27 +6,14 @@ use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
 
 class AccessToken
 {
-    /**
-     * @var string
-     */
-    public $accessToken;
+    public string $accessToken;
+
+    public string $refreshToken;
+
+    public int $expiresIn;
 
     /**
-     * @var string
-     */
-    public $refreshToken;
-
-    /**
-     * @var int
-     */
-    public $expiresIn;
-
-    /**
-     * Token constructor.
-     *
-     * @param string $accessToken
-     * @param string $refreshToken
-     * @param int $expiresIn
+     * Create a new access token instance.
      */
     public function __construct(string $accessToken = '', string $refreshToken = '', int $expiresIn = 0)
     {
@@ -36,10 +23,9 @@ class AccessToken
     }
 
     /**
-     * @param \League\OAuth2\Client\Token\AccessToken $token
-     * @return \TestMonitor\Jira\AccessToken
+     * Create an access token from a Jira OAuth token.
      */
-    public static function fromJira(OAuth2AccessToken $token)
+    public static function fromJira(OAuth2AccessToken $token): self
     {
         return new self(
             $token->getToken(),
@@ -50,10 +36,8 @@ class AccessToken
 
     /**
      * Determines if the access token has expired.
-     *
-     * @return bool
      */
-    public function expired()
+    public function expired(): bool
     {
         return ($this->expiresIn - time()) < 60;
     }
@@ -61,9 +45,9 @@ class AccessToken
     /**
      * Returns the token as an array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'access_token' => $this->accessToken,
@@ -74,8 +58,6 @@ class AccessToken
 
     /**
      * Returns the token as a Jira OAuth token.
-     *
-     * @return \League\OAuth2\Client\Token\AccessToken
      */
     public function toJira(): OAuth2AccessToken
     {

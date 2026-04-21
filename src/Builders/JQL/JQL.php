@@ -13,14 +13,7 @@ class JQL implements Stringable
     /**
      * Add a where clause to the query.
      *
-     * @param string|\Closure $column
-     * @param mixed $operator
-     * @param mixed $value
-     * @param string $boolean
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return $this
      */
     public function where(
         string|Closure $column,
@@ -55,13 +48,7 @@ class JQL implements Stringable
     /**
      * Add an or where clause to the query.
      *
-     * @param string|\Closure $column
-     * @param mixed $operator
-     * @param mixed $value
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return $this
      */
     public function orWhere(string|Closure $column, mixed $operator = Operator::EQUALS, mixed $value = null): self
     {
@@ -74,10 +61,6 @@ class JQL implements Stringable
 
     /**
      * Execute a callback when the value is truthy.
-     *
-     * @param mixed $value
-     * @param callable $callback
-     * @return $this
      */
     public function when(mixed $value, callable $callback): self
     {
@@ -92,10 +75,6 @@ class JQL implements Stringable
 
     /**
      * Execute a callback when the value is falsy.
-     *
-     * @param mixed $value
-     * @param callable $callback
-     * @return $this
      */
     public function whenNot(mixed $value, callable $callback): self
     {
@@ -110,10 +89,6 @@ class JQL implements Stringable
 
     /**
      * Add an order by clause to the query.
-     *
-     * @param string $column
-     * @param string $direction
-     * @return $this
      */
     public function orderBy(string $column, string $direction): self
     {
@@ -124,9 +99,6 @@ class JQL implements Stringable
 
     /**
      * Add a raw query string.
-     *
-     * @param string $query
-     * @return $this
      */
     public function rawQuery(string $query): self
     {
@@ -137,8 +109,6 @@ class JQL implements Stringable
 
     /**
      * Reset the query.
-     *
-     * @return $this
      */
     public function reset(): self
     {
@@ -149,8 +119,6 @@ class JQL implements Stringable
 
     /**
      * Get the current query string.
-     *
-     * @return string
      */
     public function getQuery(): string
     {
@@ -158,27 +126,18 @@ class JQL implements Stringable
     }
 
     /**
-     * @return string
+     * Returns the query as a string.
      */
     public function __toString(): string
     {
         return $this->getQuery();
     }
 
-    /**
-     * @param string $column
-     * @return string
-     */
     protected function escapeSpaces(string $column): string
     {
         return str_contains($column, ' ') ? "\"{$column}\"" : $column;
     }
 
-    /**
-     * @param string $operator
-     * @param mixed $value
-     * @return string
-     */
     protected function quote(string $operator, mixed $value): string
     {
         if (in_array($operator, Operator::acceptList(), true)) {
@@ -193,11 +152,6 @@ class JQL implements Stringable
         return '"' . str_replace('"', '\\"', (string) $value) . '"';
     }
 
-    /**
-     * @param string $query
-     * @param string $boolean
-     * @return void
-     */
     protected function appendQuery(string $query, string $boolean = ''): void
     {
         $this->query = $this->getQuery() === ''
@@ -206,13 +160,7 @@ class JQL implements Stringable
     }
 
     /**
-     * @param string $boolean
-     * @param string $operator
-     * @param mixed $value
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return void
      */
     protected function validateBooleanAndOperator(string $boolean, string $operator, mixed $value): void
     {

@@ -13,14 +13,11 @@ trait ManagesWebhooks
     /**
      * Get a list of webhooks.
      *
-     * @param int $offset
-     * @param int $limit
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\Webhook[]
+     * @return array<\TestMonitor\Jira\Resources\Webhook>
      */
-    public function webhooks(int $offset = 0, int $limit = 50)
+    public function webhooks(int $offset = 0, int $limit = 50): array
     {
         $response = $this->get('webhook', [
             'query' => [
@@ -34,9 +31,6 @@ trait ManagesWebhooks
 
     /**
      * Create a new webhook.
-     *
-     * @param Webhook $webhook
-     * @return \TestMonitor\Jira\Resources\Webhook
      */
     public function createWebhook(Webhook $webhook): Webhook
     {
@@ -53,11 +47,8 @@ trait ManagesWebhooks
 
     /**
      * Extend webhook lifetimes.
-     *
-     * @param array $webhookIds
-     * @return string
      */
-    public function extendWebhookLifetimes(array $webhookIds)
+    public function extendWebhookLifetimes(array $webhookIds): string
     {
         $response = $this->put('webhook/refresh', [
             'json' => ['webhookIds' => $webhookIds],
@@ -68,9 +59,6 @@ trait ManagesWebhooks
 
     /**
      * Delete webhooks.
-     *
-     * @param array $webhookIds
-     * @return bool
      */
     public function deleteWebhooks(array $webhookIds): bool
     {

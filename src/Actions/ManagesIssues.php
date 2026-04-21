@@ -16,13 +16,9 @@ trait ManagesIssues
     /**
      * Get a single issue.
      *
-     * @param string $id
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\Issue
      */
-    public function issue($id)
+    public function issue(string $id): Issue
     {
         $response = $this->get("issue/{$id}");
 
@@ -32,21 +28,14 @@ trait ManagesIssues
     /**
      * Get a list of issues.
      *
-     * @param \TestMonitor\Jira\Builders\JQL\JQL|null $query
-     * @param int $limit
-     * @param string|null $nextPageToken
-     * @param array $fields
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Responses\TokenPaginatedResponse
      */
     public function issues(
         ?JQL $query = null,
         int $limit = 50,
         ?string $nextPageToken = null,
         array $fields = ['*navigable']
-    ) {
+    ): TokenPaginatedResponse {
         $response = $this->get('search/jql', [
             'query' => [
                 'jql' => $query instanceof JQL ? $query->getQuery() : '',
@@ -67,11 +56,8 @@ trait ManagesIssues
 
     /**
      * Count the number of Jira issues.
-     *
-     * @param \TestMonitor\Jira\Builders\JQL\JQL|null $query
-     * @return int
      */
-    public function countIssues(?JQL $query = null)
+    public function countIssues(?JQL $query = null): int
     {
         $response = $this->post('search/approximate-count', [
             'json' => [
@@ -84,9 +70,6 @@ trait ManagesIssues
 
     /**
      * Create a new issue.
-     *
-     * @param \TestMonitor\Jira\Resources\Issue $issue
-     * @return \TestMonitor\Jira\Resources\Issue
      */
     public function createIssue(Issue $issue): Issue
     {
@@ -97,17 +80,8 @@ trait ManagesIssues
 
     /**
      * Update an issue.
-     *
-     * @param string $id
-     * @param array{
-     *      summary: string,
-     *      description: \DH\Adf\Node\Block\Document,
-     *      type: \TestMonitor\Jira\Resources\IssueType,
-     *      priority: \TestMonitor\Jira\Resources\IssuePriority
-     *  } $attributes
-     * @return \TestMonitor\Jira\Resources\Issue
      */
-    public function updateIssue($id, array $attributes): Issue
+    public function updateIssue(string $id, array $attributes): Issue
     {
         $this->put("issue/{$id}", ['json' => $this->toUpdateIssue($attributes)]);
 
@@ -117,13 +91,9 @@ trait ManagesIssues
     /**
      * Update the status of an issue.
      *
-     * @param \TestMonitor\Jira\Resources\Issue $issue
-     *
      * @throws \TestMonitor\Jira\Exceptions\FailedActionException
-     *
-     * @return \TestMonitor\Jira\Resources\Issue
      */
-    public function updateIssueStatus($issueId, IssueStatus $status): Issue
+    public function updateIssueStatus(string $issueId, IssueStatus $status): Issue
     {
         $transition = $this->findTransitionForStatus($issueId, $status);
 
@@ -140,25 +110,15 @@ trait ManagesIssues
         return $this->issue($issueId);
     }
 
-    /**
-     * Determine the transition for a given issue and status.
-     *
-     * @param string $issueId
-     * @param \TestMonitor\Jira\Resources\IssueStatus $status
-     * @return null|array
-     */
-    protected function findTransitionForStatus($issueId, IssueStatus $status): ?array
+    protected function findTransitionForStatus(string $issueId, IssueStatus $status): ?array
     {
         // Get the available transitions for this issue.
         $response = $this->get("issue/{$issueId}/transitions");
 
-        // Find matching transitions for the given status.
-        $transitions = array_filter(
+        // Find the first matching transition for the given status.
+        return array_find(
             $response['transitions'],
             fn (array $transition) => $transition['to']['id'] === $status->id
         );
-
-        // Return the first matching transition
-        return array_shift($transitions);
     }
 }

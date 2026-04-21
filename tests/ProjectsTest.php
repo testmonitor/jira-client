@@ -25,7 +25,7 @@ class ProjectsTest extends TestCase
     {
         parent::setUp();
 
-        $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
+        $this->token = Mockery::mock(\TestMonitor\Jira\AccessToken::class);
         $this->token->shouldReceive('expired')->andReturnFalse();
 
         $this->project = ['id' => '1', 'key' => 'KEY', 'name' => 'Project'];
@@ -42,7 +42,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -75,7 +75,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -93,7 +93,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -111,7 +111,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -129,7 +129,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -147,7 +147,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -169,7 +169,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -187,7 +187,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -210,7 +210,7 @@ class ProjectsTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()

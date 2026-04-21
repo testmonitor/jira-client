@@ -4,31 +4,14 @@ namespace TestMonitor\Jira\Resources;
 
 class Project extends Resource
 {
-    /**
-     * The ID of the project.
-     *
-     * @var string
-     */
-    public $id;
+    public ?string $id;
 
-    /**
-     * The key of the project.
-     *
-     * @var string
-     */
-    public $key;
+    public ?string $key;
 
-    /**
-     * The name of the project.
-     *
-     * @var string
-     */
-    public $name;
+    public ?string $name;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $attributes
      */
     public function __construct(array $attributes)
     {

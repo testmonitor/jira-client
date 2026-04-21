@@ -38,7 +38,7 @@ class OauthTest extends TestCase
 
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], $cloudId, $token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         // When
         $expired = $jira->tokenExpired();
@@ -58,7 +58,7 @@ class OauthTest extends TestCase
 
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], $cloudId, $token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $this->expectException(TokenExpiredException::class);
 

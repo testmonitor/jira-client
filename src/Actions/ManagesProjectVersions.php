@@ -10,25 +10,19 @@ trait ManagesProjectVersions
     use TransformsProjectVersions;
 
     /**
-     * Get a list of projects versions.
-     *
-     * @param string $projectId
-     * @param string $query
-     * @param int $offset
-     * @param int $limit
-     * @param string $orderBy
+     * Get a list of project versions.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\ProjectVersion[]
+     * @return array<\TestMonitor\Jira\Resources\ProjectVersion>
      */
     public function projectVersions(
-        $projectId,
+        string $projectId,
         string $query = '',
         int $offset = 0,
         int $limit = 50,
         string $orderBy = ProjectVersion::ORDER_SEQUENCE_DESC,
-    ) {
+    ): array {
         $response = $this->get("project/{$projectId}/version", [
             'query' => [
                 'query' => $query,

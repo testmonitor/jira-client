@@ -8,13 +8,11 @@ use TestMonitor\Jira\Resources\IssueType;
 trait TransformsIssueTypes
 {
     /**
-     * @param array $issueTypes
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\IssueType[]
+     * @return array<\TestMonitor\Jira\Resources\IssueType>
      */
-    protected function fromJiraIssueTypes($issueTypes): array
+    protected function fromJiraIssueTypes(mixed $issueTypes): array
     {
         Validator::isArray($issueTypes);
 
@@ -24,11 +22,7 @@ trait TransformsIssueTypes
     }
 
     /**
-     * @param array $issueType
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\IssueType
      */
     protected function fromJiraIssueType(array $issueType): IssueType
     {

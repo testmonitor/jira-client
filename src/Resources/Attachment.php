@@ -6,38 +6,16 @@ use TestMonitor\Jira\Validator;
 
 class Attachment extends Resource
 {
-    /**
-     * The ID of the attachment.
-     *
-     * @var string
-     */
-    public $id;
+    public string $id;
 
-    /**
-     * The filename of the attachment.
-     *
-     * @var string
-     */
-    public $filename;
+    public string $filename;
 
-    /**
-     * The mimetype of the attachment.
-     *
-     * @var string
-     */
-    public $mimeType;
+    public string $mimeType;
 
-    /**
-     * The size of the attachment.
-     *
-     * @var int
-     */
-    public $size;
+    public int $size;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $attachment
      */
     public function __construct(array $attachment)
     {

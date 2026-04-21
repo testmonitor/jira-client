@@ -4,31 +4,14 @@ namespace TestMonitor\Jira\Resources;
 
 class IssuePriority extends Resource
 {
-    /**
-     * The ID of the issue priority.
-     *
-     * @var string
-     */
-    public $id;
+    public string $id;
 
-    /**
-     * The name of the issue priority.
-     *
-     * @var string
-     */
-    public $name;
+    public string $name;
 
-    /**
-     * The icon url for the issue priority.
-     *
-     * @var string
-     */
-    public $iconUrl;
+    public string $iconUrl;
 
     /**
      * Create a new resource instance.
-     *
-     * @param array $attributes
      */
     public function __construct(array $attributes)
     {

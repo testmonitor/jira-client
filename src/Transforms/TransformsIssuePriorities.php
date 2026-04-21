@@ -8,13 +8,11 @@ use TestMonitor\Jira\Resources\IssuePriority;
 trait TransformsIssuePriorities
 {
     /**
-     * @param array $issuePriorities
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\IssuePriority[]
+     * @return array<\TestMonitor\Jira\Resources\IssuePriority>
      */
-    protected function fromJiraIssuePriorities($issuePriorities): array
+    protected function fromJiraIssuePriorities(mixed $issuePriorities): array
     {
         Validator::isArray($issuePriorities);
 
@@ -24,11 +22,7 @@ trait TransformsIssuePriorities
     }
 
     /**
-     * @param array $issuePriority
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\IssuePriority
      */
     protected function fromJiraIssuePriority(array $issuePriority): IssuePriority
     {

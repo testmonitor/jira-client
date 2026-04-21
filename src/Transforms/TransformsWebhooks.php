@@ -7,10 +7,6 @@ use TestMonitor\Jira\Resources\Webhook;
 
 trait TransformsWebhooks
 {
-    /**
-     * @param \TestMonitor\Jira\Resources\Webhook $webhook
-     * @return array
-     */
     protected function toJiraWebhook(Webhook $webhook): array
     {
         return [
@@ -25,13 +21,11 @@ trait TransformsWebhooks
     }
 
     /**
-     * @param array $webhooks
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\Webhook[]
+     * @return array<\TestMonitor\Jira\Resources\Webhook>
      */
-    protected function fromJiraWebhooks($webhooks): array
+    protected function fromJiraWebhooks(mixed $webhooks): array
     {
         Validator::isArray($webhooks);
 
@@ -40,10 +34,6 @@ trait TransformsWebhooks
         }, $webhooks);
     }
 
-    /**
-     * @param array $webhook
-     * @return \TestMonitor\Jira\Resources\Webhook
-     */
     protected function fromJiraWebhook(array $webhook): Webhook
     {
         return new Webhook([

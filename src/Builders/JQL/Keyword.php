@@ -7,17 +7,17 @@ namespace TestMonitor\Jira\Builders\JQL;
  */
 class Keyword
 {
-    public const AND = 'and';
+    public const string AND = 'and';
 
-    public const OR = 'or';
+    public const string OR = 'or';
 
-    public const NOT = 'not';
+    public const string NOT = 'not';
 
-    public const EMPTY = 'empty';
+    public const string EMPTY = 'empty';
 
-    public const NULL = 'null';
+    public const string NULL = 'null';
 
-    public const ORDER_BY = 'order by';
+    public const string ORDER_BY = 'order by';
 
     /**
      * Returns the list of boolean keywords.

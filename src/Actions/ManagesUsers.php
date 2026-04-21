@@ -2,6 +2,7 @@
 
 namespace TestMonitor\Jira\Actions;
 
+use TestMonitor\Jira\Resources\User;
 use TestMonitor\Jira\Transforms\TransformsUsers;
 use TestMonitor\Jira\Responses\LengthAwarePaginatedResponse;
 
@@ -12,17 +13,14 @@ trait ManagesUsers
     /**
      * Get a list of assignable users for a project.
      *
-     * @param string $projectId
-     * @param string $query
-     * @param int $offset
-     * @param int $limit
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Responses\LengthAwarePaginatedResponse
      */
-    public function users($projectId, string $query = '', int $offset = 0, int $limit = 50)
-    {
+    public function users(
+        string $projectId,
+        string $query = '',
+        int $offset = 0,
+        int $limit = 50
+    ): LengthAwarePaginatedResponse {
         $response = $this->get('user/assignable/search', [
             'query' => [
                 'project' => $projectId,
@@ -44,10 +42,8 @@ trait ManagesUsers
      * Returns the profile of the authenticated user.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\User
      */
-    public function myself()
+    public function myself(): User
     {
         $response = $this->get("https://api.atlassian.com/ex/jira/{$this->cloudId}/rest/api/3/myself");
 

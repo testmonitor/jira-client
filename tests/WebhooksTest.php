@@ -24,7 +24,7 @@ class WebhooksTest extends TestCase
     {
         parent::setUp();
 
-        $this->token = Mockery::mock('\TestMonitor\Jira\AccessToken');
+        $this->token = Mockery::mock(\TestMonitor\Jira\AccessToken::class);
         $this->token->shouldReceive('expired')->andReturnFalse();
 
         $this->webhook = ['id' => '1', 'url' => 'https://testmonitor.com'];
@@ -41,7 +41,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -64,7 +64,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -82,7 +82,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -100,7 +100,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -118,7 +118,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -136,7 +136,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -158,7 +158,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -176,7 +176,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -195,7 +195,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -216,7 +216,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $webhookData = [
             'url' => 'https://testmonitor.com/webhook',
@@ -251,7 +251,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $webhookData = [
             'url' => 'https://testmonitor.com/webhook',
@@ -280,7 +280,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $webhookIds = [1, 2, 3];
         $expirationDate = '2024-12-31T23:59:59.999+0000';
@@ -304,7 +304,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -322,7 +322,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()
@@ -340,7 +340,7 @@ class WebhooksTest extends TestCase
         // Given
         $jira = new Client(['clientId' => 1, 'clientSecret' => 'secret', 'redirectUrl' => 'none'], 'myorg', $this->token);
 
-        $jira->setClient($service = Mockery::mock('\GuzzleHttp\Client'));
+        $jira->setClient($service = Mockery::mock(\GuzzleHttp\Client::class));
 
         $service->shouldReceive('request')
             ->once()

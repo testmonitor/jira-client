@@ -8,13 +8,11 @@ use TestMonitor\Jira\Resources\User;
 trait TransformsUsers
 {
     /**
-     * @param array $users
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\User[]
+     * @return array<\TestMonitor\Jira\Resources\User>
      */
-    protected function fromJiraUsers($users): array
+    protected function fromJiraUsers(mixed $users): array
     {
         Validator::isArray($users);
 
@@ -24,11 +22,7 @@ trait TransformsUsers
     }
 
     /**
-     * @param array $user
-     *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
-     *
-     * @return \TestMonitor\Jira\Resources\User
      */
     protected function fromJiraUser(array $user): User
     {

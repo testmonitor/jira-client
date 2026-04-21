@@ -10,26 +10,20 @@ trait ManagesAttachments
 
     /**
      * Get the attachment content.
-     *
-     * @param string $id
-     * @return mixed
      */
-    public function attachment($id)
+    public function attachment(string $id): mixed
     {
         return $this->get("attachment/content/{$id}");
     }
 
     /**
-     * Add attachment to issue.
-     *
-     * @param string $issueId
-     * @param string $path
+     * Add an attachment to an issue.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
      *
-     * @return \TestMonitor\Jira\Resources\Attachment
+     * @return array<\TestMonitor\Jira\Resources\Attachment>
      */
-    public function addAttachmentToIssue(string $issueId, string $path)
+    public function addAttachmentToIssue(string $issueId, string $path): array
     {
         $response = $this->post("issue/{$issueId}/attachments", [
             'headers' => [

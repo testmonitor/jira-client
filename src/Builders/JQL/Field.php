@@ -7,113 +7,113 @@ namespace TestMonitor\Jira\Builders\JQL;
  */
 class Field
 {
-    public const AFFECTED_VERSION = 'affectedVersion';
+    public const string AFFECTED_VERSION = 'affectedVersion';
 
-    public const APPROVALS = 'approvals';
+    public const string APPROVALS = 'approvals';
 
-    public const ASSIGNEE = 'assignee';
+    public const string ASSIGNEE = 'assignee';
 
-    public const ATTACHMENTS = 'attachments';
+    public const string ATTACHMENTS = 'attachments';
 
-    public const CATEGORY = 'category';
+    public const string CATEGORY = 'category';
 
-    public const CHANGE_GATING_TYPE = 'change-gating-type';
+    public const string CHANGE_GATING_TYPE = 'change-gating-type';
 
-    public const COMMENT = 'comment';
+    public const string COMMENT = 'comment';
 
-    public const COMPONENT = 'component';
+    public const string COMPONENT = 'component';
 
-    public const CREATED = 'created';
+    public const string CREATED = 'created';
 
-    public const CREATOR = 'creator';
+    public const string CREATOR = 'creator';
 
-    public const DESCRIPTION = 'description';
+    public const string DESCRIPTION = 'description';
 
-    public const DUE = 'due';
+    public const string DUE = 'due';
 
-    public const ENVIRONMENT = 'environment';
+    public const string ENVIRONMENT = 'environment';
 
-    public const FILTER = 'filter';
+    public const string FILTER = 'filter';
 
-    public const FIX_VERSION = 'fixVersion';
+    public const string FIX_VERSION = 'fixVersion';
 
-    public const HIERARCHY_LEVEL = 'hierarchyLevel';
+    public const string HIERARCHY_LEVEL = 'hierarchyLevel';
 
-    public const ISSUE_KEY = 'issueKey';
+    public const string ISSUE_KEY = 'issueKey';
 
-    public const ISSUE_LINK = 'issueLink';
+    public const string ISSUE_LINK = 'issueLink';
 
-    public const ISSUE_LINK_TYPE = 'issueLinkType';
+    public const string ISSUE_LINK_TYPE = 'issueLinkType';
 
-    public const LABELS = 'labels';
+    public const string LABELS = 'labels';
 
-    public const LAST_VIEWED = 'lastViewed';
+    public const string LAST_VIEWED = 'lastViewed';
 
-    public const LEVEL = 'level';
+    public const string LEVEL = 'level';
 
-    public const ORGANIZATION = 'organizations';
+    public const string ORGANIZATION = 'organizations';
 
-    public const ORIGINAL_ESTIMATE = 'originalEstimate';
+    public const string ORIGINAL_ESTIMATE = 'originalEstimate';
 
-    public const PARENT = 'parent';
+    public const string PARENT = 'parent';
 
-    public const PARENT_SPACE = 'parentSpace';
+    public const string PARENT_SPACE = 'parentSpace';
 
-    public const PRIORITY = 'priority';
+    public const string PRIORITY = 'priority';
 
-    public const PROJECT = 'project';
+    public const string PROJECT = 'project';
 
-    public const PROJECT_TYPE = 'projectType';
+    public const string PROJECT_TYPE = 'projectType';
 
-    public const REMAINING_ESTIMATE = 'remainingEstimate';
+    public const string REMAINING_ESTIMATE = 'remainingEstimate';
 
-    public const REPORTER = 'reporter';
+    public const string REPORTER = 'reporter';
 
-    public const REQUEST_CHANNEL_TYPE = 'request-channel-type';
+    public const string REQUEST_CHANNEL_TYPE = 'request-channel-type';
 
-    public const REQUEST_LAST_ACTIVITY_TIME = 'request-last-activity-time';
+    public const string REQUEST_LAST_ACTIVITY_TIME = 'request-last-activity-time';
 
-    public const REQUEST_TYPE = '"Request Type"';
+    public const string REQUEST_TYPE = '"Request Type"';
 
-    public const RESOLUTION = 'resolution';
+    public const string RESOLUTION = 'resolution';
 
-    public const RESOLVED = 'resolved';
+    public const string RESOLVED = 'resolved';
 
-    public const SPACE_TYPE = 'spaceType';
+    public const string SPACE_TYPE = 'spaceType';
 
-    public const SPRINT = 'sprint';
+    public const string SPRINT = 'sprint';
 
-    public const STATUS = 'status';
+    public const string STATUS = 'status';
 
-    public const SUMMARY = 'summary';
+    public const string SUMMARY = 'summary';
 
-    public const TEXT = 'text';
+    public const string TEXT = 'text';
 
-    public const TEXT_FIELDS = 'textfields';
+    public const string TEXT_FIELDS = 'textfields';
 
-    public const TIME_SPENT = 'timeSpent';
+    public const string TIME_SPENT = 'timeSpent';
 
-    public const TYPE = 'type';
+    public const string TYPE = 'type';
 
-    public const UPDATED = 'updated';
+    public const string UPDATED = 'updated';
 
-    public const VOTER = 'voter';
+    public const string VOTER = 'voter';
 
-    public const VOTES = 'votes';
+    public const string VOTES = 'votes';
 
-    public const WATCHER = 'watcher';
+    public const string WATCHER = 'watcher';
 
-    public const WATCHERS = 'watchers';
+    public const string WATCHERS = 'watchers';
 
-    public const WORK_ITEM_KEY = 'workItemKey';
+    public const string WORK_ITEM_KEY = 'workItemKey';
 
-    public const WORK_ITEM_LINK = 'workItemLink';
+    public const string WORK_ITEM_LINK = 'workItemLink';
 
-    public const WORK_ITEM_LINK_TYPE = 'workItemLinkType';
+    public const string WORK_ITEM_LINK_TYPE = 'workItemLinkType';
 
-    public const WORKLOG_COMMENT = 'worklogComment';
+    public const string WORKLOG_COMMENT = 'worklogComment';
 
-    public const WORKLOG_DATE = 'worklogDate';
+    public const string WORKLOG_DATE = 'worklogDate';
 
-    public const WORK_RATIO = 'workRatio';
+    public const string WORK_RATIO = 'workRatio';
 }
