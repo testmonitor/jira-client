@@ -22,6 +22,7 @@ class Issue extends Resource
 
     public ?IssuePriority $priority;
 
+    /** @var array<\TestMonitor\Jira\Resources\Attachment>|null */
     public ?array $attachments;
 
     public ?Project $project;

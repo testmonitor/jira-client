@@ -45,6 +45,8 @@ trait TransformsIssues
 
     /**
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Issue>
      */
     protected function fromJiraIssues(mixed $issues): array
     {

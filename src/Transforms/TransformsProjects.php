@@ -9,6 +9,8 @@ trait TransformsProjects
 {
     /**
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Project>
      */
     protected function fromJiraProjects(mixed $projects): array
     {

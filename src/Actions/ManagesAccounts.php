@@ -13,6 +13,8 @@ trait ManagesAccounts
      * Get a list of Atlassian cloud accounts associated to the user.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Account>
      */
     public function accounts(): array
     {

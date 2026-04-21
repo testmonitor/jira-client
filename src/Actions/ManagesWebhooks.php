@@ -14,6 +14,8 @@ trait ManagesWebhooks
      * Get a list of webhooks.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Webhook>
      */
     public function webhooks(int $offset = 0, int $limit = 50): array
     {

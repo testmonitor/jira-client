@@ -9,6 +9,8 @@ trait TransformsIssuePriorities
 {
     /**
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\IssuePriority>
      */
     protected function fromJiraIssuePriorities(mixed $issuePriorities): array
     {

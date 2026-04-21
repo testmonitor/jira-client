@@ -13,6 +13,8 @@ trait ManagesProjectVersions
      * Get a list of project versions.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\ProjectVersion>
      */
     public function projectVersions(
         string $projectId,

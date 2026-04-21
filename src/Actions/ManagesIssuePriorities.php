@@ -12,6 +12,8 @@ trait ManagesIssuePriorities
      * Get a list of issue priorities for a project.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\IssuePriority>
      */
     public function issuePriorities(string $projectId): array
     {

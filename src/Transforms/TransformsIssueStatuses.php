@@ -9,6 +9,8 @@ trait TransformsIssueStatuses
 {
     /**
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\IssueStatus>
      */
     protected function fromJiraIssueStatuses(mixed $issueStatuses): array
     {

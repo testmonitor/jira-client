@@ -12,6 +12,8 @@ trait ManagesIssueTypes
      * Get a list of issue types for a project.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\IssueType>
      */
     public function issueTypes(string $projectId): array
     {

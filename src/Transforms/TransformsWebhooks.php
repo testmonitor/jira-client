@@ -22,6 +22,8 @@ trait TransformsWebhooks
 
     /**
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Webhook>
      */
     protected function fromJiraWebhooks(mixed $webhooks): array
     {

@@ -39,6 +39,8 @@ class Client
 
     /**
      * oAuth scopes.
+     *
+     * @var array<string>
      */
     protected array $scopes = [
         'manage:jira-configuration',

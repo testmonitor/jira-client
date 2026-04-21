@@ -9,6 +9,8 @@ trait TransformsAccounts
 {
     /**
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Account>
      */
     protected function fromJiraAccounts(mixed $accounts): array
     {

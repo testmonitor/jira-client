@@ -44,6 +44,8 @@ class AccessToken
 
     /**
      * Returns the token as an array.
+     *
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

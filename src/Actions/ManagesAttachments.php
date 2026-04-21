@@ -20,6 +20,8 @@ trait ManagesAttachments
      * Add an attachment to an issue.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Attachment>
      */
     public function addAttachmentToIssue(string $issueId, string $path): array
     {

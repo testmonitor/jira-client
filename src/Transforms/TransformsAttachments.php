@@ -9,6 +9,8 @@ trait TransformsAttachments
 {
     /**
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\Attachment>
      */
     protected function fromJiraAttachments(mixed $attachments): array
     {

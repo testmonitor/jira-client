@@ -12,6 +12,8 @@ trait ManagesIssueStatuses
      * Get a list of issue statuses for a project.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\IssueStatus>
      */
     public function issueStatuses(string $projectId): array
     {
@@ -26,6 +28,8 @@ trait ManagesIssueStatuses
      * Get a list of issue statuses for an issue type.
      *
      * @throws \TestMonitor\Jira\Exceptions\InvalidDataException
+     *
+     * @return array<\TestMonitor\Jira\Resources\IssueStatus>
      */
     public function issueStatusesForType(string $projectId, string $typeId): array
     {
