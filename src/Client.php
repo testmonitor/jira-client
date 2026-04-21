@@ -125,6 +125,10 @@ class Client
      */
     public function tokenExpired(): bool
     {
+        if (empty($this->token)) {
+            throw new UnauthorizedException('Invalid access token');
+        }
+
         return $this->token->expired();
     }
 
@@ -145,7 +149,7 @@ class Client
     protected function client(): \GuzzleHttp\Client
     {
         if (empty($this->token)) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('Invalid access token');
         }
 
         if ($this->token->expired()) {
