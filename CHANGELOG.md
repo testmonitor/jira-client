@@ -4,10 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2026-05-26
+### Added
+- Added `isLast` property to `TokenPaginatedResponse`
+
+### Updated
+- Replaced JQL builder with own built-in version
+- Refactored JQL namespace
+- Updated to PHP 8.4
+- Fixed description field in `ProjectVersion`
+- Refactored docblock for attachment method
+- Replaced CONTRIBUTING.md with organization version
+
 ## [3.0.0] - 2025-09-17
 ### Added
 - Better test coverage for updating issues, creating / updating webhooks
-  
+
 ### Updated
 - Replaced issues endpoint due to Jira deprecation
 - Introduced TokenPaginatedResponse
